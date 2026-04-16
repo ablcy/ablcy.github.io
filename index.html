@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +7,9 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
+    /* ── Dark Theme (default) ── */
+    :root,
+    [data-theme="dark"] {
       --bg: #0a0a0f;
       --surface: #12121a;
       --border: #1e1e2e;
@@ -16,6 +18,42 @@
       --accent: #818cf8;
       --accent2: #f472b6;
       --accent3: #34d399;
+      --grid-line: rgba(129,140,248,0.03);
+      --nav-border: rgba(255,255,255,0.04);
+      --orb1: rgba(129,140,248,0.12);
+      --orb2: rgba(244,114,182,0.08);
+      --badge-border: rgba(129,140,248,0.3);
+      --skill-tag-bg: rgba(129,140,248,0.1);
+      --card-shadow-hover: 0 12px 40px rgba(129,140,248,0.08);
+      --project-shadow-hover: 0 16px 48px rgba(0,0,0,0.3);
+      --btn-primary-color: #0a0a0f;
+      --btn-primary-hover: #a5b4fc;
+      --gradient-text-from: var(--accent);
+      --gradient-text-to: var(--accent2);
+    }
+
+    /* ── Light Theme ── */
+    [data-theme="light"] {
+      --bg: #f8f9fc;
+      --surface: #ffffff;
+      --border: #e2e8f0;
+      --text: #1e293b;
+      --muted: #64748b;
+      --accent: #6366f1;
+      --accent2: #ec4899;
+      --accent3: #10b981;
+      --grid-line: rgba(99,102,241,0.06);
+      --nav-border: rgba(0,0,0,0.06);
+      --orb1: rgba(99,102,241,0.08);
+      --orb2: rgba(236,72,153,0.06);
+      --badge-border: rgba(99,102,241,0.3);
+      --skill-tag-bg: rgba(99,102,241,0.08);
+      --card-shadow-hover: 0 12px 40px rgba(99,102,241,0.1);
+      --project-shadow-hover: 0 16px 48px rgba(0,0,0,0.08);
+      --btn-primary-color: #ffffff;
+      --btn-primary-hover: #818cf8;
+      --gradient-text-from: #6366f1;
+      --gradient-text-to: #ec4899;
     }
 
     html { scroll-behavior: smooth; }
@@ -26,6 +64,7 @@
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       overflow-x: hidden;
       line-height: 1.6;
+      transition: background 0.4s ease, color 0.4s ease;
     }
 
     body::before {
@@ -33,11 +72,12 @@
       position: fixed;
       inset: 0;
       background-image:
-        linear-gradient(rgba(129,140,248,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(129,140,248,0.03) 1px, transparent 1px);
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
       background-size: 60px 60px;
       pointer-events: none;
       z-index: 0;
+      transition: background-image 0.4s ease;
     }
 
     .orb {
@@ -46,16 +86,17 @@
       filter: blur(80px);
       pointer-events: none;
       z-index: 0;
+      transition: background 0.4s ease;
     }
     .orb-1 {
       width: 400px; height: 400px;
-      background: radial-gradient(circle, rgba(129,140,248,0.12), transparent 70%);
+      background: radial-gradient(circle, var(--orb1), transparent 70%);
       top: -100px; right: -100px;
       animation: float 8s ease-in-out infinite;
     }
     .orb-2 {
       width: 300px; height: 300px;
-      background: radial-gradient(circle, rgba(244,114,182,0.08), transparent 70%);
+      background: radial-gradient(circle, var(--orb2), transparent 70%);
       bottom: 100px; left: -80px;
       animation: float 12s ease-in-out infinite reverse;
     }
@@ -73,7 +114,8 @@
       align-items: center;
       z-index: 100;
       backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(255,255,255,0.04);
+      border-bottom: 1px solid var(--nav-border);
+      transition: border-color 0.4s ease;
     }
     nav .logo {
       font-size: 15px;
@@ -91,7 +133,7 @@
     }
     nav .nav-links a:hover { color: var(--text); }
 
-    .lang-switch {
+    .nav-btn {
       display: flex;
       align-items: center;
       gap: 6px;
@@ -105,14 +147,20 @@
       transition: all 0.3s;
       font-family: inherit;
     }
-    .lang-switch:hover {
+    .nav-btn:hover {
       border-color: var(--accent);
       color: var(--accent);
     }
-    .lang-switch svg {
+    .nav-btn svg {
       width: 14px;
       height: 14px;
+      flex-shrink: 0;
     }
+
+    .theme-switch .icon-sun,
+    .theme-switch .icon-moon { display: none; }
+    [data-theme="dark"] .theme-switch .icon-sun { display: block; }
+    [data-theme="light"] .theme-switch .icon-moon { display: block; }
 
     .hero {
       min-height: 100vh;
@@ -129,7 +177,7 @@
       align-items: center;
       gap: 6px;
       padding: 5px 14px;
-      border: 1px solid rgba(129,140,248,0.3);
+      border: 1px solid var(--badge-border);
       border-radius: 50px;
       font-size: 12px;
       color: var(--accent);
@@ -137,6 +185,7 @@
       letter-spacing: 0.05em;
       opacity: 0;
       animation: fadeUp 0.6s ease forwards 0.2s;
+      transition: border-color 0.4s ease;
     }
     .badge::before {
       content: '';
@@ -160,7 +209,7 @@
       animation: fadeUp 0.6s ease forwards 0.4s;
     }
     .hero h1 .gradient-text {
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      background: linear-gradient(135deg, var(--gradient-text-from), var(--gradient-text-to));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -196,14 +245,24 @@
       cursor: pointer;
       border: none;
     }
-    .btn-primary { background: var(--accent); color: #0a0a0f; }
-    .btn-primary:hover { background: #a5b4fc; transform: translateY(-2px); }
+    .btn-primary {
+      background: var(--accent);
+      color: var(--btn-primary-color);
+    }
+    .btn-primary:hover {
+      background: var(--btn-primary-hover);
+      transform: translateY(-2px);
+    }
     .btn-outline {
       border: 1px solid var(--border);
       color: var(--text);
       background: transparent;
     }
-    .btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+    .btn-outline:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
 
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(24px); }
@@ -294,7 +353,7 @@
     .skill-card:hover {
       border-color: var(--accent);
       transform: translateY(-4px);
-      box-shadow: 0 12px 40px rgba(129,140,248,0.08);
+      box-shadow: var(--card-shadow-hover);
     }
     .skill-icon { font-size: 28px; margin-bottom: 16px; }
     .skill-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
@@ -303,7 +362,7 @@
       display: inline-block;
       margin-top: 12px;
       padding: 3px 10px;
-      background: rgba(129,140,248,0.1);
+      background: var(--skill-tag-bg);
       border-radius: 4px;
       font-size: 11px;
       color: var(--accent);
@@ -326,9 +385,9 @@
       display: block;
     }
     .project-card:hover {
-      border-color: rgba(129,140,248,0.4);
+      border-color: rgba(99,102,241,0.4);
       transform: translateY(-4px);
-      box-shadow: 0 16px 48px rgba(0,0,0,0.3);
+      box-shadow: var(--project-shadow-hover);
     }
     .project-top { display: flex; justify-content: space-between; align-items: start; margin-bottom: 16px; }
     .project-icon { font-size: 24px; }
@@ -382,7 +441,8 @@
       .contact-box { padding: 32px 24px; }
       section { padding: 80px 24px; }
       .stat-row { gap: 32px; }
-      nav .nav-links { gap: 16px; }
+      nav .nav-links { gap: 12px; }
+      .nav-btn span { display: none; }
     }
   </style>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -401,7 +461,18 @@
       <li><a href="#projects" data-en="Projects" data-zh="项目">Projects</a></li>
       <li><a href="#contact" data-en="Contact" data-zh="联系">Contact</a></li>
       <li>
-        <button class="lang-switch" onclick="toggleLanguage()">
+        <button class="nav-btn theme-switch" onclick="toggleTheme()" aria-label="Toggle theme">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+          <span data-en="Light" data-zh="亮色">Light</span>
+        </button>
+      </li>
+      <li>
+        <button class="nav-btn" onclick="toggleLanguage()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="12" cy="12" r="10"/>
             <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
@@ -554,37 +625,59 @@
   </footer>
 
   <script>
-    // Scroll reveal animation
+    // ── Scroll reveal ──
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
+        if (entry.isIntersecting) entry.target.classList.add('visible');
       });
     }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    // Language switching
-    let currentLang = 'en';
+    // ── Language switching ──
+    let currentLang = localStorage.getItem('lang') || 'en';
+
+    function applyLanguage() {
+      document.documentElement.lang = currentLang === 'en' ? 'en' : 'zh-CN';
+      document.title = currentLang === 'en' ? 'Yan — Developer' : '岩 — 开发者';
+      document.querySelectorAll('[data-en][data-zh]').forEach(el => {
+        const text = el.getAttribute(`data-${currentLang}`);
+        if (text) el.textContent = text;
+      });
+    }
 
     function toggleLanguage() {
       currentLang = currentLang === 'en' ? 'zh' : 'en';
-      document.documentElement.lang = currentLang === 'en' ? 'en' : 'zh-CN';
-      document.title = currentLang === 'en' ? 'Yan — Developer' : '岩 — 开发者';
-      
-      // Update all elements with data-en and data-zh attributes
-      document.querySelectorAll('[data-en][data-zh]').forEach(el => {
-        const text = el.getAttribute(`data-${currentLang}`);
-        if (text) {
-          if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-            el.placeholder = text;
-          } else {
-            el.textContent = text;
-          }
-        }
-      });
+      localStorage.setItem('lang', currentLang);
+      applyLanguage();
     }
+
+    // Apply saved language on load
+    if (localStorage.getItem('lang')) applyLanguage();
+
+    // ── Theme switching ──
+    let currentTheme = localStorage.getItem('theme') || 'dark';
+
+    function applyTheme() {
+      document.documentElement.setAttribute('data-theme', currentTheme);
+      // Update theme button label
+      const themeBtnSpan = document.querySelector('.theme-switch span');
+      if (themeBtnSpan) {
+        if (currentLang === 'en') {
+          themeBtnSpan.textContent = currentTheme === 'dark' ? 'Light' : 'Dark';
+        } else {
+          themeBtnSpan.textContent = currentTheme === 'dark' ? '亮色' : '暗色';
+        }
+      }
+    }
+
+    function toggleTheme() {
+      currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('theme', currentTheme);
+      applyTheme();
+    }
+
+    // Apply saved theme on load
+    applyTheme();
   </script>
 </body>
 </html>
