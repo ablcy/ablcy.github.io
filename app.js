@@ -1,225 +1,408 @@
-// ===== 资源数据 =====
-const resources = [
-  // --- 电影/剧集 ---
-  { name: "LIBVIO", icon: "🎬", origin: "LIBVIO", category: "movie", free: "full", tags: ["电影", "剧集", "动漫"], desc: "热门影视资源站，电影、电视剧、动漫、综艺一应俱全，播放体验流畅", url: "https://www.libvio.cc", featured: true },
-  { name: "茶杯狐", icon: "🦊", origin: "茶杯狐", category: "movie", free: "full", tags: ["电影", "搜索", "聚合"], desc: "影视资源聚合搜索引擎，一键搜索全网影视站点，快速找到想看的影片", url: "https://www.cupfox.com", featured: false },
-  { name: "低端影视", icon: "🎭", origin: "低端影视", category: "movie", free: "full", tags: ["电影", "剧集", "高清"], desc: "专注高清影视资源，电影电视剧资源丰富，更新速度快", url: "https://ddrk.me", featured: false },
-  { name: "独播库", icon: "📺", origin: "独播库", category: "movie", free: "full", tags: ["电影", "剧集", "综艺"], desc: "综合影视站，涵盖电影、电视剧、综艺、动漫等多个分类", url: "https://www.duboku.tv", featured: false },
-  { name: "电影狗", icon: "🐕", origin: "电影狗", category: "movie", free: "full", tags: ["搜索", "聚合", "电影"], desc: "影视资源聚合搜索，支持多个资源站同时搜索，快速定位播放源", url: "https://www.dianyinggou.com", featured: false },
-  { name: "努努影院", icon: "🎥", origin: "努努影院", category: "movie", free: "full", tags: ["电影", "剧集", "动漫"], desc: "简洁清爽的影视站，资源覆盖面广，支持在线观看", url: "https://www.nunu.tv", featured: false },
-  { name: "555电影", icon: "🎞️", origin: "555电影", category: "movie", free: "full", tags: ["电影", "剧集", "综艺"], desc: "老牌影视站，资源全面，电影电视剧综艺动漫都有", url: "https://www.555dyy.com", featured: false },
-  { name: "黑洞影视", icon: "🕳️", origin: "黑洞影视", category: "movie", free: "full", tags: ["电影", "搜索", "聚合"], desc: "影视资源聚合搜索引擎，多个资源源同时检索", url: "https://www.blackhole.tv", featured: false },
+// ===== YanLink - 短链接生成器 =====
 
-  // --- 动漫 ---
-  { name: "AGE动漫", icon: "🎌", origin: "AGE动漫", category: "anime", free: "full", tags: ["动漫", "番剧", "追番"], desc: "老牌动漫网站，新番连载+经典番剧库，追番神器", url: "https://www.agedm.org", featured: false },
-  { name: "樱花动漫", icon: "🌸", origin: "樱花动漫", category: "anime", free: "full", tags: ["动漫", "番剧", "日漫"], desc: "专注日本动漫资源，新番更新快，画质选择多", url: "https://www.yhdm.io", featured: false },
-  { name: "包子动漫", icon: "🥟", origin: "包子动漫", category: "anime", free: "full", tags: ["动漫", "番剧", "国漫"], desc: "涵盖日漫、国漫、美漫，资源丰富分类清晰", url: "https://www.baozimanhua.com", featured: false },
+const STORAGE_KEY = 'yanlink_data';
+const BASE_URL = window.location.origin + window.location.pathname;
 
-  // --- 音乐 ---
-  { name: "方PI音乐", icon: "🎵", origin: "方PI", category: "music", free: "full", tags: ["音乐", "搜索", "下载"], desc: "免费音乐搜索与试听，多平台资源聚合，高品质音频", url: "https://www.fangpi.org", featured: true },
-  { name: "铜钟音乐", icon: "🔔", origin: "铜钟", category: "music", free: "full", tags: ["音乐", "搜索", "无损"], desc: "高品质音乐搜索引擎，支持无损音质，多平台资源", url: "https://tongzhong.xyz", featured: false },
-  { name: "音乐磁场", icon: "🧲", origin: "音乐磁场", category: "music", free: "full", tags: ["音乐", "在线", "播放"], desc: "在线音乐播放平台，海量歌曲免费收听，界面简洁", url: "https://www.hifini.com", featured: false },
-  { name: "MyFreeMP3", icon: "🎶", origin: "MyFreeMP3", category: "music", free: "full", tags: ["音乐", "下载", "MP3"], desc: "免费MP3音乐下载站，资源量大，支持直接下载", url: "https://myfreemp3.vip", featured: false },
-  { name: "Listen 1", icon: "🎧", origin: "Listen1", category: "music", free: "full", tags: ["音乐", "聚合", "工具"], desc: "开源音乐聚合工具，整合多平台资源，浏览器插件+桌面客户端", url: "https://listen1.github.io/listen1", featured: false },
-  { name: "椒盐音乐", icon: "🧂", origin: "椒盐音乐", category: "music", free: "full", tags: ["音乐", "APP", "播放器"], desc: "开源Android本地音乐播放器，界面简洁，支持歌词显示", url: "https://github.com/Aux12/SaltPlayer", featured: false },
+// ===== Data Management =====
+function getLinks() {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+  } catch { return []; }
+}
 
-  // --- 电子书 ---
-  { name: "鸠摩搜书", icon: "📚", origin: "鸠摩搜书", category: "ebook", free: "full", tags: ["电子书", "搜索", "多格式"], desc: "最知名的电子书搜索引擎，聚合多个书源，PDF/EPUB/MOBI全支持", url: "https://www.jiumodiary.com", featured: true },
-  { name: "Z-Library", icon: "📖", origin: "Z-Library", category: "ebook", free: "full", tags: ["电子书", "学术", "海量"], desc: "全球最大的电子图书馆之一，千万级藏书，学术书籍丰富", url: "https://z-lib.org", featured: false },
-  { name: "安娜的档案", icon: "🗂️", origin: "Anna's Archive", category: "ebook", free: "full", tags: ["电子书", "论文", "聚合"], desc: "全球最大的开源图书馆搜索引擎，聚合Z-Lib/LibGen等书源", url: "https://annas-archive.org", featured: false },
-  { name: "书格", icon: "🏯", origin: "书格", category: "ebook", free: "full", tags: ["古籍", "公版", "高清"], desc: "自由开放的在线古籍图书馆，提供高清公版古籍影印本", url: "https://new.shuge.org", featured: false },
-  { name: "苦瓜书盘", icon: "🥒", origin: "苦瓜书盘", category: "ebook", free: "full", tags: ["电子书", "精排", "EPUB"], desc: "高质量精排版电子书分享社区，EPUB格式为主，阅读体验极佳", url: "https://www.kugushu.com", featured: false },
-  { name: "知轩藏书", icon: "📖", origin: "知轩藏书", category: "ebook", free: "full", tags: ["小说", "精校", "TXT"], desc: "网络小说精校版收藏站，大量热门小说的TXT精排版", url: "https://www.zxcs.info", featured: false },
-  { name: "好读", icon: "📕", origin: "好读", category: "ebook", free: "full", tags: ["小说", "繁体", "下载"], desc: "老牌华文小说下载站，大量经典网络小说，繁简体兼有", url: "https://www.haodoo.net", featured: false },
-  { name: "LoreFree", icon: "🌐", origin: "LoreFree", category: "ebook", free: "full", tags: ["电子书", "社区", "分享"], desc: "去中心化电子书共享社区，用户自发上传分享各类书籍", url: "https://lorefree.com", featured: false },
+function saveLinks(links) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(links));
+}
 
-  // --- 有声书 ---
-  { name: "喜马拉雅", icon: "🎙️", origin: "喜马拉雅", category: "audiobook", free: "partial", tags: ["有声书", "播客", "电台"], desc: "国内最大的有声阅读平台，海量有声书、播客、相声评书", url: "https://www.ximalaya.com", featured: false },
-  { name: "懒人听书", icon: "😴", origin: "懒人听书", category: "audiobook", free: "partial", tags: ["有声书", "小说", "免费"], desc: "专注有声小说平台，大量免费有声读物，通勤必备", url: "https://www.lrts.me", featured: false },
-  { name: "蜻蜓FM", icon: "🦟", origin: "蜻蜓FM", category: "audiobook", free: "partial", tags: ["有声书", "广播", "播客"], desc: "广播电台+有声书+播客综合平台，内容丰富", url: "https://www.qingting.fm", featured: false },
+function generateId(length = 6) {
+  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  for (let i = 0; i < length; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return result;
+}
 
-  // --- 公开课 ---
-  { name: "中国大学MOOC", icon: "🎓", origin: "网易", category: "course", free: "full", tags: ["大学", "课程", "证书"], desc: "国内最大的在线课程平台，985/211名校课程免费学习", url: "https://www.icourse163.org", featured: false },
-  { name: "B站", icon: "📺", origin: "哔哩哔哩", category: "course", free: "full", tags: ["视频", "教程", "知识"], desc: "国内最大的学习视频平台，大量免费教程和知识类UP主", url: "https://www.bilibili.com", featured: false },
-  { name: "Coursera", icon: "🌐", origin: "Coursera", category: "course", free: "partial", tags: ["大学", "国际", "证书"], desc: "全球顶尖大学课程平台，支持免费旁听，付费拿证书", url: "https://www.coursera.org", featured: false },
-  { name: "可汗学院", icon: "🧑‍🏫", origin: "Khan Academy", category: "course", free: "full", tags: ["教育", "数学", "科学"], desc: "非营利教育平台，从小学到大学的免费课程，数学理科尤其出色", url: "https://zh.khanacademy.org", featured: false },
-  { name: "edX", icon: "🏛️", origin: "edX", category: "course", free: "partial", tags: ["大学", "国际", "MIT"], desc: "哈佛、MIT联合创办的在线学习平台，名校课程免费旁听", url: "https://www.edx.org", featured: false },
-  { name: "OER", icon: "📚", origin: "OER", category: "course", free: "full", tags: ["教材", "开放", "教育"], desc: "开放教育资源平台，免费大学教材和课程资料", url: "https://oer.mit.edu", featured: false },
+// ===== Shorten URL =====
+function shortenUrl(originalUrl, customAlias) {
+  const links = getLinks();
+  let alias = customAlias ? customAlias.trim().toLowerCase() : '';
 
-  // --- 工具 ---
-  { name: "IDM", icon: "⬇️", origin: "Tonec", category: "tool", free: "partial", tags: ["下载", "加速", "工具"], desc: "最强的下载管理器，多线程加速下载，浏览器集成", url: "https://www.internetdownloadmanager.com", featured: false },
-  { name: "Motrix", icon: "🚀", origin: "Motrix", category: "tool", free: "full", tags: ["下载", "开源", "跨平台"], desc: "开源免费下载工具，支持HTTP/FTP/BT/磁力，界面现代", url: "https://motrix.app", featured: false },
-  { name: "qBittorrent", icon: "🌊", origin: "qBittorrent", category: "tool", free: "full", tags: ["BT", "下载", "开源"], desc: "开源BT下载客户端，无广告无捆绑，功能强大", url: "https://www.qbittorrent.org", featured: false },
-  { name: "Calibre", icon: "📗", origin: "Calibre", category: "tool", free: "full", tags: ["电子书", "管理", "转换"], desc: "最强电子书管理工具，支持格式转换、编辑、整理个人书库", url: "https://calibre-ebook.com", featured: false },
-  { name: "PotPlayer", icon: "▶️", origin: "PotPlayer", category: "tool", free: "full", tags: ["播放器", "视频", "解码"], desc: "Windows最强本地视频播放器，解码能力出色，支持硬解", url: "https://potplayer.daum.net", featured: false },
-  { name: "VLC", icon: "🔶", origin: "VideoLAN", category: "tool", free: "full", tags: ["播放器", "跨平台", "开源"], desc: "开源万能播放器，支持几乎所有音视频格式，跨平台", url: "https://www.videolan.org", featured: false },
-];
+  if (alias) {
+    if (!/^[a-z0-9_-]+$/.test(alias)) {
+      return { error: '别名只能包含小写字母、数字、- 和 _' };
+    }
+    if (links.find(l => l.alias === alias)) {
+      return { error: '该别名已被使用，请换一个' };
+    }
+  } else {
+    do {
+      alias = generateId();
+    } while (links.find(l => l.alias === alias));
+  }
 
-// ===== 分类名称映射 =====
-const categoryNames = {
-  all: "全部资源", movie: "电影/剧集", anime: "动漫",
-  music: "音乐", ebook: "电子书", audiobook: "有声书",
-  course: "公开课", tool: "工具"
-};
+  const link = {
+    id: Date.now().toString(36),
+    alias,
+    original: originalUrl,
+    short: `${BASE_URL}#/${alias}`,
+    clicks: 0,
+    created: new Date().toISOString()
+  };
 
-// ===== State =====
-let currentCategory = 'all';
-let searchQuery = '';
+  links.unshift(link);
+  saveLinks(links);
+  return { link };
+}
+
+// ===== Redirect Handler =====
+function handleRedirect() {
+  const hash = window.location.hash;
+  if (hash.startsWith('#/')) {
+    const alias = hash.slice(2);
+    const links = getLinks();
+    const link = links.find(l => l.alias === alias);
+    if (link) {
+      link.clicks++;
+      saveLinks(links);
+      window.location.href = link.original;
+      return true;
+    }
+  }
+  return false;
+}
 
 // ===== Theme Toggle =====
-const themeToggle = document.getElementById('themeToggle');
-const themeIcon = themeToggle?.querySelector('.theme-icon');
-let currentTheme = localStorage.getItem('yanread-theme') || 'dark';
-applyTheme(currentTheme);
-
-function applyTheme(theme) {
-  document.documentElement.setAttribute('data-theme', theme);
-  if (themeIcon) themeIcon.textContent = theme === 'dark' ? '🌙' : '☀️';
-  localStorage.setItem('yanread-theme', theme);
-}
-themeToggle?.addEventListener('click', () => {
-  currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
-  applyTheme(currentTheme);
-});
-
-// ===== Keyboard shortcut for search =====
-document.addEventListener('keydown', (e) => {
-  if (e.key === '/' && !['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) {
-    e.preventDefault();
-    document.getElementById('searchInput')?.focus();
+function initTheme() {
+  const saved = localStorage.getItem('yanlink_theme');
+  if (saved) {
+    document.documentElement.setAttribute('data-theme', saved);
+  } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+    document.documentElement.setAttribute('data-theme', 'light');
   }
-  if (e.key === 'Escape') {
-    document.getElementById('searchInput')?.blur();
-    searchInput.value = '';
-    searchQuery = '';
-    renderTools();
-  }
-});
-
-// ===== Search =====
-const searchInput = document.getElementById('searchInput');
-searchInput?.addEventListener('input', (e) => {
-  searchQuery = e.target.value.trim().toLowerCase();
-  renderTools();
-});
-
-// ===== Category Filter =====
-document.querySelectorAll('.filter-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    currentCategory = btn.dataset.category;
-    document.getElementById('sectionTitle').textContent = categoryNames[currentCategory] || '全部资源';
-    renderTools();
-  });
-});
-
-// ===== Render Tools =====
-function getFilteredTools() {
-  let filtered = resources;
-
-  if (currentCategory !== 'all') {
-    filtered = filtered.filter(t => t.category === currentCategory);
-  }
-
-  if (searchQuery) {
-    filtered = filtered.filter(t =>
-      t.name.toLowerCase().includes(searchQuery) ||
-      t.desc.toLowerCase().includes(searchQuery) ||
-      t.origin.toLowerCase().includes(searchQuery) ||
-      t.tags.some(tag => tag.toLowerCase().includes(searchQuery)) ||
-      (categoryNames[t.category] || '').includes(searchQuery)
-    );
-  }
-
-  return filtered;
+  updateThemeIcon();
 }
 
-function renderTools() {
-  const grid = document.getElementById('toolsGrid');
-  const noResults = document.getElementById('noResults');
-  const countLabel = document.getElementById('toolCountLabel');
-  const filtered = getFilteredTools();
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('yanlink_theme', next);
+  updateThemeIcon();
+}
 
-  countLabel.textContent = `${filtered.length} 个`;
+function updateThemeIcon() {
+  const theme = document.documentElement.getAttribute('data-theme');
+  const icon = document.querySelector('.theme-icon');
+  if (icon) icon.textContent = theme === 'dark' ? '🌙' : '☀️';
+}
 
-  if (filtered.length === 0) {
-    grid.innerHTML = '';
-    noResults.style.display = 'block';
-    return;
-  }
-
-  noResults.style.display = 'none';
-
-  grid.innerHTML = filtered.map((tool, i) => `
-    <a href="${tool.url}" target="_blank" rel="noopener" class="tool-card" style="animation: fadeInUp 0.4s ease ${i * 0.04}s both">
-      <div class="tool-card-glow"></div>
-      <div class="tool-card-header">
-        <div class="tool-icon">${tool.icon}</div>
-        <div class="tool-card-info">
-          <div class="tool-name">${tool.name}</div>
-          <div class="tool-origin">${tool.origin}</div>
-        </div>
-        <span class="tool-arrow">→</span>
-      </div>
-      <p class="tool-desc">${tool.desc}</p>
-      <div class="tool-card-footer">
-        <div class="tool-tags">
-          ${tool.tags.slice(0, 3).map(t => `<span class="mini-tag">${t}</span>`).join('')}
-        </div>
-        <span class="free-badge ${tool.free === 'full' ? 'full' : 'partial'}">
-          ${tool.free === 'full' ? '免费' : '部分免费'}
-        </span>
-      </div>
-    </a>
-  `).join('');
-
-  // Add hover glow effect
-  grid.querySelectorAll('.tool-card').forEach(card => {
-    card.addEventListener('mousemove', (e) => {
-      const rect = card.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 100;
-      const y = ((e.clientY - rect.top) / rect.height) * 100;
-      const glow = card.querySelector('.tool-card-glow');
-      if (glow) {
-        glow.style.background = `radial-gradient(circle at ${x}% ${y}%, rgba(245,158,11,0.1) 0%, transparent 60%)`;
-      }
+// ===== Navigation =====
+function initNav() {
+  const navLinks = document.querySelectorAll('.nav-link');
+  navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const section = link.getAttribute('data-section');
+      showSection(section);
     });
   });
 }
 
-// ===== Update tool count =====
-function updateToolCount() {
-  const el = document.getElementById('toolCount');
-  if (el) {
-    const target = resources.length;
-    let current = 0;
-    const step = Math.ceil(target / 30);
-    const timer = setInterval(() => {
-      current += step;
-      if (current >= target) { current = target; clearInterval(timer); }
-      el.textContent = current;
-    }, 30);
+function showSection(name) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  const section = document.getElementById(name);
+  const navLink = document.querySelector(`.nav-link[data-section="${name}"]`);
+  if (section) section.classList.add('active');
+  if (navLink) navLink.classList.add('active');
+  if (name === 'manage') renderLinksList();
+}
+
+// ===== Create Short Link =====
+function initCreate() {
+  const urlInput = document.getElementById('urlInput');
+  const aliasInput = document.getElementById('customAlias');
+  const shortenBtn = document.getElementById('shortenBtn');
+  const result = document.getElementById('result');
+  const resultUrl = document.getElementById('resultUrl');
+  const error = document.getElementById('error');
+  const copyBtn = document.getElementById('copyBtn');
+  const openBtn = document.getElementById('openBtn');
+
+  function isValidUrl(str) {
+    try {
+      const url = new URL(str);
+      return url.protocol === 'http:' || url.protocol === 'https:';
+    } catch { return false; }
+  }
+
+  shortenBtn.addEventListener('click', () => {
+    const url = urlInput.value.trim();
+    if (!url) {
+      showError('请输入链接地址');
+      return;
+    }
+    if (!isValidUrl(url)) {
+      showError('请输入有效的 URL（以 http:// 或 https:// 开头）');
+      return;
+    }
+
+    const alias = aliasInput.value.trim();
+    const res = shortenUrl(url, alias);
+
+    if (res.error) {
+      showError(res.error);
+      return;
+    }
+
+    result.style.display = 'block';
+    error.style.display = 'none';
+    resultUrl.textContent = res.link.short;
+
+    copyBtn.onclick = () => {
+      navigator.clipboard.writeText(res.link.short).then(() => {
+        showToast('✅ 链接已复制到剪贴板');
+      });
+    };
+
+    openBtn.onclick = () => {
+      window.open(res.link.short, '_blank');
+    };
+
+    updateStats();
+  });
+
+  urlInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') shortenBtn.click();
+  });
+
+  aliasInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') shortenBtn.click();
+  });
+
+  function showError(msg) {
+    error.textContent = msg;
+    error.style.display = 'block';
+    result.style.display = 'none';
   }
 }
 
-// ===== Navbar scroll effect =====
-window.addEventListener('scroll', () => {
-  const navbar = document.querySelector('.navbar');
-  if (!navbar) return;
-  navbar.style.boxShadow = window.scrollY > 20 ? '0 4px 20px rgba(0,0,0,0.3)' : 'none';
-});
+// ===== Stats =====
+function updateStats() {
+  const links = getLinks();
+  const totalLinks = document.getElementById('totalLinks');
+  const totalClicks = document.getElementById('totalClicks');
+  if (totalLinks) totalLinks.textContent = links.length;
+  if (totalClicks) totalClicks.textContent = links.reduce((sum, l) => sum + (l.clicks || 0), 0);
+}
 
-// ===== Entrance Animation CSS =====
-const style = document.createElement('style');
-style.textContent = `
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to { opacity: 1; transform: translateY(0); }
+// ===== Links List =====
+function renderLinksList(filter = '') {
+  const links = getLinks();
+  const list = document.getElementById('linksList');
+  const empty = document.getElementById('emptyState');
+  const actions = document.getElementById('manageActions');
+
+  const filtered = filter
+    ? links.filter(l =>
+        l.alias.includes(filter.toLowerCase()) ||
+        l.original.includes(filter.toLowerCase())
+      )
+    : links;
+
+  if (links.length === 0) {
+    list.innerHTML = '';
+    list.appendChild(createEmptyState());
+    actions.style.display = 'none';
+    return;
   }
-`;
-document.head.appendChild(style);
+
+  actions.style.display = 'flex';
+
+  if (filtered.length === 0) {
+    list.innerHTML = '<div class="empty-state"><span class="empty-icon">🔍</span><p>没有找到匹配的链接</p></div>';
+    return;
+  }
+
+  list.innerHTML = filtered.map(link => `
+    <div class="link-item" data-id="${link.id}">
+      <div class="link-info">
+        <div class="link-short" onclick="copyShortLink('${link.short}')" title="点击复制">${link.alias}</div>
+        <div class="link-original" title="${link.original}">${link.original}</div>
+        <div class="link-meta">
+          <span class="link-clicks">👆 ${link.clicks || 0}</span>
+          <span class="link-date">${formatDate(link.created)}</span>
+        </div>
+      </div>
+      <div class="link-actions">
+        <button class="btn btn-copy btn-sm" onclick="copyShortLink('${link.short}')">📋</button>
+        <button class="btn btn-secondary btn-sm" onclick="openOriginal('${link.original}')">↗️</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteLink('${link.id}')">🗑️</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function createEmptyState() {
+  const div = document.createElement('div');
+  div.className = 'empty-state';
+  div.id = 'emptyState';
+  div.innerHTML = `
+    <span class="empty-icon">📭</span>
+    <p>还没有创建任何短链接</p>
+    <a href="#create" class="btn btn-primary btn-sm" onclick="showSection('create')">去创建</a>
+  `;
+  return div;
+}
+
+function copyShortLink(url) {
+  navigator.clipboard.writeText(url).then(() => {
+    showToast('✅ 链接已复制');
+  });
+}
+
+function openOriginal(url) {
+  window.open(url, '_blank');
+}
+
+function deleteLink(id) {
+  if (!confirm('确定删除这个链接吗？')) return;
+  const links = getLinks().filter(l => l.id !== id);
+  saveLinks(links);
+  renderLinksList(document.getElementById('searchInput')?.value || '');
+  updateStats();
+  showToast('🗑️ 链接已删除');
+}
+
+function clearAll() {
+  if (!confirm('确定清空所有链接吗？此操作不可恢复！')) return;
+  saveLinks([]);
+  renderLinksList();
+  updateStats();
+  showToast('🗑️ 所有链接已清空');
+}
+
+function exportData() {
+  const links = getLinks();
+  const blob = new Blob([JSON.stringify(links, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `yanlink-backup-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('📥 数据已导出');
+}
+
+function importData(file) {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!Array.isArray(data)) throw new Error();
+      const links = getLinks();
+      const existing = new Set(links.map(l => l.alias));
+      let imported = 0;
+      data.forEach(item => {
+        if (item.alias && item.original && !existing.has(item.alias)) {
+          links.unshift({
+            id: item.id || Date.now().toString(36) + imported,
+            alias: item.alias,
+            original: item.original,
+            short: `${BASE_URL}#/${item.alias}`,
+            clicks: item.clicks || 0,
+            created: item.created || new Date().toISOString()
+          });
+          existing.add(item.alias);
+          imported++;
+        }
+      });
+      saveLinks(links);
+      renderLinksList();
+      updateStats();
+      showToast(`📤 成功导入 ${imported} 个链接`);
+    } catch {
+      showToast('❌ 导入失败，文件格式错误');
+    }
+  };
+  reader.readAsText(file);
+}
+
+// ===== Search =====
+function initSearch() {
+  const input = document.getElementById('searchInput');
+  if (input) {
+    input.addEventListener('input', (e) => {
+      renderLinksList(e.target.value);
+    });
+  }
+}
+
+// ===== Toast =====
+function showToast(message) {
+  let toast = document.querySelector('.toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.className = 'toast';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = message;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
+// ===== Date Format =====
+function formatDate(isoStr) {
+  const d = new Date(isoStr);
+  const now = new Date();
+  const diff = now - d;
+  if (diff < 60000) return '刚刚';
+  if (diff < 3600000) return `${Math.floor(diff / 60000)} 分钟前`;
+  if (diff < 86400000) return `${Math.floor(diff / 3600000)} 小时前`;
+  if (diff < 604800000) return `${Math.floor(diff / 86400000)} 天前`;
+  return d.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' });
+}
 
 // ===== Init =====
-updateToolCount();
-renderTools();
+document.addEventListener('DOMContentLoaded', () => {
+  // Handle redirect first
+  if (handleRedirect()) return;
+
+  initTheme();
+  initNav();
+  initCreate();
+  initSearch();
+  updateStats();
+
+  // Keyboard shortcut
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      const result = document.getElementById('result');
+      const error = document.getElementById('error');
+      if (result) result.style.display = 'none';
+      if (error) error.style.display = 'none';
+    }
+  });
+
+  // Theme toggle
+  document.getElementById('themeToggle')?.addEventListener('click', toggleTheme);
+
+  // Manage actions
+  document.getElementById('clearAllBtn')?.addEventListener('click', clearAll);
+  document.getElementById('exportBtn')?.addEventListener('click', exportData);
+  document.getElementById('importBtn')?.addEventListener('click', () => {
+    document.getElementById('importFile')?.click();
+  });
+  document.getElementById('importFile')?.addEventListener('change', (e) => {
+    if (e.target.files[0]) {
+      importData(e.target.files[0]);
+      e.target.value = '';
+    }
+  });
+
+  // Hash change handler
+  window.addEventListener('hashchange', () => {
+    handleRedirect();
+  });
+});

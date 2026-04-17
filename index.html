@@ -1,210 +1,158 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="dark">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>YanRead - 免费电影·音乐·书籍资源合集</title>
-  <meta name="description" content="精选全网优质免费资源，涵盖电影、电视剧、动漫、音乐、有声书、电子书、公开课等，你的数字生活一站式入口。">
-  <link rel="stylesheet" href="style.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YanLink - 短链接生成器</title>
+  <meta name="description" content="简洁优雅的短链接生成器，快速缩短你的长链接。由李成岩创建。">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔗</text></svg>">
 </head>
 <body>
-  <!-- 导航栏 -->
-  <nav class="navbar">
-    <div class="nav-container">
-      <a href="index.html" class="nav-logo">
-        <span class="logo-icon">🎬</span>
-        <span class="logo-text">YanRead</span>
-      </a>
-      <div class="nav-links">
-        <a href="index.html" class="nav-link active">全部资源</a>
-        <a href="about.html" class="nav-link">关于</a>
+  <div class="glow glow-1"></div>
+  <div class="glow glow-2"></div>
+
+  <header class="header">
+    <div class="container">
+      <div class="logo">
+        <span class="logo-icon">🔗</span>
+        <span class="logo-text">YanLink</span>
       </div>
-      <div class="nav-actions">
-        <div class="search-box" id="searchBox">
-          <span class="search-icon">🔍</span>
-          <input type="text" id="searchInput" placeholder="搜索资源网站..." autocomplete="off" />
-          <div class="search-shortcut">/</div>
-        </div>
-        <button class="theme-toggle" id="themeToggle" title="切换主题">
+      <nav class="nav">
+        <a href="#create" class="nav-link active" data-section="create">创建短链</a>
+        <a href="#manage" class="nav-link" data-section="manage">我的链接</a>
+        <a href="#about" class="nav-link" data-section="about">关于</a>
+        <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
           <span class="theme-icon">🌙</span>
         </button>
-      </div>
+      </nav>
     </div>
-  </nav>
+  </header>
 
-  <!-- 主内容 -->
-  <main class="main-content">
-    <!-- Hero 区域 -->
-    <section class="hero">
-      <div class="hero-content">
-        <div class="hero-text">
-          <div class="hero-badge">✨ 持续收录中</div>
-          <h1 class="hero-title">发现优质<span class="gradient-text">免费资源</span></h1>
-          <p class="hero-subtitle">精选全网免费影视、音乐、书籍资源站点</p>
+  <main class="main">
+    <!-- 创建短链 -->
+    <section id="create" class="section active">
+      <div class="container">
+        <div class="hero">
+          <h1 class="hero-title">
+            <span class="gradient-text">缩短你的链接</span>
+          </h1>
           <p class="hero-desc">
-            涵盖在线影院、音乐平台、电子书库、公开课程等。<br/>
-            每个站点都经过人工筛选，标注访问方式和资源质量。
+            粘贴长链接，一键生成短链接。<br/>
+            简洁、快速、优雅。
           </p>
           <p class="hero-author">由 <a href="https://github.com/ablcy" target="_blank">李成岩</a> 创建</p>
-          <div class="hero-stats">
-            <div class="hero-stat">
-              <span class="hero-stat-num" id="toolCount">0</span>
-              <span class="hero-stat-label">个站点</span>
+        </div>
+
+        <div class="card create-card">
+          <div class="input-group">
+            <div class="input-wrapper">
+              <span class="input-icon">🔗</span>
+              <input type="url" id="urlInput" class="input" placeholder="粘贴你的长链接..." autocomplete="off" spellcheck="false">
             </div>
-            <div class="hero-stat-divider"></div>
-            <div class="hero-stat">
-              <span class="hero-stat-num">8</span>
-              <span class="hero-stat-label">大分类</span>
+            <button class="btn btn-primary" id="shortenBtn">
+              <span class="btn-text">缩短链接</span>
+              <span class="btn-loading" style="display:none;">生成中...</span>
+            </button>
+          </div>
+
+          <div class="options">
+            <label class="option">
+              <input type="text" id="customAlias" class="option-input" placeholder="自定义别名（可选）" maxlength="20" spellcheck="false">
+              <span class="option-hint">自定义短链后缀，如 mylink</span>
+            </label>
+          </div>
+
+          <div class="result" id="result" style="display:none;">
+            <div class="result-label">✅ 短链接已生成</div>
+            <div class="result-url" id="resultUrl"></div>
+            <div class="result-actions">
+              <button class="btn btn-copy" id="copyBtn">
+                <span>📋</span> 复制链接
+              </button>
+              <button class="btn btn-secondary" id="openBtn">
+                <span>↗️</span> 打开链接
+              </button>
             </div>
-            <div class="hero-stat-divider"></div>
-            <div class="hero-stat">
-              <span class="hero-stat-num">100%</span>
-              <span class="hero-stat-label">免费</span>
-            </div>
+          </div>
+
+          <div class="error" id="error" style="display:none;"></div>
+        </div>
+
+        <div class="stats-bar">
+          <div class="stat">
+            <span class="stat-value" id="totalLinks">0</span>
+            <span class="stat-label">已创建链接</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value" id="totalClicks">0</span>
+            <span class="stat-label">总点击次数</span>
           </div>
         </div>
-        <div class="hero-visual">
-          <div class="hero-grid">
-            <div class="hero-float-card card-1">
-              <span>🎬</span><span>在线影院</span>
-            </div>
-            <div class="hero-float-card card-2">
-              <span>🎵</span><span>音乐平台</span>
-            </div>
-            <div class="hero-float-card card-3">
-              <span>📚</span><span>电子书库</span>
-            </div>
-            <div class="hero-float-card card-4">
-              <span>📖</span><span>有声书</span>
-            </div>
-            <div class="hero-float-card card-5">
-              <span>🎓</span><span>公开课程</span>
-            </div>
-            <div class="hero-float-card card-6">
-              <span>📰</span><span>知识科普</span>
-            </div>
+      </div>
+    </section>
+
+    <!-- 我的链接 -->
+    <section id="manage" class="section">
+      <div class="container">
+        <h2 class="section-title">我的链接</h2>
+        
+        <div class="search-bar">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="searchInput" class="search-input" placeholder="搜索链接..." autocomplete="off">
+        </div>
+
+        <div class="links-list" id="linksList">
+          <div class="empty-state" id="emptyState">
+            <span class="empty-icon">📭</span>
+            <p>还没有创建任何短链接</p>
+            <a href="#create" class="btn btn-primary btn-sm">去创建</a>
           </div>
+        </div>
+
+        <div class="manage-actions" id="manageActions" style="display:none;">
+          <button class="btn btn-danger btn-sm" id="clearAllBtn">🗑️ 清空所有链接</button>
+          <button class="btn btn-secondary btn-sm" id="exportBtn">📥 导出数据</button>
+          <button class="btn btn-secondary btn-sm" id="importBtn">📤 导入数据</button>
+          <input type="file" id="importFile" accept=".json" style="display:none;">
         </div>
       </div>
     </section>
 
-    <!-- 分类过滤 -->
-    <section class="filter-section">
-      <div class="filter-bar">
-        <button class="filter-btn active" data-category="all">
-          <span class="filter-icon">🌟</span> 全部
-        </button>
-        <button class="filter-btn" data-category="movie">
-          <span class="filter-icon">🎬</span> 电影/剧集
-        </button>
-        <button class="filter-btn" data-category="anime">
-          <span class="filter-icon">🎌</span> 动漫
-        </button>
-        <button class="filter-btn" data-category="music">
-          <span class="filter-icon">🎵</span> 音乐
-        </button>
-        <button class="filter-btn" data-category="ebook">
-          <span class="filter-icon">📚</span> 电子书
-        </button>
-        <button class="filter-btn" data-category="audiobook">
-          <span class="filter-icon">📖</span> 有声书
-        </button>
-        <button class="filter-btn" data-category="course">
-          <span class="filter-icon">🎓</span> 公开课
-        </button>
-        <button class="filter-btn" data-category="tool">
-          <span class="filter-icon">🛠️</span> 工具
-        </button>
-      </div>
-    </section>
-
-    <!-- 资源列表 -->
-    <section class="tools-section">
-      <div class="section-header">
-        <h2 class="section-title" id="sectionTitle">全部资源</h2>
-        <span class="tool-count-label" id="toolCountLabel"></span>
-        <span class="section-line"></span>
-      </div>
-
-      <div class="tools-grid" id="toolsGrid">
-        <!-- 资源卡片由 JS 动态生成 -->
-      </div>
-
-      <!-- 无结果提示 -->
-      <div class="no-results" id="noResults" style="display:none;">
-        <span class="no-results-icon">🔍</span>
-        <p class="no-results-text">没有找到匹配的资源</p>
-        <p class="no-results-hint">试试其他关键词或分类</p>
-      </div>
-    </section>
-
-    <!-- 推荐区域 -->
-    <section class="featured-section">
-      <div class="section-header">
-        <h2 class="section-title">⭐ 编辑推荐</h2>
-        <span class="section-line"></span>
-      </div>
-      <div class="featured-grid">
-        <a href="https://www.libvio.cc" target="_blank" class="featured-card">
-          <div class="featured-card-icon">🎬</div>
-          <h3 class="featured-card-title">LIBVIO</h3>
-          <p class="featured-card-desc">热门影视资源站，电影、电视剧、动漫、综艺一应俱全，无广告播放体验</p>
-          <div class="featured-card-meta">
-            <span class="free-badge full">完全免费</span>
-            <span class="featured-card-tags">电影 · 剧集 · 动漫</span>
+    <!-- 关于 -->
+    <section id="about" class="section">
+      <div class="container">
+        <div class="about-card">
+          <h2 class="section-title">关于 YanLink</h2>
+          <div class="about-content">
+            <p>
+              <strong>YanLink</strong> 是一个简洁优雅的短链接生成工具。
+              所有数据存储在浏览器本地（localStorage），无需注册，无需登录。
+            </p>
+            <h3>⚡ 功能特点</h3>
+            <ul>
+              <li>一键缩短长链接</li>
+              <li>支持自定义短链别名</li>
+              <li>链接管理与搜索</li>
+              <li>点击次数统计</li>
+              <li>数据导入/导出</li>
+              <li>深色/浅色主题切换</li>
+            </ul>
+            <h3>🔒 隐私说明</h3>
+            <p>所有链接数据仅存储在你的浏览器本地，不会上传到任何服务器。</p>
+            <h3>💡 使用提示</h3>
+            <p>短链接格式：<code>lcy.dpdns.org/#/你的别名</code>，你可以将此链接分享给他人，打开后会自动跳转到目标地址。</p>
+            <h3>🛠️ 技术栈</h3>
+            <p>纯静态 HTML/CSS/JS，无后端服务。</p>
           </div>
-        </a>
-        <a href="https://www.fangpi.org" target="_blank" class="featured-card">
-          <div class="featured-card-icon">🎵</div>
-          <h3 class="featured-card-title">方PI音乐搜索</h3>
-          <p class="featured-card-desc">免费音乐搜索与试听，支持多平台资源聚合，一键获取高品质音频</p>
-          <div class="featured-card-meta">
-            <span class="free-badge full">完全免费</span>
-            <span class="featured-card-tags">音乐 · 搜索 · 下载</span>
-          </div>
-        </a>
-        <a href="https://www.jiumodiary.com" target="_blank" class="featured-card">
-          <div class="featured-card-icon">📚</div>
-          <h3 class="featured-card-title">鸠摩搜书</h3>
-          <p class="featured-card-desc">最知名的电子书搜索引擎，聚合多个书源，PDF/EPUB/MOBI格式全支持</p>
-          <div class="featured-card-meta">
-            <span class="free-badge full">完全免费</span>
-            <span class="featured-card-tags">电子书 · 搜索 · 多格式</span>
-          </div>
-        </a>
-      </div>
-    </section>
-
-    <!-- 免责声明 -->
-    <section class="disclaimer-section">
-      <div class="disclaimer-card">
-        <div class="disclaimer-icon">⚠️</div>
-        <h3 class="disclaimer-title">免责声明</h3>
-        <p class="disclaimer-text">
-          本站仅收录公开可访问的资源网站链接，不存储、不托管任何版权内容。
-          所有资源版权归原作者和来源网站所有，请在遵守当地法律法规的前提下使用。
-          如有侵权，请联系删除。
-        </p>
+        </div>
       </div>
     </section>
   </main>
 
-  <!-- 页脚 -->
   <footer class="footer">
-    <div class="footer-content">
-      <div class="footer-left">
-        <span class="footer-logo">🎬 YanRead</span>
-        <p class="footer-desc">精选免费影视·音乐·书籍资源，让知识触手可及</p>
-      </div>
-      <div class="footer-right">
-        <a href="index.html" class="footer-link">首页</a>
-        <a href="about.html" class="footer-link">关于</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>&copy; 2026 YanRead · 由 <a href="https://github.com/ablcy" class="footer-domain" target="_blank">李成岩</a> 创建 · Built with ❤️</p>
+    <div class="container">
+      <p>&copy; 2026 YanLink · 由 <a href="https://github.com/ablcy" class="footer-domain" target="_blank">李成岩</a> 创建 · Built with ❤️</p>
     </div>
   </footer>
 
