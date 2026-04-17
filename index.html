@@ -1,687 +1,212 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Yan — Developer</title>
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="favicon-180.png">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    /* ── Dark Theme (default) ── */
-    :root,
-    [data-theme="dark"] {
-      --bg: #0a0a0f;
-      --surface: #12121a;
-      --border: #1e1e2e;
-      --text: #e2e8f0;
-      --muted: #64748b;
-      --accent: #818cf8;
-      --accent2: #f472b6;
-      --accent3: #34d399;
-      --grid-line: rgba(129,140,248,0.03);
-      --nav-border: rgba(255,255,255,0.04);
-      --orb1: rgba(129,140,248,0.12);
-      --orb2: rgba(244,114,182,0.08);
-      --badge-border: rgba(129,140,248,0.3);
-      --skill-tag-bg: rgba(129,140,248,0.1);
-      --card-shadow-hover: 0 12px 40px rgba(129,140,248,0.08);
-      --project-shadow-hover: 0 16px 48px rgba(0,0,0,0.3);
-      --btn-primary-color: #0a0a0f;
-      --btn-primary-hover: #a5b4fc;
-      --gradient-text-from: var(--accent);
-      --gradient-text-to: var(--accent2);
-    }
-
-    /* ── Light Theme ── */
-    [data-theme="light"] {
-      --bg: #f8f9fc;
-      --surface: #ffffff;
-      --border: #e2e8f0;
-      --text: #1e293b;
-      --muted: #64748b;
-      --accent: #6366f1;
-      --accent2: #ec4899;
-      --accent3: #10b981;
-      --grid-line: rgba(99,102,241,0.06);
-      --nav-border: rgba(0,0,0,0.06);
-      --orb1: rgba(99,102,241,0.08);
-      --orb2: rgba(236,72,153,0.06);
-      --badge-border: rgba(99,102,241,0.3);
-      --skill-tag-bg: rgba(99,102,241,0.08);
-      --card-shadow-hover: 0 12px 40px rgba(99,102,241,0.1);
-      --project-shadow-hover: 0 16px 48px rgba(0,0,0,0.08);
-      --btn-primary-color: #ffffff;
-      --btn-primary-hover: #818cf8;
-      --gradient-text-from: #6366f1;
-      --gradient-text-to: #ec4899;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      overflow-x: hidden;
-      line-height: 1.6;
-      transition: background 0.4s ease, color 0.4s ease;
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(var(--grid-line) 1px, transparent 1px),
-        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-      background-size: 60px 60px;
-      pointer-events: none;
-      z-index: 0;
-      transition: background-image 0.4s ease;
-    }
-
-    .orb {
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(80px);
-      pointer-events: none;
-      z-index: 0;
-      transition: background 0.4s ease;
-    }
-    .orb-1 {
-      width: 400px; height: 400px;
-      background: radial-gradient(circle, var(--orb1), transparent 70%);
-      top: -100px; right: -100px;
-      animation: float 8s ease-in-out infinite;
-    }
-    .orb-2 {
-      width: 300px; height: 300px;
-      background: radial-gradient(circle, var(--orb2), transparent 70%);
-      bottom: 100px; left: -80px;
-      animation: float 12s ease-in-out infinite reverse;
-    }
-    @keyframes float {
-      0%, 100% { transform: translate(0, 0); }
-      50% { transform: translate(30px, 20px); }
-    }
-
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      padding: 20px 40px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 100;
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--nav-border);
-      transition: border-color 0.4s ease;
-    }
-    nav .logo {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--accent);
-      letter-spacing: 0.05em;
-    }
-    nav .nav-links { display: flex; gap: 24px; list-style: none; align-items: center; }
-    nav .nav-links a {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 13px;
-      transition: color 0.3s;
-      letter-spacing: 0.03em;
-    }
-    nav .nav-links a:hover { color: var(--text); }
-
-    .nav-btn {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 14px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      background: transparent;
-      color: var(--muted);
-      font-size: 12px;
-      cursor: pointer;
-      transition: all 0.3s;
-      font-family: inherit;
-    }
-    .nav-btn:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-    .nav-btn svg {
-      width: 14px;
-      height: 14px;
-      flex-shrink: 0;
-    }
-
-    .theme-switch .icon-sun,
-    .theme-switch .icon-moon { display: none; }
-    [data-theme="dark"] .theme-switch .icon-sun { display: block; }
-    [data-theme="light"] .theme-switch .icon-moon { display: block; }
-
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      padding: 0 10vw;
-      position: relative;
-      z-index: 1;
-    }
-    .hero-content { max-width: 700px; }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 5px 14px;
-      border: 1px solid var(--badge-border);
-      border-radius: 50px;
-      font-size: 12px;
-      color: var(--accent);
-      margin-bottom: 28px;
-      letter-spacing: 0.05em;
-      opacity: 0;
-      animation: fadeUp 0.6s ease forwards 0.2s;
-      transition: border-color 0.4s ease;
-    }
-    .badge::before {
-      content: '';
-      width: 6px; height: 6px;
-      background: var(--accent3);
-      border-radius: 50%;
-      animation: pulse 2s ease infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
-    }
-
-    .hero h1 {
-      font-size: clamp(48px, 8vw, 96px);
-      font-weight: 800;
-      line-height: 1.05;
-      letter-spacing: -0.03em;
-      margin-bottom: 24px;
-      opacity: 0;
-      animation: fadeUp 0.6s ease forwards 0.4s;
-    }
-    .hero h1 .gradient-text {
-      background: linear-gradient(135deg, var(--gradient-text-from), var(--gradient-text-to));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .hero p {
-      font-size: 18px;
-      color: var(--muted);
-      max-width: 520px;
-      margin-bottom: 40px;
-      opacity: 0;
-      animation: fadeUp 0.6s ease forwards 0.6s;
-    }
-
-    .hero-buttons {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-      opacity: 0;
-      animation: fadeUp 0.6s ease forwards 0.8s;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 28px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 500;
-      text-decoration: none;
-      transition: all 0.3s;
-      cursor: pointer;
-      border: none;
-    }
-    .btn-primary {
-      background: var(--accent);
-      color: var(--btn-primary-color);
-    }
-    .btn-primary:hover {
-      background: var(--btn-primary-hover);
-      transform: translateY(-2px);
-    }
-    .btn-outline {
-      border: 1px solid var(--border);
-      color: var(--text);
-      background: transparent;
-    }
-    .btn-outline:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-      transform: translateY(-2px);
-    }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .scroll-hint {
-      position: absolute;
-      bottom: 40px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      color: var(--muted);
-      font-size: 11px;
-      letter-spacing: 0.1em;
-      opacity: 0;
-      animation: fadeUp 0.6s ease forwards 1.2s;
-    }
-    .scroll-line {
-      width: 1px;
-      height: 40px;
-      background: linear-gradient(to bottom, var(--accent), transparent);
-      animation: scrollAnim 2s ease infinite;
-    }
-    @keyframes scrollAnim {
-      0% { opacity: 1; transform: scaleY(1); transform-origin: top; }
-      100% { opacity: 0; transform: scaleY(0.3); transform-origin: top; }
-    }
-
-    section { padding: 120px 10vw; position: relative; z-index: 1; }
-
-    .section-label {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 16px;
-    }
-    .section-title {
-      font-size: clamp(28px, 4vw, 42px);
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      margin-bottom: 60px;
-    }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      align-items: start;
-    }
-    .about-text p {
-      color: var(--muted);
-      font-size: 16px;
-      margin-bottom: 20px;
-    }
-    .stat-row { display: flex; gap: 48px; margin-top: 40px; }
-    .stat-item .stat-num {
-      font-size: 36px;
-      font-weight: 800;
-      color: var(--accent);
-      letter-spacing: -0.02em;
-    }
-    .stat-item .stat-label {
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 4px;
-      letter-spacing: 0.05em;
-    }
-
-    .skills-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 16px;
-    }
-    .skill-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 24px;
-      transition: all 0.3s;
-      cursor: default;
-    }
-    .skill-card:hover {
-      border-color: var(--accent);
-      transform: translateY(-4px);
-      box-shadow: var(--card-shadow-hover);
-    }
-    .skill-icon { font-size: 28px; margin-bottom: 16px; }
-    .skill-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
-    .skill-card p { font-size: 13px; color: var(--muted); }
-    .skill-tag {
-      display: inline-block;
-      margin-top: 12px;
-      padding: 3px 10px;
-      background: var(--skill-tag-bg);
-      border-radius: 4px;
-      font-size: 11px;
-      color: var(--accent);
-      letter-spacing: 0.03em;
-    }
-
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 20px;
-    }
-    .project-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 28px;
-      transition: all 0.3s;
-      text-decoration: none;
-      color: inherit;
-      display: block;
-    }
-    .project-card:hover {
-      border-color: rgba(99,102,241,0.4);
-      transform: translateY(-4px);
-      box-shadow: var(--project-shadow-hover);
-    }
-    .project-top { display: flex; justify-content: space-between; align-items: start; margin-bottom: 16px; }
-    .project-icon { font-size: 24px; }
-    .project-arrow { color: var(--muted); font-size: 18px; transition: transform 0.3s; }
-    .project-card:hover .project-arrow { transform: translate(3px, -3px); color: var(--accent); }
-    .project-card h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
-    .project-card p { font-size: 13px; color: var(--muted); line-height: 1.6; }
-    .project-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 16px; }
-    .project-tag {
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 11px;
-      color: var(--muted);
-      border: 1px solid var(--border);
-    }
-
-    .contact-box {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 60px;
-      max-width: 600px;
-      margin: 0 auto;
-      text-align: center;
-    }
-    .contact-box h2 { font-size: 32px; margin-bottom: 16px; }
-    .contact-box p { color: var(--muted); margin-bottom: 32px; }
-    .contact-links { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
-
-    footer {
-      text-align: center;
-      padding: 40px;
-      color: var(--muted);
-      font-size: 12px;
-      border-top: 1px solid var(--border);
-      position: relative;
-      z-index: 1;
-    }
-
-    .reveal {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-
-    @media (max-width: 768px) {
-      nav { padding: 16px 24px; }
-      .hero { padding: 0 24px; }
-      .about-grid { grid-template-columns: 1fr; }
-      .contact-box { padding: 32px 24px; }
-      section { padding: 80px 24px; }
-      .stat-row { gap: 32px; }
-      nav .nav-links { gap: 12px; }
-      .nav-btn span { display: none; }
-    }
-  </style>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YanRead - 免费电影·音乐·书籍资源合集</title>
+  <meta name="description" content="精选全网优质免费资源，涵盖电影、电视剧、动漫、音乐、有声书、电子书、公开课等，你的数字生活一站式入口。">
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 </head>
 <body>
-
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-
-  <nav>
-    <div class="logo" data-en="Yan" data-zh="岩">Yan</div>
-    <ul class="nav-links">
-      <li><a href="#about" data-en="About" data-zh="关于">About</a></li>
-      <li><a href="#skills" data-en="Skills" data-zh="技能">Skills</a></li>
-      <li><a href="#projects" data-en="Projects" data-zh="项目">Projects</a></li>
-      <li><a href="#contact" data-en="Contact" data-zh="联系">Contact</a></li>
-      <li>
-        <button class="nav-btn theme-switch" onclick="toggleTheme()" aria-label="Toggle theme">
-          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-          </svg>
-          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-          </svg>
-          <span data-en="Light" data-zh="亮色">Light</span>
+  <!-- 导航栏 -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <span class="logo-icon">🎬</span>
+        <span class="logo-text">YanRead</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link active">全部资源</a>
+        <a href="about.html" class="nav-link">关于</a>
+      </div>
+      <div class="nav-actions">
+        <div class="search-box" id="searchBox">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="searchInput" placeholder="搜索资源网站..." autocomplete="off" />
+          <div class="search-shortcut">/</div>
+        </div>
+        <button class="theme-toggle" id="themeToggle" title="切换主题">
+          <span class="theme-icon">🌙</span>
         </button>
-      </li>
-      <li>
-        <button class="nav-btn" onclick="toggleLanguage()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-          </svg>
-          <span data-en="中文" data-zh="English">中文</span>
-        </button>
-      </li>
-    </ul>
+      </div>
+    </div>
   </nav>
 
-  <section class="hero" id="hero">
-    <div class="hero-content">
-      <div class="badge" data-en="Open to Opportunities" data-zh="开放合作">Open to Opportunities</div>
-      <h1 data-en="Hi, I'm " data-zh="你好，我是">Hi, I'm <span class="gradient-text" data-en="Yan" data-zh="岩">Yan</span></h1>
-      <p data-en="Developer & Creative Technologist. Building products with code, exploring the intersection of design and technology." data-zh="开发者 & 创意技术人。用代码构建产品，探索设计与技术的交汇点。">Developer & Creative Technologist. Building products with code, exploring the intersection of design and technology.</p>
-      <div class="hero-buttons">
-        <a href="https://github.com/ablcy" class="btn btn-primary">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
-          GitHub
+  <!-- 主内容 -->
+  <main class="main-content">
+    <!-- Hero 区域 -->
+    <section class="hero">
+      <div class="hero-content">
+        <div class="hero-text">
+          <div class="hero-badge">✨ 持续收录中</div>
+          <h1 class="hero-title">发现优质<span class="gradient-text">免费资源</span></h1>
+          <p class="hero-subtitle">精选全网免费影视、音乐、书籍资源站点</p>
+          <p class="hero-desc">
+            涵盖在线影院、音乐平台、电子书库、公开课程等。<br/>
+            每个站点都经过人工筛选，标注访问方式和资源质量。
+          </p>
+          <div class="hero-stats">
+            <div class="hero-stat">
+              <span class="hero-stat-num" id="toolCount">0</span>
+              <span class="hero-stat-label">个站点</span>
+            </div>
+            <div class="hero-stat-divider"></div>
+            <div class="hero-stat">
+              <span class="hero-stat-num">8</span>
+              <span class="hero-stat-label">大分类</span>
+            </div>
+            <div class="hero-stat-divider"></div>
+            <div class="hero-stat">
+              <span class="hero-stat-num">100%</span>
+              <span class="hero-stat-label">免费</span>
+            </div>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="hero-grid">
+            <div class="hero-float-card card-1">
+              <span>🎬</span><span>在线影院</span>
+            </div>
+            <div class="hero-float-card card-2">
+              <span>🎵</span><span>音乐平台</span>
+            </div>
+            <div class="hero-float-card card-3">
+              <span>📚</span><span>电子书库</span>
+            </div>
+            <div class="hero-float-card card-4">
+              <span>📖</span><span>有声书</span>
+            </div>
+            <div class="hero-float-card card-5">
+              <span>🎓</span><span>公开课程</span>
+            </div>
+            <div class="hero-float-card card-6">
+              <span>📰</span><span>知识科普</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 分类过滤 -->
+    <section class="filter-section">
+      <div class="filter-bar">
+        <button class="filter-btn active" data-category="all">
+          <span class="filter-icon">🌟</span> 全部
+        </button>
+        <button class="filter-btn" data-category="movie">
+          <span class="filter-icon">🎬</span> 电影/剧集
+        </button>
+        <button class="filter-btn" data-category="anime">
+          <span class="filter-icon">🎌</span> 动漫
+        </button>
+        <button class="filter-btn" data-category="music">
+          <span class="filter-icon">🎵</span> 音乐
+        </button>
+        <button class="filter-btn" data-category="ebook">
+          <span class="filter-icon">📚</span> 电子书
+        </button>
+        <button class="filter-btn" data-category="audiobook">
+          <span class="filter-icon">📖</span> 有声书
+        </button>
+        <button class="filter-btn" data-category="course">
+          <span class="filter-icon">🎓</span> 公开课
+        </button>
+        <button class="filter-btn" data-category="tool">
+          <span class="filter-icon">🛠️</span> 工具
+        </button>
+      </div>
+    </section>
+
+    <!-- 资源列表 -->
+    <section class="tools-section">
+      <div class="section-header">
+        <h2 class="section-title" id="sectionTitle">全部资源</h2>
+        <span class="tool-count-label" id="toolCountLabel"></span>
+        <span class="section-line"></span>
+      </div>
+
+      <div class="tools-grid" id="toolsGrid">
+        <!-- 资源卡片由 JS 动态生成 -->
+      </div>
+
+      <!-- 无结果提示 -->
+      <div class="no-results" id="noResults" style="display:none;">
+        <span class="no-results-icon">🔍</span>
+        <p class="no-results-text">没有找到匹配的资源</p>
+        <p class="no-results-hint">试试其他关键词或分类</p>
+      </div>
+    </section>
+
+    <!-- 推荐区域 -->
+    <section class="featured-section">
+      <div class="section-header">
+        <h2 class="section-title">⭐ 编辑推荐</h2>
+        <span class="section-line"></span>
+      </div>
+      <div class="featured-grid">
+        <a href="https://www.libvio.cc" target="_blank" class="featured-card">
+          <div class="featured-card-icon">🎬</div>
+          <h3 class="featured-card-title">LIBVIO</h3>
+          <p class="featured-card-desc">热门影视资源站，电影、电视剧、动漫、综艺一应俱全，无广告播放体验</p>
+          <div class="featured-card-meta">
+            <span class="free-badge full">完全免费</span>
+            <span class="featured-card-tags">电影 · 剧集 · 动漫</span>
+          </div>
         </a>
-        <a href="#contact" class="btn btn-outline" data-en="Contact Me" data-zh="联系我">Contact Me</a>
+        <a href="https://www.fangpi.org" target="_blank" class="featured-card">
+          <div class="featured-card-icon">🎵</div>
+          <h3 class="featured-card-title">方PI音乐搜索</h3>
+          <p class="featured-card-desc">免费音乐搜索与试听，支持多平台资源聚合，一键获取高品质音频</p>
+          <div class="featured-card-meta">
+            <span class="free-badge full">完全免费</span>
+            <span class="featured-card-tags">音乐 · 搜索 · 下载</span>
+          </div>
+        </a>
+        <a href="https://www.jiumodiary.com" target="_blank" class="featured-card">
+          <div class="featured-card-icon">📚</div>
+          <h3 class="featured-card-title">鸠摩搜书</h3>
+          <p class="featured-card-desc">最知名的电子书搜索引擎，聚合多个书源，PDF/EPUB/MOBI格式全支持</p>
+          <div class="featured-card-meta">
+            <span class="free-badge full">完全免费</span>
+            <span class="featured-card-tags">电子书 · 搜索 · 多格式</span>
+          </div>
+        </a>
       </div>
-    </div>
-    <div class="scroll-hint">
-      <span data-en="Scroll" data-zh="滚动">Scroll</span>
-      <div class="scroll-line"></div>
-    </div>
-  </section>
+    </section>
 
-  <section id="about">
-    <div class="section-label reveal" data-en="About" data-zh="关于">About</div>
-    <h2 class="section-title reveal" data-en="Crafting Digital Experiences" data-zh="打造数字体验">Crafting Digital Experiences</h2>
-    <div class="about-grid">
-      <div class="about-text reveal">
-        <p data-en="I build products for the Web — from responsive frontends to clean backend systems. I love clean code, intuitive UX, and those small details that make a big difference." data-zh="我为 Web 构建产品 —— 从响应式前端到简洁的后端系统。热爱整洁的代码、直观的用户体验，以及那些能带来巨大差异的小细节。">I build products for the Web — from responsive frontends to clean backend systems. I love clean code, intuitive UX, and those small details that make a big difference.</p>
-        <p data-en="Always learning, always building. Currently focused on exploring modern Web technologies and open source projects." data-zh="永远在学习，永远在构建。目前专注于探索现代 Web 技术和开源项目。">Always learning, always building. Currently focused on exploring modern Web technologies and open source projects.</p>
-        <div class="stat-row">
-          <div class="stat-item">
-            <div class="stat-num">1</div>
-            <div class="stat-label" data-en="Repositories" data-zh="仓库">Repositories</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-num">1</div>
-            <div class="stat-label" data-en="Stars" data-zh="星标">Stars</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-num">2024</div>
-            <div class="stat-label" data-en="Active Since" data-zh="开始活跃">Active Since</div>
-          </div>
-        </div>
+    <!-- 免责声明 -->
+    <section class="disclaimer-section">
+      <div class="disclaimer-card">
+        <div class="disclaimer-icon">⚠️</div>
+        <h3 class="disclaimer-title">免责声明</h3>
+        <p class="disclaimer-text">
+          本站仅收录公开可访问的资源网站链接，不存储、不托管任何版权内容。
+          所有资源版权归原作者和来源网站所有，请在遵守当地法律法规的前提下使用。
+          如有侵权，请联系删除。
+        </p>
       </div>
-      <div class="reveal" style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:32px">
-        <p style="font-size:13px;color:var(--muted);margin-bottom:16px;letter-spacing:0.1em;text-transform:uppercase;font-weight:600" data-en="Currently Exploring" data-zh="正在探索">Currently Exploring</p>
-        <div style="display:flex;flex-direction:column;gap:12px">
-          <div style="display:flex;align-items:center;gap:12px">
-            <span style="color:var(--accent);font-size:18px">&#9655;</span>
-            <span style="font-size:14px" data-en="Web Development" data-zh="Web 开发">Web Development</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:12px">
-            <span style="color:var(--accent2);font-size:18px">&#9655;</span>
-            <span style="font-size:14px" data-en="Open Source" data-zh="开源项目">Open Source</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:12px">
-            <span style="color:var(--accent3);font-size:18px">&#9655;</span>
-            <span style="font-size:14px" data-en="Creative Coding" data-zh="创意编程">Creative Coding</span>
-          </div>
-        </div>
+    </section>
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-left">
+        <span class="footer-logo">🎬 YanRead</span>
+        <p class="footer-desc">精选免费影视·音乐·书籍资源，让知识触手可及</p>
+      </div>
+      <div class="footer-right">
+        <a href="index.html" class="footer-link">首页</a>
+        <a href="about.html" class="footer-link">关于</a>
       </div>
     </div>
-  </section>
-
-  <section id="skills">
-    <div class="section-label reveal" data-en="Skills" data-zh="技能">Skills</div>
-    <h2 class="section-title reveal" data-en="My Tech Stack" data-zh="我的技术栈">My Tech Stack</h2>
-    <div class="skills-grid">
-      <div class="skill-card reveal">
-        <div class="skill-icon">&#127760;</div>
-        <h3>HTML / CSS</h3>
-        <p data-en="Semantic markup, responsive layouts, modern CSS features" data-zh="语义化标签、响应式布局、现代 CSS 特性">Semantic markup, responsive layouts, modern CSS features</p>
-        <span class="skill-tag" data-en="Fundamentals" data-zh="基础">Fundamentals</span>
-      </div>
-      <div class="skill-card reveal">
-        <div class="skill-icon">&#9889;</div>
-        <h3>JavaScript / TypeScript</h3>
-        <p data-en="ES6+, async programming, DOM manipulation, modern frameworks" data-zh="ES6+、异步编程、DOM 操作、现代框架">ES6+, async programming, DOM manipulation, modern frameworks</p>
-        <span class="skill-tag" data-en="Core Language" data-zh="核心语言">Core Language</span>
-      </div>
-      <div class="skill-card reveal">
-        <div class="skill-icon">&#9881;</div>
-        <h3>Git / GitHub</h3>
-        <p data-en="Version control, team collaboration, open source workflows" data-zh="版本控制、团队协作、开源工作流">Version control, team collaboration, open source workflows</p>
-        <span class="skill-tag" data-en="Tools" data-zh="工具">Tools</span>
-      </div>
-      <div class="skill-card reveal">
-        <div class="skill-icon">&#128736;</div>
-        <h3>Python</h3>
-        <p data-en="Scripting, automation, backend tools" data-zh="脚本编写、自动化、后端工具">Scripting, automation, backend tools</p>
-        <span class="skill-tag" data-en="Scripting" data-zh="脚本语言">Scripting</span>
-      </div>
-      <div class="skill-card reveal">
-        <div class="skill-icon">&#128230;</div>
-        <h3>Node.js</h3>
-        <p data-en="Server-side JavaScript, npm ecosystem, tooling" data-zh="服务端 JavaScript、npm 生态、工具链">Server-side JavaScript, npm ecosystem, tooling</p>
-        <span class="skill-tag" data-en="Runtime" data-zh="运行时">Runtime</span>
-      </div>
-      <div class="skill-card reveal">
-        <div class="skill-icon">&#127912;</div>
-        <h3>UI/UX Design</h3>
-        <p data-en="Clean interfaces, accessibility, design systems" data-zh="简洁界面、无障碍设计、设计系统">Clean interfaces, accessibility, design systems</p>
-        <span class="skill-tag" data-en="Design" data-zh="设计">Design</span>
-      </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 YanRead · Built with ❤️</p>
     </div>
-  </section>
-
-  <section id="projects">
-    <div class="section-label reveal" data-en="Projects" data-zh="项目">Projects</div>
-    <h2 class="section-title reveal" data-en="Featured Work" data-zh="精选作品">Featured Work</h2>
-    <div class="projects-grid">
-      <a href="https://github.com/ablcy/ablcy.github.io" class="project-card reveal" target="_blank">
-        <div class="project-top">
-          <div class="project-icon">&#127968;</div>
-          <div class="project-arrow">&#8599;</div>
-        </div>
-        <h3 data-en="Personal Website" data-zh="个人网站">Personal Website</h3>
-        <p data-en="Personal website & portfolio — the very place you're visiting." data-zh="个人网站与作品集 —— 你正在访问的地方。">Personal website & portfolio — the very place you're visiting.</p>
-        <div class="project-tags">
-          <span class="project-tag">HTML</span>
-          <span class="project-tag">CSS</span>
-          <span class="project-tag">JavaScript</span>
-        </div>
-      </a>
-    </div>
-  </section>
-
-  <section id="contact">
-    <div class="section-label reveal" data-en="Contact" data-zh="联系">Contact</div>
-    <h2 class="section-title reveal" data-en="Get in Touch" data-zh="与我联系">Get in Touch</h2>
-    <div class="contact-box reveal">
-      <h2 data-en="Have an idea? Let's make it happen." data-zh="有想法？一起实现它。">Have an idea? Let's make it happen.</h2>
-      <p data-en="Open for collaboration, freelance projects, or just a tech chat." data-zh="欢迎合作、自由职业项目，或只是聊聊技术。">Open for collaboration, freelance projects, or just a tech chat.</p>
-      <div class="contact-links">
-        <a href="https://github.com/ablcy" class="btn btn-primary" target="_blank">GitHub</a>
-        <a href="mailto:3428270273@qq.com" class="btn btn-outline" data-en="Send Email" data-zh="发送邮件">Send Email</a>
-      </div>
-    </div>
-  </section>
-
-  <footer>
-    <p data-en="© 2026 Yan · Built with care, code as companion" data-zh="© 2026 岩 · 用心构建，代码为伴">© 2026 Yan · Built with care, code as companion</p>
   </footer>
 
-  <script>
-    // ── Scroll reveal ──
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('visible');
-      });
-    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-    // ── Language switching ──
-    let currentLang = localStorage.getItem('lang') || 'en';
-
-    function applyLanguage() {
-      document.documentElement.lang = currentLang === 'en' ? 'en' : 'zh-CN';
-      document.title = currentLang === 'en' ? 'Yan — Developer' : '岩 — 开发者';
-      document.querySelectorAll('[data-en][data-zh]').forEach(el => {
-        const text = el.getAttribute(`data-${currentLang}`);
-        if (text) el.textContent = text;
-      });
-    }
-
-    function toggleLanguage() {
-      currentLang = currentLang === 'en' ? 'zh' : 'en';
-      localStorage.setItem('lang', currentLang);
-      applyLanguage();
-    }
-
-    // Apply saved language on load
-    if (localStorage.getItem('lang')) applyLanguage();
-
-    // ── Theme switching ──
-    let currentTheme = localStorage.getItem('theme') || 'dark';
-
-    function applyTheme() {
-      document.documentElement.setAttribute('data-theme', currentTheme);
-      // Update theme button label
-      const themeBtnSpan = document.querySelector('.theme-switch span');
-      if (themeBtnSpan) {
-        if (currentLang === 'en') {
-          themeBtnSpan.textContent = currentTheme === 'dark' ? 'Light' : 'Dark';
-        } else {
-          themeBtnSpan.textContent = currentTheme === 'dark' ? '亮色' : '暗色';
-        }
-      }
-    }
-
-    function toggleTheme() {
-      currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
-      localStorage.setItem('theme', currentTheme);
-      applyTheme();
-    }
-
-    // Apply saved theme on load
-    applyTheme();
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>
