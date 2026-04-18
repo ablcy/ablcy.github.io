@@ -218,7 +218,6 @@ body {
     opacity: 0;
     transform: translateY(20px);
     transition: opacity 0.6s ease, transform 0.6s ease;
-    overflow: visible;
 }
 
 .hero.visible {
@@ -229,46 +228,24 @@ body {
 .hero-content {
     display: flex;
     align-items: center;
-    gap: 2.5rem;
+    gap: 2rem;
     margin-bottom: 2.5rem;
-    padding: 1rem 0;
 }
 
 .hero-avatar {
     flex-shrink: 0;
     position: relative;
-    width: 100px;
-    height: 100px;
-    transform-style: preserve-3d;
-    perspective: 600px;
 }
 
-/* 恒星（头像）发光效果 */
 .hero-avatar::before {
     content: '';
     position: absolute;
-    inset: -6px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(255, 200, 50, 0.4) 0%, rgba(255, 140, 0, 0.15) 40%, transparent 70%);
-    animation: starPulse 3s ease-in-out infinite;
-    z-index: 0;
-}
-
-.hero-avatar::after {
-    content: '';
-    position: absolute;
-    inset: -3px;
+    inset: -4px;
     border-radius: 50%;
     background: linear-gradient(135deg, var(--gradient-1), var(--gradient-2), var(--gradient-3));
     background-size: 200% 200%;
     animation: gradientShift 5s ease infinite;
     opacity: 0.7;
-    z-index: 0;
-}
-
-@keyframes starPulse {
-    0%, 100% { opacity: 0.6; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.08); }
 }
 
 .hero-avatar img {
@@ -279,104 +256,6 @@ body {
     position: relative;
     z-index: 1;
     border: 3px solid var(--bg-primary);
-}
-
-/* 轨道通用样式 */
-.orbit {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    border-radius: 50%;
-    transform-style: preserve-3d;
-    pointer-events: none;
-}
-
-/* 轨道1 — 小行星，快，倾斜 */
-.orbit-1 {
-    width: 140px;
-    height: 140px;
-    margin: -70px 0 0 -70px;
-    animation: orbitSpin1 4s linear infinite;
-}
-
-.orbit-1 .planet {
-    top: -4px;
-    left: 50%;
-    margin-left: -4px;
-}
-
-/* 轨道2 — 中行星，中速，另一倾角 */
-.orbit-2 {
-    width: 180px;
-    height: 180px;
-    margin: -90px 0 0 -90px;
-    animation: orbitSpin2 7s linear infinite;
-}
-
-.orbit-2 .planet {
-    top: -6px;
-    left: 50%;
-    margin-left: -6px;
-}
-
-/* 轨道3 — 大行星，慢，第三倾角 */
-.orbit-3 {
-    width: 220px;
-    height: 220px;
-    margin: -110px 0 0 -110px;
-    animation: orbitSpin3 11s linear infinite;
-}
-
-.orbit-3 .planet {
-    top: -5px;
-    left: 50%;
-    margin-left: -5px;
-}
-
-/* 行星通用 */
-.planet {
-    position: absolute;
-    border-radius: 50%;
-    display: block;
-    box-shadow: 0 0 6px rgba(255, 255, 255, 0.3);
-}
-
-/* 各行星颜色与大小 */
-.p-mercury {
-    width: 8px;
-    height: 8px;
-    background: radial-gradient(circle at 35% 35%, #e0e0e0, #888);
-    box-shadow: 0 0 4px rgba(200, 200, 200, 0.6);
-}
-
-.p-earth {
-    width: 12px;
-    height: 12px;
-    background: radial-gradient(circle at 35% 35%, #4fc3f7, #1565c0);
-    box-shadow: 0 0 8px rgba(79, 195, 247, 0.5);
-}
-
-.p-mars {
-    width: 10px;
-    height: 10px;
-    background: radial-gradient(circle at 35% 35%, #ef9a6e, #c62828);
-    box-shadow: 0 0 6px rgba(239, 154, 110, 0.5);
-}
-
-/* 3D 旋转动画 — 不同倾斜角度实现立体感 */
-@keyframes orbitSpin1 {
-    from { transform: rotateX(65deg) rotateY(0deg) rotateZ(0deg); }
-    to   { transform: rotateX(65deg) rotateY(360deg) rotateZ(0deg); }
-}
-
-@keyframes orbitSpin2 {
-    from { transform: rotateX(70deg) rotateY(20deg) rotateZ(0deg); }
-    to   { transform: rotateX(70deg) rotateY(380deg) rotateZ(0deg); }
-}
-
-@keyframes orbitSpin3 {
-    from { transform: rotateX(60deg) rotateY(-15deg) rotateZ(0deg); }
-    to   { transform: rotateX(60deg) rotateY(345deg) rotateZ(0deg); }
 }
 
 .hero-text {
@@ -1012,7 +891,6 @@ body {
     .hero-content {
         flex-direction: column;
         text-align: center;
-        overflow: visible;
     }
 
     .hero-name {
