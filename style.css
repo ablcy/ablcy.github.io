@@ -614,7 +614,7 @@ body {
 /* ===== 联系 ===== */
 .contact-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
 }
 
@@ -622,7 +622,7 @@ body {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    padding: 1.25rem 1.5rem;
+    padding: 1.1rem 1.25rem;
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: 16px;
@@ -644,15 +644,31 @@ body {
     flex-shrink: 0;
 }
 
-.contact-card span:nth-child(2) {
+.contact-info {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+}
+
+.contact-label {
     font-weight: 500;
     font-size: 0.95rem;
+}
+
+.contact-id {
+    font-size: 0.78rem;
+    color: var(--text-tertiary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .contact-arrow {
     color: var(--text-tertiary);
     transition: transform var(--transition), color var(--transition);
+    flex-shrink: 0;
 }
 
 .contact-card:hover .contact-arrow {
@@ -907,6 +923,10 @@ body {
     }
 
     .projects-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-grid {
         grid-template-columns: 1fr;
     }
 
