@@ -160,9 +160,10 @@
                     </div>
                 </a>
 
-                <a href="https://ablcy.github.io/yanbookmark" class="project-card" data-color="teal">
+                <div class="project-card locked-card" data-color="teal" data-target="https://ablcy.github.io/yanbookmark">
                     <div class="card-header">
                         <span class="card-icon">🔖</span>
+                        <span class="card-lock" title="需要密码">🔒</span>
                         <span class="card-arrow">↗</span>
                     </div>
                     <h3 class="card-title">YanBookmark</h3>
@@ -171,7 +172,7 @@
                         <span class="tag" data-zh="书签" data-en="Bookmarks">书签</span>
                         <span class="tag" data-zh="管理" data-en="Manager">管理</span>
                     </div>
-                </a>
+                </div>
             </div>
         </section>
 
@@ -320,6 +321,87 @@
                     walineInstance.update({ lang: l === 'zh' ? 'zh-CN' : 'en' });
                 }
             };
+        };
+    </script>
+    <!-- 密码验证弹窗 -->
+    <div class="lock-modal-overlay" id="lockModal">
+        <div class="lock-modal">
+            <div class="lock-modal-icon">🔒</div>
+            <h3 class="lock-modal-title" data-zh="此项目需要密码访问" data-en="Password Required">此项目需要密码访问</h3>
+            <p class="lock-modal-desc" data-zh="请输入访问密码" data-en="Enter the access password">请输入访问密码</p>
+            <input type="password" class="lock-modal-input" id="lockInput" autocomplete="off" data-placeholder-zh="输入密码..." data-placeholder-en="Enter password...">
+            <p class="lock-modal-error" id="lockError" data-zh="密码错误，请重试" data-en="Wrong password, try again"></p>
+            <div class="lock-modal-actions">
+                <button class="lock-modal-btn lock-cancel" id="lockCancel" data-zh="取消" data-en="Cancel">取消</button>
+                <button class="lock-modal-btn lock-confirm" id="lockConfirm" data-zh="确认" data-en="Confirm">确认</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // === 项目卡片密码锁 ===
+        const LOCKED_PASS = '558852';
+        const VERIFIED_KEY = 'yanbookmark_verified';
+
+        function openLockModal() {
+            const modal = document.getElementById('lockModal');
+            const input = document.getElementById('lockInput');
+            const error = document.getElementById('lockError');
+            modal.classList.add('active');
+            error.style.display = 'none';
+            input.value = '';
+            setTimeout(() => input.focus(), 150);
+        }
+
+        function closeLockModal() {
+            document.getElementById('lockModal').classList.remove('active');
+        }
+
+        function verifyLock() {
+            const input = document.getElementById('lockInput');
+            const error = document.getElementById('lockError');
+            if (input.value === LOCKED_PASS) {
+                sessionStorage.setItem(VERIFIED_KEY, '1');
+                closeLockModal();
+                window.open('https://ablcy.github.io/yanbookmark', '_blank');
+            } else {
+                error.style.display = 'block';
+                input.value = '';
+                input.focus();
+                // 抖动效果
+                const modal = document.querySelector('.lock-modal');
+                modal.style.animation = 'shake 0.4s ease';
+                setTimeout(() => modal.style.animation = '', 400);
+            }
+        }
+
+        document.querySelectorAll('.locked-card').forEach(card => {
+            card.style.cursor = 'pointer';
+            card.addEventListener('click', () => {
+                if (sessionStorage.getItem(VERIFIED_KEY)) {
+                    window.open('https://ablcy.github.io/yanbookmark', '_blank');
+                } else {
+                    openLockModal();
+                }
+            });
+        });
+
+        document.getElementById('lockConfirm').addEventListener('click', verifyLock);
+        document.getElementById('lockCancel').addEventListener('click', closeLockModal);
+        document.getElementById('lockInput').addEventListener('keydown', e => {
+            if (e.key === 'Enter') verifyLock();
+        });
+        document.getElementById('lockModal').addEventListener('click', e => {
+            if (e.target === e.currentTarget) closeLockModal();
+        });
+
+        // 初始化 lock input placeholder
+        const lockInput = document.getElementById('lockInput');
+        lockInput.placeholder = lockInput.getAttribute('data-placeholder-' + lang) || '输入密码...';
+        const origSetLang2 = setLang;
+        setLang = function(l) {
+            origSetLang2(l);
+            lockInput.placeholder = lockInput.getAttribute('data-placeholder-' + l) || '';
         };
     </script>
     <script type="module">
