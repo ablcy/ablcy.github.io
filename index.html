@@ -194,6 +194,15 @@
             </div>
         </section>
 
+        <!-- 评论区 -->
+        <section id="comments" class="section">
+            <h2 class="section-title">
+                <span class="title-dot"></span>
+                <span data-zh="留言板" data-en="Guestbook">留言板</span>
+            </h2>
+            <div id="waline"></div>
+        </section>
+
         <!-- 底部 -->
         <footer class="footer">
             <p class="copyright" data-zh="© 2026 Yan. 用代码构建有趣的产品。" data-en="© 2026 Yan. Building fun products with code.">© 2026 Yan. Built with ❤️ and code.</p>
@@ -232,6 +241,10 @@
             html.setAttribute('data-theme', next);
             localStorage.setItem('theme', next);
             updateThemeIcon();
+            // 同步 Waline 暗色模式
+            if (window.walineInstance) {
+                walineInstance.update({ dark: next === 'dark' });
+            }
         });
 
         function updateThemeIcon() {
@@ -282,6 +295,30 @@
 
         const grid = document.querySelector('.projects-grid');
         if (grid) cardObserver.observe(grid);
+
+        // === Waline 评论 ===
+        window.walineInstance = Waline.init({
+            el: '#waline',
+            serverURL: 'https://ablcy-o9k0ocvo8-luck-lucys-projects.vercel.app',
+            lang: lang === 'zh' ? 'zh-CN' : 'en',
+            dark: html.getAttribute('data-theme') === 'dark',
+            meta: ['nick', 'mail'],
+            requiredMeta: [],
+            login: 'disable',
+            wordLimit: [0, 500],
+            pageSize: 10,
+        });
+
+        // 语言切换时同步 Waline 语言
+        const origSetLang = setLang;
+        setLang = function(l) {
+            origSetLang(l);
+            if (window.walineInstance) {
+                walineInstance.update({ lang: l === 'zh' ? 'zh-CN' : 'en' });
+            }
+        };
     </script>
+    <script type="module" src="https://unpkg.com/@waline/client@v3/dist/waline.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css">
 </body>
 </html>
