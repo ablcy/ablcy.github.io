@@ -359,7 +359,7 @@ body {
 
 /* ===== 关于我 ===== */
 .about-content {
-    padding: 2rem 2.5rem;
+    padding: 2rem 2rem 1.5rem;
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: 16px;
@@ -367,37 +367,34 @@ body {
 }
 
 .about-verse {
-    font-size: 0.92rem;
-    line-height: 2;
-    color: var(--text-secondary);
     margin-bottom: 1.2rem;
-    padding-bottom: 1.2rem;
+    padding-bottom: 1rem;
     border-bottom: 1px solid var(--border-color);
-    letter-spacing: 0.03em;
-    font-style: italic;
+}
+
+.about-verse span {
+    display: block;
+    font-size: 0.9rem;
+    line-height: 2.2;
+    color: var(--text-secondary);
+    letter-spacing: 0.04em;
+}
+
+.about-verse span:first-child {
+    text-indent: 2em;
 }
 
 .about-desc {
     color: var(--text-secondary);
     line-height: 2;
-    margin-bottom: 0.6rem;
-    font-size: 0.95rem;
-    letter-spacing: 0.02em;
-}
-
-.about-desc:last-of-type {
-    margin-bottom: 1.2rem;
-}
-
-.about-closing {
-    text-align: center;
-    color: var(--gradient-1);
+    margin-bottom: 0.3rem;
     font-size: 0.92rem;
-    letter-spacing: 0.05em;
-    margin-top: 1rem;
-    padding-top: 1.2rem;
-    border-top: 1px solid var(--border-color);
-    opacity: 0.85;
+    letter-spacing: 0.02em;
+    text-indent: 2em;
+}
+
+.about-desc:last-child {
+    margin-bottom: 0;
 }
 
 /* ===== 项目网格 ===== */
