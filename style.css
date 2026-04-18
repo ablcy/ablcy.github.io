@@ -193,6 +193,25 @@ body {
     border-color: var(--border-hover);
 }
 
+.lang-toggle {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.4rem 0.6rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    line-height: 1;
+    transition: all var(--transition);
+}
+
+.lang-toggle:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--border-hover);
+    color: var(--text-primary);
+}
+
 /* ===== Hero 区域 ===== */
 .hero {
     padding: 5rem 0 3rem;

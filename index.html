@@ -21,11 +21,14 @@
                 <span class="nav-name">Yan</span>
             </div>
             <div class="nav-links">
-                <a href="#about" class="nav-link active">关于</a>
-                <a href="#projects" class="nav-link">项目</a>
-                <a href="#contact" class="nav-link">联系</a>
+                <a href="#about" class="nav-link active" data-zh="关于" data-en="About">关于</a>
+                <a href="#projects" class="nav-link" data-zh="项目" data-en="Projects">项目</a>
+                <a href="#contact" class="nav-link" data-zh="联系" data-en="Contact">联系</a>
                 <button class="theme-toggle" id="themeToggle" title="切换主题">
                     <span class="theme-icon">🌙</span>
+                </button>
+                <button class="lang-toggle" id="langToggle" title="切换语言">
+                    <span class="lang-text">EN</span>
                 </button>
             </div>
         </nav>
@@ -37,25 +40,24 @@
                     <img src="avatar.jpg" alt="Yan">
                 </div>
                 <div class="hero-text">
-                    <p class="hero-greeting">👋 你好，我是</p>
                     <h1 class="hero-name">Yan</h1>
-                    <p class="hero-bio">热爱技术，喜欢折腾。独立开发者，用代码构建有趣的互联网产品。</p>
+                    <p class="hero-bio" data-zh="热爱技术，喜欢折腾。独立开发者，用代码构建有趣的互联网产品。" data-en="Tech enthusiast & indie developer. Building fun web products with code."></p>
                 </div>
             </div>
             <div class="hero-stats">
                 <div class="stat-item">
                     <span class="stat-num">7</span>
-                    <span class="stat-label">个项目</span>
+                    <span class="stat-label" data-zh="个项目" data-en="Projects"></span>
                 </div>
                 <div class="stat-divider"></div>
                 <div class="stat-item">
                     <span class="stat-num">GitHub</span>
-                    <span class="stat-label">开源</span>
+                    <span class="stat-label" data-zh="开源" data-en="Open Source"></span>
                 </div>
                 <div class="stat-divider"></div>
                 <div class="stat-item">
                     <span class="stat-num">AIGC</span>
-                    <span class="stat-label">探索中</span>
+                    <span class="stat-label" data-zh="探索中" data-en="Exploring"></span>
                 </div>
             </div>
         </header>
@@ -64,11 +66,11 @@
         <section id="about" class="section">
             <h2 class="section-title">
                 <span class="title-dot"></span>
-                关于我
+                <span data-zh="关于我" data-en="About Me">关于我</span>
             </h2>
             <div class="about-content">
-                <p>一个喜欢折腾技术的独立开发者，专注于构建简洁实用的 Web 应用。从 AI 工具到音乐播放器，从书签管理到 FIRE 计算器，享受从零到一的创造过程。</p>
-                <p>主要技术栈：前端三件套（HTML/CSS/JS）、Cloudflare Workers、GitHub Pages。喜欢暗色系设计、渐变色和微交互动画。</p>
+                <p data-zh="一个喜欢折腾技术的独立开发者，专注于构建简洁实用的 Web 应用。从 AI 工具到音乐播放器，从书签管理到 FIRE 计算器，享受从零到一的创造过程。" data-en="An indie developer who loves tinkering with tech. Focused on building clean, practical web apps — from AI tools to music players, bookmark managers to FIRE calculators. I enjoy the creative process from zero to one."></p>
+                <p data-zh="主要技术栈：前端三件套（HTML/CSS/JS）、Cloudflare Workers、GitHub Pages。喜欢暗色系设计、渐变色和微交互动画。" data-en="Tech stack: HTML/CSS/JS, Cloudflare Workers, GitHub Pages. I love dark themes, gradients, and micro-interaction animations."></p>
             </div>
         </section>
 
@@ -76,7 +78,7 @@
         <section id="projects" class="section">
             <h2 class="section-title">
                 <span class="title-dot"></span>
-                我的项目
+                <span data-zh="我的项目" data-en="My Projects">我的项目</span>
             </h2>
             <div class="projects-grid">
                 <a href="https://ablcy.github.io/yanai" class="project-card" data-color="purple">
@@ -85,10 +87,10 @@
                         <span class="card-arrow">↗</span>
                     </div>
                     <h3 class="card-title">YanAI</h3>
-                    <p class="card-desc">免费 AI 工具合集，60+ 款精选工具</p>
+                    <p class="card-desc" data-zh="免费 AI 工具合集，60+ 款精选工具" data-en="Free AI tools collection, 60+ curated tools"></p>
                     <div class="card-tags">
                         <span class="tag">AI</span>
-                        <span class="tag">工具</span>
+                        <span class="tag" data-zh="工具" data-en="Tools">工具</span>
                     </div>
                 </a>
 
@@ -98,10 +100,10 @@
                         <span class="card-arrow">↗</span>
                     </div>
                     <h3 class="card-title">YanLink</h3>
-                    <p class="card-desc">短链接生成器，自定义别名与点击统计</p>
+                    <p class="card-desc" data-zh="短链接生成器，自定义别名与点击统计" data-en="Short link generator with custom aliases & click tracking"></p>
                     <div class="card-tags">
-                        <span class="tag">工具</span>
-                        <span class="tag">效率</span>
+                        <span class="tag" data-zh="工具" data-en="Tools">工具</span>
+                        <span class="tag" data-zh="效率" data-en="Productivity">效率</span>
                     </div>
                 </a>
 
@@ -111,10 +113,10 @@
                         <span class="card-arrow">↗</span>
                     </div>
                     <h3 class="card-title">YanTravel</h3>
-                    <p class="card-desc">全球景点推荐，36 个精选目的地</p>
+                    <p class="card-desc" data-zh="全球景点推荐，36 个精选目的地" data-en="Global travel recommendations, 36 curated destinations"></p>
                     <div class="card-tags">
-                        <span class="tag">旅行</span>
-                        <span class="tag">推荐</span>
+                        <span class="tag" data-zh="旅行" data-en="Travel">旅行</span>
+                        <span class="tag" data-zh="推荐" data-en="Guide">推荐</span>
                     </div>
                 </a>
 
@@ -124,10 +126,10 @@
                         <span class="card-arrow">↗</span>
                     </div>
                     <h3 class="card-title">YanRead</h3>
-                    <p class="card-desc">精选阅读推荐，好书不孤单</p>
+                    <p class="card-desc" data-zh="精选阅读推荐，好书不孤单" data-en="Curated reading recommendations"></p>
                     <div class="card-tags">
-                        <span class="tag">阅读</span>
-                        <span class="tag">书籍</span>
+                        <span class="tag" data-zh="阅读" data-en="Reading">阅读</span>
+                        <span class="tag" data-zh="书籍" data-en="Books">书籍</span>
                     </div>
                 </a>
 
@@ -137,10 +139,10 @@
                         <span class="card-arrow">↗</span>
                     </div>
                     <h3 class="card-title">YanMusic</h3>
-                    <p class="card-desc">免费音乐播放器，搜索即听</p>
+                    <p class="card-desc" data-zh="免费音乐播放器，搜索即听" data-en="Free music player, search and play instantly"></p>
                     <div class="card-tags">
-                        <span class="tag">音乐</span>
-                        <span class="tag">播放器</span>
+                        <span class="tag" data-zh="音乐" data-en="Music">音乐</span>
+                        <span class="tag" data-zh="播放器" data-en="Player">播放器</span>
                     </div>
                 </a>
 
@@ -150,10 +152,10 @@
                         <span class="card-arrow">↗</span>
                     </div>
                     <h3 class="card-title">YanFire</h3>
-                    <p class="card-desc">FIRE 生活推广，财务自由计算器</p>
+                    <p class="card-desc" data-zh="FIRE 生活推广，财务自由计算器" data-en="FIRE lifestyle advocacy & financial freedom calculator"></p>
                     <div class="card-tags">
                         <span class="tag">FIRE</span>
-                        <span class="tag">理财</span>
+                        <span class="tag" data-zh="理财" data-en="Finance">理财</span>
                     </div>
                 </a>
 
@@ -163,10 +165,10 @@
                         <span class="card-arrow">↗</span>
                     </div>
                     <h3 class="card-title">YanBookmark</h3>
-                    <p class="card-desc">书签管理平台，189 个精选收藏</p>
+                    <p class="card-desc" data-zh="书签管理平台，189 个精选收藏" data-en="Bookmark manager, 189 curated collections"></p>
                     <div class="card-tags">
-                        <span class="tag">书签</span>
-                        <span class="tag">管理</span>
+                        <span class="tag" data-zh="书签" data-en="Bookmarks">书签</span>
+                        <span class="tag" data-zh="管理" data-en="Manager">管理</span>
                     </div>
                 </a>
             </div>
@@ -176,7 +178,7 @@
         <section id="contact" class="section">
             <h2 class="section-title">
                 <span class="title-dot"></span>
-                找到我
+                <span data-zh="找到我" data-en="Find Me">找到我</span>
             </h2>
             <div class="contact-grid">
                 <a href="https://github.com/ablcy" target="_blank" rel="noopener" class="contact-card">
@@ -194,13 +196,33 @@
 
         <!-- 底部 -->
         <footer class="footer">
-            <p class="copyright">© 2026 Yan. Built with ❤️ and code.</p>
+            <p class="copyright" data-zh="© 2026 Yan. 用代码构建有趣的产品。" data-en="© 2026 Yan. Building fun products with code.">© 2026 Yan. Built with ❤️ and code.</p>
         </footer>
     </div>
 
     <script>
-        // 主题切换
         const html = document.documentElement;
+
+        // === 语言切换 ===
+        let lang = localStorage.getItem('lang') || 'zh';
+
+        function setLang(l) {
+            lang = l;
+            localStorage.setItem('lang', l);
+            html.setAttribute('lang', l === 'zh' ? 'zh-CN' : 'en');
+            document.querySelectorAll('[data-zh]').forEach(el => {
+                el.textContent = el.getAttribute('data-' + l);
+            });
+            document.querySelector('.lang-text').textContent = l === 'zh' ? 'EN' : '中';
+        }
+
+        document.getElementById('langToggle').addEventListener('click', () => {
+            setLang(lang === 'zh' ? 'en' : 'zh');
+        });
+
+        setLang(lang);
+
+        // === 主题切换 ===
         const saved = localStorage.getItem('theme') || 'dark';
         html.setAttribute('data-theme', saved);
         updateThemeIcon();
