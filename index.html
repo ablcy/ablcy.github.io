@@ -3,113 +3,263 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YanHub - 项目导航</title>
+    <title>Yan - Personal Blog</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
     <link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180">
 </head>
 <body>
+    <!-- 背景装饰 -->
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="bg-orb orb-3"></div>
+
     <div class="container">
-        <header>
-            <div class="avatar">
-                <img src="avatar.jpg" alt="YanHub">
+        <!-- 导航栏 -->
+        <nav class="navbar">
+            <div class="nav-logo">
+                <span class="nav-name">Yan</span>
             </div>
-            <h1 class="name">YanHub</h1>
-            <p class="bio">个人项目合集</p>
+            <div class="nav-links">
+                <a href="#about" class="nav-link active">关于</a>
+                <a href="#projects" class="nav-link">项目</a>
+                <a href="#contact" class="nav-link">联系</a>
+                <button class="theme-toggle" id="themeToggle" title="切换主题">
+                    <span class="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Hero 区域 -->
+        <header class="hero">
+            <div class="hero-content">
+                <div class="hero-avatar">
+                    <img src="avatar.jpg" alt="Yan">
+                </div>
+                <div class="hero-text">
+                    <p class="hero-greeting">👋 你好，我是</p>
+                    <h1 class="hero-name">Yan</h1>
+                    <p class="hero-bio">热爱技术，喜欢折腾。独立开发者，用代码构建有趣的互联网产品。</p>
+                </div>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-num">7</span>
+                    <span class="stat-label">个项目</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-num">GitHub</span>
+                    <span class="stat-label">开源</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-num">AIGC</span>
+                    <span class="stat-label">探索中</span>
+                </div>
+            </div>
         </header>
 
-        <main class="projects">
-            <a href="https://ablcy.github.io/yanai" class="project-card" data-color="purple">
-                <div class="card-icon">🤖</div>
-                <div class="card-info">
-                    <h2>YanAI</h2>
-                    <p>免费 AI 工具合集，60+ 款精选工具</p>
-                </div>
-                <div class="card-arrow">→</div>
-            </a>
+        <!-- 关于我 -->
+        <section id="about" class="section">
+            <h2 class="section-title">
+                <span class="title-dot"></span>
+                关于我
+            </h2>
+            <div class="about-content">
+                <p>一个喜欢折腾技术的独立开发者，专注于构建简洁实用的 Web 应用。从 AI 工具到音乐播放器，从书签管理到 FIRE 计算器，享受从零到一的创造过程。</p>
+                <p>主要技术栈：前端三件套（HTML/CSS/JS）、Cloudflare Workers、GitHub Pages。喜欢暗色系设计、渐变色和微交互动画。</p>
+            </div>
+        </section>
 
-            <a href="https://ablcy.github.io/yanlink" class="project-card" data-color="cyan">
-                <div class="card-icon">🔗</div>
-                <div class="card-info">
-                    <h2>YanLink</h2>
-                    <p>短链接生成器，自定义别名与点击统计</p>
-                </div>
-                <div class="card-arrow">→</div>
-            </a>
+        <!-- 项目展示 -->
+        <section id="projects" class="section">
+            <h2 class="section-title">
+                <span class="title-dot"></span>
+                我的项目
+            </h2>
+            <div class="projects-grid">
+                <a href="https://ablcy.github.io/yanai" class="project-card" data-color="purple">
+                    <div class="card-header">
+                        <span class="card-icon">🤖</span>
+                        <span class="card-arrow">↗</span>
+                    </div>
+                    <h3 class="card-title">YanAI</h3>
+                    <p class="card-desc">免费 AI 工具合集，60+ 款精选工具</p>
+                    <div class="card-tags">
+                        <span class="tag">AI</span>
+                        <span class="tag">工具</span>
+                    </div>
+                </a>
 
-            <a href="https://ablcy.github.io/yantravel" class="project-card" data-color="blue">
-                <div class="card-icon">🌍</div>
-                <div class="card-info">
-                    <h2>YanTravel</h2>
-                    <p>全球景点推荐，36 个精选目的地</p>
-                </div>
-                <div class="card-arrow">→</div>
-            </a>
+                <a href="https://ablcy.github.io/yanlink" class="project-card" data-color="cyan">
+                    <div class="card-header">
+                        <span class="card-icon">🔗</span>
+                        <span class="card-arrow">↗</span>
+                    </div>
+                    <h3 class="card-title">YanLink</h3>
+                    <p class="card-desc">短链接生成器，自定义别名与点击统计</p>
+                    <div class="card-tags">
+                        <span class="tag">工具</span>
+                        <span class="tag">效率</span>
+                    </div>
+                </a>
 
-            <a href="https://ablcy.github.io/yanread" class="project-card" data-color="green">
-                <div class="card-icon">📚</div>
-                <div class="card-info">
-                    <h2>YanRead</h2>
-                    <p>阅读相关工具与资源</p>
-                </div>
-                <div class="card-arrow">→</div>
-            </a>
+                <a href="https://ablcy.github.io/yantravel" class="project-card" data-color="blue">
+                    <div class="card-header">
+                        <span class="card-icon">🌍</span>
+                        <span class="card-arrow">↗</span>
+                    </div>
+                    <h3 class="card-title">YanTravel</h3>
+                    <p class="card-desc">全球景点推荐，36 个精选目的地</p>
+                    <div class="card-tags">
+                        <span class="tag">旅行</span>
+                        <span class="tag">推荐</span>
+                    </div>
+                </a>
 
-            <a href="https://ablcy.github.io/yanmusic" class="project-card" data-color="pink">
-                <div class="card-icon">🎵</div>
-                <div class="card-info">
-                    <h2>YanMusic</h2>
-                    <p>免费音乐播放器，搜索即听</p>
-                </div>
-                <div class="card-arrow">→</div>
-            </a>
+                <a href="https://ablcy.github.io/yanread" class="project-card" data-color="green">
+                    <div class="card-header">
+                        <span class="card-icon">📚</span>
+                        <span class="card-arrow">↗</span>
+                    </div>
+                    <h3 class="card-title">YanRead</h3>
+                    <p class="card-desc">精选阅读推荐，好书不孤单</p>
+                    <div class="card-tags">
+                        <span class="tag">阅读</span>
+                        <span class="tag">书籍</span>
+                    </div>
+                </a>
 
-            <a href="https://ablcy.github.io/yanfire" class="project-card" data-color="orange">
-                <div class="card-icon">🔥</div>
-                <div class="card-info">
-                    <h2>YanFire</h2>
-                    <p>FIRE 生活推广，财务自由计算器</p>
-                </div>
-                <div class="card-arrow">→</div>
-            </a>
+                <a href="https://ablcy.github.io/yanmusic" class="project-card" data-color="pink">
+                    <div class="card-header">
+                        <span class="card-icon">🎵</span>
+                        <span class="card-arrow">↗</span>
+                    </div>
+                    <h3 class="card-title">YanMusic</h3>
+                    <p class="card-desc">免费音乐播放器，搜索即听</p>
+                    <div class="card-tags">
+                        <span class="tag">音乐</span>
+                        <span class="tag">播放器</span>
+                    </div>
+                </a>
 
-            <a href="https://ablcy.github.io/yanbookmark" class="project-card" data-color="teal">
-                <div class="card-icon">🔖</div>
-                <div class="card-info">
-                    <h2>YanBookmark</h2>
-                    <p>书签管理平台，189 个精选收藏</p>
-                </div>
-                <div class="card-arrow">→</div>
-            </a>
-        </main>
+                <a href="https://ablcy.github.io/yanfire" class="project-card" data-color="orange">
+                    <div class="card-header">
+                        <span class="card-icon">🔥</span>
+                        <span class="card-arrow">↗</span>
+                    </div>
+                    <h3 class="card-title">YanFire</h3>
+                    <p class="card-desc">FIRE 生活推广，财务自由计算器</p>
+                    <div class="card-tags">
+                        <span class="tag">FIRE</span>
+                        <span class="tag">理财</span>
+                    </div>
+                </a>
 
-        <footer>
-            <div class="external-links">
-                <a href="https://github.com/ablcy" target="_blank" rel="noopener">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-                    GitHub
+                <a href="https://ablcy.github.io/yanbookmark" class="project-card" data-color="teal">
+                    <div class="card-header">
+                        <span class="card-icon">🔖</span>
+                        <span class="card-arrow">↗</span>
+                    </div>
+                    <h3 class="card-title">YanBookmark</h3>
+                    <p class="card-desc">书签管理平台，189 个精选收藏</p>
+                    <div class="card-tags">
+                        <span class="tag">书签</span>
+                        <span class="tag">管理</span>
+                    </div>
                 </a>
             </div>
-            <p class="copyright">© 2026 YanHub</p>
+        </section>
+
+        <!-- 联系方式 -->
+        <section id="contact" class="section">
+            <h2 class="section-title">
+                <span class="title-dot"></span>
+                找到我
+            </h2>
+            <div class="contact-grid">
+                <a href="https://github.com/ablcy" target="_blank" rel="noopener" class="contact-card">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                    <span>GitHub</span>
+                    <span class="contact-arrow">→</span>
+                </a>
+                <a href="mailto:lcy@yan.dev" class="contact-card">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                    <span>Email</span>
+                    <span class="contact-arrow">→</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- 底部 -->
+        <footer class="footer">
+            <p class="copyright">© 2026 Yan. Built with ❤️ and code.</p>
         </footer>
     </div>
 
     <script>
         // 主题切换
+        const html = document.documentElement;
         const saved = localStorage.getItem('theme') || 'dark';
-        document.documentElement.setAttribute('data-theme', saved);
+        html.setAttribute('data-theme', saved);
+        updateThemeIcon();
 
-        // 卡片入场动画
-        const cards = document.querySelectorAll('.project-card');
-        cards.forEach((card, i) => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(20px)';
-            setTimeout(() => {
-                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-                card.style.opacity = '1';
-                card.style.transform = 'translateY(0)';
-            }, 200 + i * 100);
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon();
         });
+
+        function updateThemeIcon() {
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            document.querySelector('.theme-icon').textContent = isDark ? '🌙' : '☀️';
+        }
+
+        // 导航高亮
+        const sections = document.querySelectorAll('.section');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(sec => {
+                const top = sec.offsetTop - 120;
+                if (window.scrollY >= top) current = sec.getAttribute('id');
+            });
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+            });
+        });
+
+        // 滚动入场动画
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.section, .hero').forEach(el => observer.observe(el));
+
+        // 项目卡片逐个入场
+        const cardObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const cards = entry.target.querySelectorAll('.project-card');
+                    cards.forEach((card, i) => {
+                        setTimeout(() => card.classList.add('visible'), i * 80);
+                    });
+                    cardObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        const grid = document.querySelector('.projects-grid');
+        if (grid) cardObserver.observe(grid);
     </script>
 </body>
 </html>
