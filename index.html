@@ -296,29 +296,34 @@
         const grid = document.querySelector('.projects-grid');
         if (grid) cardObserver.observe(grid);
 
-        // === Waline 评论 ===
-        window.walineInstance = Waline.init({
-            el: '#waline',
-            serverURL: 'https://ablcy-o9k0ocvo8-luck-lucys-projects.vercel.app',
-            lang: lang === 'zh' ? 'zh-CN' : 'en',
-            dark: html.getAttribute('data-theme') === 'dark',
-            meta: ['nick', 'mail'],
-            requiredMeta: [],
-            login: 'disable',
-            wordLimit: [0, 500],
-            pageSize: 10,
-        });
+        // Waline 初始化由 module script 处理
+        window.initWaline = function(Waline) {
+            window.walineInstance = Waline.init({
+                el: '#waline',
+                serverURL: 'https://ablcy-o9k0ocvo8-luck-lucys-projects.vercel.app',
+                lang: lang === 'zh' ? 'zh-CN' : 'en',
+                dark: html.getAttribute('data-theme') === 'dark',
+                meta: ['nick', 'mail'],
+                requiredMeta: [],
+                login: 'disable',
+                wordLimit: [0, 500],
+                pageSize: 10,
+            });
 
-        // 语言切换时同步 Waline 语言
-        const origSetLang = setLang;
-        setLang = function(l) {
-            origSetLang(l);
-            if (window.walineInstance) {
-                walineInstance.update({ lang: l === 'zh' ? 'zh-CN' : 'en' });
-            }
+            // 语言切换时同步 Waline 语言
+            const origSetLang = setLang;
+            setLang = function(l) {
+                origSetLang(l);
+                if (window.walineInstance) {
+                    walineInstance.update({ lang: l === 'zh' ? 'zh-CN' : 'en' });
+                }
+            };
         };
     </script>
-    <script type="module" src="https://unpkg.com/@waline/client@v3/dist/waline.js"></script>
+    <script type="module">
+        import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
+        window.initWaline({ init });
+    </script>
     <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css">
 </body>
 </html>
