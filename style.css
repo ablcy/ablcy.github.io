@@ -646,16 +646,23 @@ body {
 
 .contact-info {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    min-width: 0;
+}
+
+.contact-label {
     font-weight: 500;
     font-size: 0.95rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .contact-id {
+    font-size: 0.82rem;
     color: var(--text-tertiary);
-    font-weight: 400;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .contact-arrow {
