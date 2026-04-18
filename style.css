@@ -659,12 +659,39 @@ body {
 
 [data-theme="dark"] #waline .wl-input,
 [data-theme="dark"] #waline .wl-textarea {
-    background: var(--bg-secondary) !important;
+    background: rgba(255, 255, 255, 0.08) !important;
     color: var(--text-primary) !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
+    caret-color: var(--gradient-1) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-theme="dark"] #waline .wl-input:focus,
+[data-theme="dark"] #waline .wl-textarea:focus {
+    border-color: var(--gradient-1) !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* 强制覆盖 Waline 默认暗色输入框颜色 */
+[data-theme="dark"] #waline input[type="text"],
+[data-theme="dark"] #waline input[type="email"],
+[data-theme="dark"] #waline input[type="url"],
+[data-theme="dark"] #waline input[type="nick"],
+[data-theme="dark"] #waline input[type="password"],
+[data-theme="dark"] #waline textarea {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: var(--text-primary) !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
+    caret-color: var(--gradient-1) !important;
 }
 
 [data-theme="dark"] #waline .wl-card:hover {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* 暗色模式下评论内容文字 */
+[data-theme="dark"] #waline .wl-content {
+    color: var(--text-primary) !important;
 }
 
 /* ===== 浅色主题评论区 ===== */
