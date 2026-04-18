@@ -655,6 +655,7 @@ body {
 .contact-label {
     font-weight: 500;
     font-size: 0.95rem;
+    display: block;
 }
 
 .contact-id {
@@ -663,6 +664,7 @@ body {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    display: block;
 }
 
 .contact-arrow {
@@ -886,6 +888,13 @@ body {
 .copyright {
     color: var(--text-tertiary);
     font-size: 0.8rem;
+}
+
+.version {
+    color: var(--text-tertiary);
+    font-size: 0.72rem;
+    margin-top: 0.3rem;
+    opacity: 0.6;
 }
 
 /* ===== 响应式 ===== */
