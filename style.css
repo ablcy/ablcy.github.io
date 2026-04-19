@@ -153,7 +153,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    transition: opacity 0.6s var(--ease), visibility 0.6s;
+    transition: opacity 0.3s var(--ease), visibility 0.3s;
 }
 
 .loader-done {
@@ -163,7 +163,7 @@ body {
 }
 
 .loader-text {
-    font-size: 3rem;
+    font-size: 5rem;
     font-weight: 900;
     letter-spacing: 0.3em;
     background: linear-gradient(135deg, var(--violet), var(--cyan));
@@ -171,7 +171,7 @@ body {
     -webkit-text-fill-color: transparent;
     background-clip: text;
     margin-bottom: 2rem;
-    animation: loaderPulse 1.5s ease-in-out infinite;
+    animation: loaderPulse 0.8s ease-in-out infinite;
 }
 
 @keyframes loaderPulse {
@@ -192,7 +192,7 @@ body {
     height: 100%;
     background: linear-gradient(90deg, var(--violet), var(--cyan));
     border-radius: 1px;
-    transition: width 1s var(--ease);
+    transition: width 0.6s var(--ease);
 }
 
 /* ===== 导航 ===== */
@@ -855,8 +855,38 @@ body {
 
 #waline .wl-card:hover { border-color: var(--border-hover) !important; }
 
-#waline .wl-avatar {
+/* Waline 头像隐藏（评论列表+编辑框+管理后台） */
+#waline .wl-avatar,
+#waline [class*="wl-avatar"],
+.wl-avatar,
+.wl-panel-avatar,
+.wl-admin-avatar {
     display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    overflow: hidden !important;
+    visibility: hidden !important;
+}
+
+/* 头像旁边的内容区占满 */
+#waline .wl-header-item:not(:last-child) {
+    display: none !important;
+}
+#waline .wl-header-item:last-child {
+    display: flex !important;
+    flex: 1 !important;
+}
+#waline .wl-meta {
+    flex: 1 !important;
+}
+#waline .wl-comment-header {
+    display: flex !important;
+    align-items: center !important;
 }
 
 #waline .wl-nick {

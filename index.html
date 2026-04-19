@@ -56,11 +56,9 @@
         <section class="hero" id="hero">
             <div class="hero-inner">
                 <div class="hero-left">
-                    <p class="hero-tag" data-zh="独立开发者 · 数字匠人" data-en="Indie Developer · Digital Craftsman">独立开发者 · 数字匠人</p>
                     <h1 class="hero-title">
                         <span class="hero-name" id="heroName">Yan</span>
                     </h1>
-                    <p class="hero-subtitle" data-zh="用代码构建有趣的互联网产品" data-en="Building fun web products with code">用代码构建有趣的互联网产品</p>
                     <div class="hero-stats">
                         <div class="stat">
                             <span class="stat-number" data-count="7">0</span>
@@ -314,7 +312,7 @@
     <footer class="footer">
         <div class="footer-inner">
             <p class="footer-text" data-zh="© 2026 Yan. 用代码构建有趣的产品。" data-en="© 2026 Yan. Building fun products with code.">© 2026 Yan. 用代码构建有趣的产品。</p>
-            <p class="footer-version">v1.1.2</p>
+            <p class="footer-version">v1.1.3</p>
         </div>
     </footer>
 
@@ -421,12 +419,12 @@
             loader.classList.add('loader-done');
             document.body.style.overflow = 'auto';
             animateHero();
-        }, 1200);
+        }, 800);
     });
 
     // ===== Hero 入场动画 =====
     function animateHero() {
-        const elements = document.querySelectorAll('.hero-tag, .hero-name, .hero-subtitle, .hero-stats, .hero-right');
+        const elements = document.querySelectorAll('.hero-name, .hero-stats, .hero-right');
         elements.forEach((el, i) => {
             setTimeout(() => el.classList.add('in-view'), i * 150 + 200);
         });
