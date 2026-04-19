@@ -856,11 +856,7 @@ body {
 #waline .wl-card:hover { border-color: var(--border-hover) !important; }
 
 #waline .wl-avatar {
-    border-radius: 50% !important;
-    border: 2px solid transparent !important;
-    background: linear-gradient(135deg, var(--violet), var(--cyan)) !important;
-    background-origin: border-box !important;
-    background-clip: content-box, border-box !important;
+    display: none !important;
 }
 
 #waline .wl-nick {
