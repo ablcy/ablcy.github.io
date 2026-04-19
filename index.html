@@ -3,425 +3,625 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yan - Personal Blog</title>
+    <title>Yan — Digital Craftsman</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css">
     <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
     <link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180">
 </head>
 <body>
-    <!-- 背景装饰 -->
-    <div class="bg-orb orb-1"></div>
-    <div class="bg-orb orb-2"></div>
-    <div class="bg-orb orb-3"></div>
+    <!-- 自定义光标 -->
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-follower" id="cursorFollower"></div>
 
-    <div class="container">
-        <!-- 导航栏 -->
-        <nav class="navbar">
-            <div class="nav-logo">
-                <span class="nav-name">Yan</span>
-            </div>
-            <div class="nav-links">
-                <a href="#about" class="nav-link active" data-zh="关于" data-en="About">关于</a>
-                <a href="#projects" class="nav-link" data-zh="项目" data-en="Projects">项目</a>
-                <a href="#contact" class="nav-link" data-zh="联系" data-en="Contact">联系</a>
-                <a href="#comments" class="nav-link" data-zh="留言" data-en="Guest">留言</a>
-                <button class="theme-toggle" id="themeToggle" title="切换主题">
-                    <span class="theme-icon">🌙</span>
-                </button>
-                <button class="lang-toggle" id="langToggle" title="切换语言">
-                    <span class="lang-text">EN</span>
-                </button>
-            </div>
-        </nav>
+    <!-- 粒子背景 -->
+    <canvas id="particleCanvas"></canvas>
 
-        <!-- Hero 区域 -->
-        <header class="hero">
-            <div class="hero-content">
-                <div class="hero-avatar">
-                    <img src="avatar.jpg" alt="Yan">
-                </div>
-                <div class="hero-text">
-                    <h1 class="hero-name">Yan</h1>
-                    <p class="hero-bio" data-zh="热爱技术，喜欢折腾。独立开发者，用代码构建有趣的互联网产品。" data-en="Tech enthusiast & indie developer. Building fun web products with code."></p>
-                </div>
-            </div>
-            <div class="hero-stats">
-                <div class="stat-item">
-                    <span class="stat-num">7</span>
-                    <span class="stat-label" data-zh="个项目" data-en="Projects"></span>
-                </div>
-                <div class="stat-divider"></div>
-                <div class="stat-item">
-                    <span class="stat-num">GitHub</span>
-                    <span class="stat-label" data-zh="开源" data-en="Open Source"></span>
-                </div>
-                <div class="stat-divider"></div>
-                <div class="stat-item">
-                    <span class="stat-num">AIGC</span>
-                    <span class="stat-label" data-zh="探索中" data-en="Exploring"></span>
-                </div>
-            </div>
-        </header>
+    <!-- 网格背景 -->
+    <div class="grid-bg"></div>
 
-        <!-- 关于我 -->
-        <section id="about" class="section">
-            <h2 class="section-title">
-                <span class="title-dot"></span>
-                <span data-zh="关于我" data-en="About Me">关于我</span>
-            </h2>
+    <!-- 背景光球 -->
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+    <div class="glow glow-3"></div>
+
+    <!-- 加载屏幕 -->
+    <div class="loader" id="loader">
+        <div class="loader-text">YAN</div>
+        <div class="loader-bar">
+            <div class="loader-progress" id="loaderProgress"></div>
+        </div>
+    </div>
+
+    <!-- 导航 -->
+    <nav class="nav" id="nav">
+        <a href="#" class="nav-logo magnetic">
+            <span class="logo-text">YAN</span>
+            <span class="logo-dot"></span>
+        </a>
+        <div class="nav-links">
+            <a href="#about" class="nav-link magnetic" data-zh="关于" data-en="About">关于</a>
+            <a href="#work" class="nav-link magnetic" data-zh="作品" data-en="Work">作品</a>
+            <a href="#contact" class="nav-link magnetic" data-zh="联系" data-en="Contact">联系</a>
+            <a href="#guestbook" class="nav-link magnetic" data-zh="留言" data-en="Guest">留言</a>
+        </div>
+        <div class="nav-actions">
+            <button class="lang-btn magnetic" id="langToggle">EN</button>
+        </div>
+    </nav>
+
+    <main>
+        <!-- ===== HERO ===== -->
+        <section class="hero" id="hero">
+            <div class="hero-inner">
+                <div class="hero-left">
+                    <p class="hero-tag" data-zh="独立开发者 · 数字匠人" data-en="Indie Developer · Digital Craftsman">独立开发者 · 数字匠人</p>
+                    <h1 class="hero-title">
+                        <span class="hero-name" id="heroName">Yan</span>
+                    </h1>
+                    <p class="hero-subtitle" data-zh="用代码构建有趣的互联网产品" data-en="Building fun web products with code">用代码构建有趣的互联网产品</p>
+                    <div class="hero-stats">
+                        <div class="stat">
+                            <span class="stat-number" data-count="7">0</span>
+                            <span class="stat-unit" data-zh="个项目" data-en="Projects">个项目</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number" data-count="3">0</span>
+                            <span class="stat-unit" data-zh="个平台" data-en="Platforms">个平台</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">∞</span>
+                            <span class="stat-unit" data-zh="个想法" data-en="Ideas">个想法</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-right">
+                    <div class="hero-avatar magnetic">
+                        <img src="avatar.jpg" alt="Yan" class="avatar-img">
+                        <div class="avatar-ring"></div>
+                        <div class="avatar-glow"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-scroll">
+                <span data-zh="向下探索" data-en="Scroll Down">向下探索</span>
+                <div class="scroll-line"></div>
+            </div>
+        </section>
+
+        <!-- ===== MARQUEE ===== -->
+        <div class="marquee-wrapper">
+            <div class="marquee" id="marquee">
+                <span>AI TOOLS</span>
+                <span>·</span>
+                <span>WEB DEV</span>
+                <span>·</span>
+                <span>DESIGN</span>
+                <span>·</span>
+                <span>OPEN SOURCE</span>
+                <span>·</span>
+                <span>AIGC</span>
+                <span>·</span>
+                <span>FIRE</span>
+                <span>·</span>
+                <span>CREATIVE</span>
+                <span>·</span>
+                <span>AI TOOLS</span>
+                <span>·</span>
+                <span>WEB DEV</span>
+                <span>·</span>
+                <span>DESIGN</span>
+                <span>·</span>
+                <span>OPEN SOURCE</span>
+                <span>·</span>
+                <span>AIGC</span>
+                <span>·</span>
+                <span>FIRE</span>
+                <span>·</span>
+                <span>CREATIVE</span>
+                <span>·</span>
+            </div>
+        </div>
+
+        <!-- ===== ABOUT ===== -->
+        <section class="section about-section" id="about">
+            <div class="section-header">
+                <span class="section-num">01</span>
+                <h2 class="section-title" data-zh="关于我" data-en="About Me">关于我</h2>
+            </div>
             <div class="about-content">
                 <div class="about-verse">
                     <span data-zh="我学着不去担心得太远，" data-en="I learn not to worry too far ahead,">我学着不去担心得太远，</span>
                     <span data-zh="不计划太多反而能勇敢冒险。" data-en="not to plan too much so I can be brave.">不计划太多反而能勇敢冒险。</span>
                     <span data-zh="丰富地过每一天快乐地看每一天。" data-en="Live every day richly, happily watch every day pass.">丰富地过每一天快乐地看每一天。</span>
                 </div>
-                <p class="about-desc" data-zh="一个在文字与逻辑之间游走的人。偏爱深度思考，习惯在安静里慢慢沉淀，对世界保持好奇，也对自我保持清醒。" data-en="A person wandering between words and logic. Loves deep thinking, settles slowly in quietness, stays curious about the world and clear about oneself.">一个在文字与逻辑之间游走的人。偏爱深度思考，习惯在安静里慢慢沉淀，对世界保持好奇，也对自我保持清醒。</p>
-                <p class="about-desc" data-zh="时而感性细腻，时而理性较真，不追逐喧嚣，只忠于内心。" data-en="Sometimes emotional and delicate, sometimes rational and meticulous. Not chasing noise, only loyal to the heart.">时而感性细腻，时而理性较真，不追逐喧嚣，只忠于内心。</p>
-                <p class="about-desc" data-zh="这里是我的精神自留地，记录思考、感悟与偶然的灵光一现。" data-en="This is my spiritual sanctuary — recording thoughts, reflections, and occasional flashes of inspiration.">这里是我的精神自留地，记录思考、感悟与偶然的灵光一现。</p>
-                <p class="about-desc" data-zh="不问来路，不问归途，只与同频者，慢慢相遇。" data-en="Not asking where I came from, not asking where I'm going — just slowly meeting those on the same frequency.">不问来路，不问归途，只与同频者，慢慢相遇。</p>
-            </div>
-        </section>
-
-        <!-- 项目展示 -->
-        <section id="projects" class="section">
-            <h2 class="section-title">
-                <span class="title-dot"></span>
-                <span data-zh="我的项目" data-en="My Projects">我的项目</span>
-            </h2>
-            <div class="projects-grid">
-                <a href="https://ablcy.github.io/yanai" class="project-card" data-color="purple">
-                    <div class="card-header">
-                        <span class="card-icon">🤖</span>
-                        <span class="card-arrow">↗</span>
-                    </div>
-                    <h3 class="card-title">YanAI</h3>
-                    <p class="card-desc" data-zh="免费 AI 工具合集，60+ 款精选工具" data-en="Free AI tools collection, 60+ curated tools"></p>
-                    <div class="card-tags">
-                        <span class="tag">AI</span>
-                        <span class="tag" data-zh="工具" data-en="Tools">工具</span>
-                    </div>
-                </a>
-
-                <a href="https://ablcy.github.io/yanlink" class="project-card" data-color="cyan">
-                    <div class="card-header">
-                        <span class="card-icon">🔗</span>
-                        <span class="card-arrow">↗</span>
-                    </div>
-                    <h3 class="card-title">YanLink</h3>
-                    <p class="card-desc" data-zh="短链接生成器，自定义别名与点击统计" data-en="Short link generator with custom aliases & click tracking"></p>
-                    <div class="card-tags">
-                        <span class="tag" data-zh="工具" data-en="Tools">工具</span>
-                        <span class="tag" data-zh="效率" data-en="Productivity">效率</span>
-                    </div>
-                </a>
-
-                <a href="https://ablcy.github.io/yantravel" class="project-card" data-color="blue">
-                    <div class="card-header">
-                        <span class="card-icon">🌍</span>
-                        <span class="card-arrow">↗</span>
-                    </div>
-                    <h3 class="card-title">YanTravel</h3>
-                    <p class="card-desc" data-zh="全球景点推荐，36 个精选目的地" data-en="Global travel recommendations, 36 curated destinations"></p>
-                    <div class="card-tags">
-                        <span class="tag" data-zh="旅行" data-en="Travel">旅行</span>
-                        <span class="tag" data-zh="推荐" data-en="Guide">推荐</span>
-                    </div>
-                </a>
-
-                <a href="https://ablcy.github.io/yanread" class="project-card" data-color="green">
-                    <div class="card-header">
-                        <span class="card-icon">📚</span>
-                        <span class="card-arrow">↗</span>
-                    </div>
-                    <h3 class="card-title">YanRead</h3>
-                    <p class="card-desc" data-zh="精选阅读推荐，好书不孤单" data-en="Curated reading recommendations"></p>
-                    <div class="card-tags">
-                        <span class="tag" data-zh="阅读" data-en="Reading">阅读</span>
-                        <span class="tag" data-zh="书籍" data-en="Books">书籍</span>
-                    </div>
-                </a>
-
-                <a href="https://ablcy.github.io/yanmusic" class="project-card" data-color="pink">
-                    <div class="card-header">
-                        <span class="card-icon">🎵</span>
-                        <span class="card-arrow">↗</span>
-                    </div>
-                    <h3 class="card-title">YanMusic</h3>
-                    <p class="card-desc" data-zh="免费音乐播放器，搜索即听" data-en="Free music player, search and play instantly"></p>
-                    <div class="card-tags">
-                        <span class="tag" data-zh="音乐" data-en="Music">音乐</span>
-                        <span class="tag" data-zh="播放器" data-en="Player">播放器</span>
-                    </div>
-                </a>
-
-                <a href="https://ablcy.github.io/yanfire" class="project-card" data-color="orange">
-                    <div class="card-header">
-                        <span class="card-icon">🔥</span>
-                        <span class="card-arrow">↗</span>
-                    </div>
-                    <h3 class="card-title">YanFire</h3>
-                    <p class="card-desc" data-zh="FIRE 生活推广，财务自由计算器" data-en="FIRE lifestyle advocacy & financial freedom calculator"></p>
-                    <div class="card-tags">
-                        <span class="tag">FIRE</span>
-                        <span class="tag" data-zh="理财" data-en="Finance">理财</span>
-                    </div>
-                </a>
-
-                <div class="project-card locked-card" data-color="teal" data-target="https://ablcy.github.io/yanbookmark">
-                    <div class="card-header">
-                        <span class="card-icon">🔖</span>
-                        <span class="card-lock" title="需要密码">🔒</span>
-                        <span class="card-arrow">↗</span>
-                    </div>
-                    <h3 class="card-title">YanBookmark</h3>
-                    <p class="card-desc" data-zh="书签管理平台，189 个精选收藏" data-en="Bookmark manager, 189 curated collections"></p>
-                    <div class="card-tags">
-                        <span class="tag" data-zh="书签" data-en="Bookmarks">书签</span>
-                        <span class="tag" data-zh="管理" data-en="Manager">管理</span>
-                    </div>
+                <div class="about-body">
+                    <p class="about-desc" data-zh="一个在文字与逻辑之间游走的人。偏爱深度思考，习惯在安静里慢慢沉淀，对世界保持好奇，也对自我保持清醒。" data-en="A person wandering between words and logic. Loves deep thinking, settles slowly in quietness, stays curious about the world and clear about oneself.">一个在文字与逻辑之间游走的人。偏爱深度思考，习惯在安静里慢慢沉淀，对世界保持好奇，也对自我保持清醒。</p>
+                    <p class="about-desc" data-zh="时而感性细腻，时而理性较真，不追逐喧嚣，只忠于内心。" data-en="Sometimes emotional and delicate, sometimes rational and meticulous. Not chasing noise, only loyal to the heart.">时而感性细腻，时而理性较真，不追逐喧嚣，只忠于内心。</p>
+                    <p class="about-desc" data-zh="这里是我的精神自留地，记录思考、感悟与偶然的灵光一现。" data-en="This is my spiritual sanctuary — recording thoughts, reflections, and occasional flashes of inspiration.">这里是我的精神自留地，记录思考、感悟与偶然的灵光一现。</p>
+                    <p class="about-desc" data-zh="不问来路，不问归途，只与同频者，慢慢相遇。" data-en="Not asking where I came from, not asking where I'm going — just slowly meeting those on the same frequency.">不问来路，不问归途，只与同频者，慢慢相遇。</p>
                 </div>
             </div>
         </section>
 
-        <!-- 联系方式 -->
-        <section id="contact" class="section">
-            <h2 class="section-title">
-                <span class="title-dot"></span>
-                <span data-zh="找到我" data-en="Find Me">找到我</span>
-            </h2>
+        <!-- ===== WORK ===== -->
+        <section class="section work-section" id="work">
+            <div class="section-header">
+                <span class="section-num">02</span>
+                <h2 class="section-title" data-zh="作品集" data-en="Selected Work">作品集</h2>
+            </div>
+            <div class="work-grid">
+                <a href="https://ablcy.github.io/yanai" class="work-card magnetic" data-color="violet">
+                    <div class="work-card-inner">
+                        <div class="work-index">01</div>
+                        <div class="work-info">
+                            <div class="work-icon">🤖</div>
+                            <h3 class="work-name">YanAI</h3>
+                            <p class="work-desc" data-zh="免费 AI 工具合集，60+ 款精选工具" data-en="Free AI tools collection, 60+ curated tools">免费 AI 工具合集，60+ 款精选工具</p>
+                        </div>
+                        <div class="work-arrow">↗</div>
+                    </div>
+                    <div class="work-card-bg"></div>
+                </a>
+
+                <a href="https://ablcy.github.io/yantravel" class="work-card magnetic" data-color="cyan">
+                    <div class="work-card-inner">
+                        <div class="work-index">02</div>
+                        <div class="work-info">
+                            <div class="work-icon">🌍</div>
+                            <h3 class="work-name">YanTravel</h3>
+                            <p class="work-desc" data-zh="全球景点推荐，36 个精选目的地" data-en="Global travel recommendations, 36 curated destinations">全球景点推荐，36 个精选目的地</p>
+                        </div>
+                        <div class="work-arrow">↗</div>
+                    </div>
+                    <div class="work-card-bg"></div>
+                </a>
+
+                <a href="https://ablcy.github.io/yanmusic" class="work-card magnetic" data-color="pink">
+                    <div class="work-card-inner">
+                        <div class="work-index">03</div>
+                        <div class="work-info">
+                            <div class="work-icon">🎵</div>
+                            <h3 class="work-name">YanMusic</h3>
+                            <p class="work-desc" data-zh="免费音乐播放器，搜索即听" data-en="Free music player, search and play instantly">免费音乐播放器，搜索即听</p>
+                        </div>
+                        <div class="work-arrow">↗</div>
+                    </div>
+                    <div class="work-card-bg"></div>
+                </a>
+
+                <a href="https://ablcy.github.io/yanread" class="work-card magnetic" data-color="emerald">
+                    <div class="work-card-inner">
+                        <div class="work-index">04</div>
+                        <div class="work-info">
+                            <div class="work-icon">📚</div>
+                            <h3 class="work-name">YanRead</h3>
+                            <p class="work-desc" data-zh="精选阅读推荐，好书不孤单" data-en="Curated reading recommendations">精选阅读推荐，好书不孤单</p>
+                        </div>
+                        <div class="work-arrow">↗</div>
+                    </div>
+                    <div class="work-card-bg"></div>
+                </a>
+
+                <a href="https://ablcy.github.io/yanlink" class="work-card magnetic" data-color="sky">
+                    <div class="work-card-inner">
+                        <div class="work-index">05</div>
+                        <div class="work-info">
+                            <div class="work-icon">🔗</div>
+                            <h3 class="work-name">YanLink</h3>
+                            <p class="work-desc" data-zh="短链接生成器，自定义别名与点击统计" data-en="Short link generator with custom aliases & click tracking">短链接生成器，自定义别名与点击统计</p>
+                        </div>
+                        <div class="work-arrow">↗</div>
+                    </div>
+                    <div class="work-card-bg"></div>
+                </a>
+
+                <a href="https://ablcy.github.io/yanfire" class="work-card magnetic" data-color="amber">
+                    <div class="work-card-inner">
+                        <div class="work-index">06</div>
+                        <div class="work-info">
+                            <div class="work-icon">🔥</div>
+                            <h3 class="work-name">YanFire</h3>
+                            <p class="work-desc" data-zh="FIRE 生活推广，财务自由计算器" data-en="FIRE lifestyle advocacy & financial freedom calculator">FIRE 生活推广，财务自由计算器</p>
+                        </div>
+                        <div class="work-arrow">↗</div>
+                    </div>
+                    <div class="work-card-bg"></div>
+                </a>
+
+                <div class="work-card work-card-locked magnetic" data-color="teal" data-target="https://ablcy.github.io/yanbookmark">
+                    <div class="work-card-inner">
+                        <div class="work-index">07</div>
+                        <div class="work-info">
+                            <div class="work-icon">🔖</div>
+                            <h3 class="work-name">YanBookmark</h3>
+                            <p class="work-desc" data-zh="书签管理平台，189 个精选收藏" data-en="Bookmark manager, 189 curated collections">书签管理平台，189 个精选收藏</p>
+                        </div>
+                        <span class="work-lock">🔒</span>
+                        <div class="work-arrow">↗</div>
+                    </div>
+                    <div class="work-card-bg"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== CONTACT ===== -->
+        <section class="section contact-section" id="contact">
+            <div class="section-header">
+                <span class="section-num">03</span>
+                <h2 class="section-title" data-zh="联系方式" data-en="Get in Touch">联系方式</h2>
+            </div>
             <div class="contact-grid">
-                <a href="https://github.com/ablcy" target="_blank" rel="noopener" class="contact-card">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-                    <span class="contact-info"><span class="contact-label">GitHub</span><span class="contact-id">ablcy</span></span>
+                <a href="https://github.com/ablcy" target="_blank" rel="noopener" class="contact-card magnetic">
+                    <div class="contact-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                    </div>
+                    <div class="contact-text">
+                        <span class="contact-name">GitHub</span>
+                        <span class="contact-handle">@ablcy</span>
+                    </div>
                     <span class="contact-arrow">→</span>
                 </a>
-                <a href="mailto:ablcy@qq.com" class="contact-card">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-                    <span class="contact-info"><span class="contact-label">Email</span><span class="contact-id">ablcy@qq.com</span></span>
+
+                <a href="mailto:ablcy@qq.com" class="contact-card magnetic">
+                    <div class="contact-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                    </div>
+                    <div class="contact-text">
+                        <span class="contact-name">Email</span>
+                        <span class="contact-handle">ablcy@qq.com</span>
+                    </div>
                     <span class="contact-arrow">→</span>
                 </a>
-                <a href="https://qm.qq.com/q/TpZmrSxLQQ" target="_blank" rel="noopener" class="contact-card">
-                    <svg width="24" height="24" viewBox="0 0 16 16" fill="currentColor"><path d="M6.048 3.323c.022.277-.13.523-.338.55-.21.026-.397-.176-.419-.453s.13-.523.338-.55c.21-.026.397.176.42.453Zm2.265-.24c-.603-.146-.894.256-.936.333-.027.048-.008.117.037.15.045.035.092.025.119-.003.361-.39.751-.172.829-.129l.011.007c.053.024.147.028.193-.098.023-.063.017-.11-.006-.142-.016-.023-.089-.08-.247-.118"/><path d="M11.727 6.719c0-.022.01-.375.01-.557 0-3.07-1.45-6.156-5.015-6.156S1.708 3.092 1.708 6.162c0 .182.01.535.01.557l-.72 1.795a26 26 0 0 0-.534 1.508c-.68 2.187-.46 3.093-.292 3.113.36.044 1.401-1.647 1.401-1.647 0 .979.504 2.256 1.594 3.179-.408.126-.907.319-1.228.556-.29.213-.253.43-.201.518.228.386 3.92.246 4.985.126 1.065.12 4.756.26 4.984-.126.052-.088.088-.305-.2-.518-.322-.237-.822-.43-1.23-.557 1.09-.922 1.594-2.2 1.594-3.178 0 0 1.041 1.69 1.401 1.647.168-.02.388-.926-.292-3.113a26 26 0 0 0-.534-1.508l-.72-1.795ZM9.773 5.53a.1.1 0 0 1-.009.096c-.109.159-1.554.943-3.033.943h-.017c-1.48 0-2.925-.784-3.034-.943a.1.1 0 0 1-.018-.055q0-.022.01-.04c.13-.287 1.43-.606 3.042-.606h.017c1.611 0 2.912.319 3.042.605m-4.32-.989c-.483.022-.896-.529-.922-1.229s.344-1.286.828-1.308c.483-.022.896.529.922 1.23.027.7-.344 1.286-.827 1.307Zm2.538 0c-.484-.022-.854-.607-.828-1.308.027-.7.44-1.25.923-1.23.483.023.853.608.827 1.309-.026.7-.439 1.251-.922 1.23ZM2.928 8.99q.32.063.639.117v2.336s1.104.222 2.21.068V9.363q.49.027.937.023h.017c1.117.013 2.474-.136 3.786-.396.097.622.151 1.386.097 2.284-.146 2.45-1.6 3.99-3.846 4.012h-.091c-2.245-.023-3.7-1.562-3.846-4.011-.054-.9 0-1.663.097-2.285"/></svg>
-                    <span class="contact-info"><span class="contact-label">QQ</span><span class="contact-id">3428270273</span></span>
+
+                <a href="https://qm.qq.com/q/TpZmrSxLQQ" target="_blank" rel="noopener" class="contact-card magnetic">
+                    <div class="contact-icon">
+                        <svg width="22" height="22" viewBox="0 0 16 16" fill="currentColor"><path d="M6.048 3.323c.022.277-.13.523-.338.55-.21.026-.397-.176-.419-.453s.13-.523.338-.55c.21-.026.397.176.42.453Zm2.265-.24c-.603-.146-.894.256-.936.333-.027.048-.008.117.037.15.045.035.092.025.119-.003.361-.39.751-.172.829-.129l.011.007c.053.024.147.028.193-.098.023-.063.017-.11-.006-.142-.016-.023-.089-.08-.247-.118"/><path d="M11.727 6.719c0-.022.01-.375.01-.557 0-3.07-1.45-6.156-5.015-6.156S1.708 3.092 1.708 6.162c0 .182.01.535.01.557l-.72 1.795a26 26 0 0 0-.534 1.508c-.68 2.187-.46 3.093-.292 3.113.36.044 1.401-1.647 1.401-1.647 0 .979.504 2.256 1.594 3.179-.408.126-.907.319-1.228.556-.29.213-.253.43-.201.518.228.386 3.92.246 4.985.126 1.065.12 4.756.26 4.984-.126.052-.088.088-.305-.2-.518-.322-.237-.822-.43-1.23-.557 1.09-.922 1.594-2.2 1.594-3.178 0 0 1.041 1.69 1.401 1.647.168-.02.388-.926-.292-3.113a26 26 0 0 0-.534-1.508l-.72-1.795ZM9.773 5.53a.1.1 0 0 1-.009.096c-.109.159-1.554.943-3.033.943h-.017c-1.48 0-2.925-.784-3.034-.943a.1.1 0 0 1-.018-.055q0-.022.01-.04c.13-.287 1.43-.606 3.042-.606h.017c1.611 0 2.912.319 3.042.605m-4.32-.989c-.483.022-.896-.529-.922-1.229s.344-1.286.828-1.308c.483-.022.896.529.922 1.23.027.7-.344 1.286-.827 1.307Zm2.538 0c-.484-.022-.854-.607-.828-1.308.027-.7.44-1.25.923-1.23.483.023.853.608.827 1.309-.026.7-.439 1.251-.922 1.23ZM2.928 8.99q.32.063.639.117v2.336s1.104.222 2.21.068V9.363q.49.027.937.023h.017c1.117.013 2.474-.136 3.786-.396.097.622.151 1.386.097 2.284-.146 2.45-1.6 3.99-3.846 4.012h-.091c-2.245-.023-3.7-1.562-3.846-4.011-.054-.9 0-1.663.097-2.285"/></svg>
+                    </div>
+                    <div class="contact-text">
+                        <span class="contact-name">QQ</span>
+                        <span class="contact-handle">3428270273</span>
+                    </div>
                     <span class="contact-arrow">→</span>
                 </a>
-                <a href="https://v.douyin.com/oWVmRw3Yc7c/" target="_blank" rel="noopener" class="contact-card">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
-                    <span class="contact-info"><span class="contact-label" data-zh="抖音" data-en="Douyin">抖音</span><span class="contact-id">lcy9421</span></span>
+
+                <a href="https://v.douyin.com/oWVmRw3Yc7c/" target="_blank" rel="noopener" class="contact-card magnetic">
+                    <div class="contact-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+                    </div>
+                    <div class="contact-text">
+                        <span class="contact-name" data-zh="抖音" data-en="Douyin">抖音</span>
+                        <span class="contact-handle">lcy9421</span>
+                    </div>
                     <span class="contact-arrow">→</span>
                 </a>
             </div>
         </section>
 
-        <!-- 评论区 -->
-        <section id="comments" class="section">
-            <h2 class="section-title">
-                <span class="title-dot"></span>
-                <span data-zh="留言板" data-en="Guestbook">留言板</span>
-            </h2>
-            <p class="comment-hint" data-zh="💡 留下邮箱可收到回复通知，不填昵称和邮箱也能匿名评论" data-en="💡 Leave your email to get reply notifications. Anonymous comments are also welcome.">💡 留下邮箱可收到回复通知，不填昵称和邮箱也能匿名评论</p>
+        <!-- ===== GUESTBOOK ===== -->
+        <section class="section guestbook-section" id="guestbook">
+            <div class="section-header">
+                <span class="section-num">04</span>
+                <h2 class="section-title" data-zh="留言板" data-en="Guestbook">留言板</h2>
+            </div>
+            <p class="guestbook-hint" data-zh="留下你的想法，匿名也可以 ✨" data-en="Leave your thoughts, anonymous is fine too ✨">留下你的想法，匿名也可以 ✨</p>
             <div id="waline"></div>
         </section>
+    </main>
 
-        <!-- 底部 -->
-        <footer class="footer">
-            <p class="copyright" data-zh="© 2026 Yan. 用代码构建有趣的产品。" data-en="© 2026 Yan. Building fun products with code.">© 2026 Yan. Built with ❤️ and code.</p>
-            <p class="version">v1.0.4</p>
-        </footer>
-    </div>
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <p class="footer-text" data-zh="© 2026 Yan. 用代码构建有趣的产品。" data-en="© 2026 Yan. Building fun products with code.">© 2026 Yan. 用代码构建有趣的产品。</p>
+            <p class="footer-version">v1.1.0</p>
+        </div>
+    </footer>
 
-    <script>
-        const html = document.documentElement;
-
-        // === 语言切换 ===
-        let lang = localStorage.getItem('lang') || 'zh';
-
-        function setLang(l) {
-            lang = l;
-            localStorage.setItem('lang', l);
-            html.setAttribute('lang', l === 'zh' ? 'zh-CN' : 'en');
-            document.querySelectorAll('[data-zh]').forEach(el => {
-                el.textContent = el.getAttribute('data-' + l);
-            });
-            document.querySelector('.lang-text').textContent = l === 'zh' ? 'EN' : '中';
-        }
-
-        document.getElementById('langToggle').addEventListener('click', () => {
-            setLang(lang === 'zh' ? 'en' : 'zh');
-        });
-
-        setLang(lang);
-
-        // === 主题切换 ===
-        const saved = localStorage.getItem('theme') || 'dark';
-        html.setAttribute('data-theme', saved);
-        updateThemeIcon();
-
-        document.getElementById('themeToggle').addEventListener('click', () => {
-            const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-            html.setAttribute('data-theme', next);
-            localStorage.setItem('theme', next);
-            updateThemeIcon();
-            // 同步 Waline 暗色模式
-            if (window.walineInstance) {
-                walineInstance.update({ dark: next === 'dark' });
-            }
-        });
-
-        function updateThemeIcon() {
-            const isDark = html.getAttribute('data-theme') === 'dark';
-            document.querySelector('.theme-icon').textContent = isDark ? '🌙' : '☀️';
-        }
-
-        // 导航高亮
-        const sections = document.querySelectorAll('.section');
-        const navLinks = document.querySelectorAll('.nav-link');
-
-        window.addEventListener('scroll', () => {
-            let current = '';
-            sections.forEach(sec => {
-                const top = sec.offsetTop - 120;
-                if (window.scrollY >= top) current = sec.getAttribute('id');
-            });
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === '#' + current) link.classList.add('active');
-            });
-        });
-
-        // 滚动入场动画
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.section, .hero').forEach(el => observer.observe(el));
-
-        // 项目卡片逐个入场
-        const cardObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const cards = entry.target.querySelectorAll('.project-card');
-                    cards.forEach((card, i) => {
-                        setTimeout(() => card.classList.add('visible'), i * 80);
-                    });
-                    cardObserver.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.1 });
-
-        const grid = document.querySelector('.projects-grid');
-        if (grid) cardObserver.observe(grid);
-
-        // Waline 初始化由 module script 处理
-        window.initWaline = function(Waline) {
-            window.walineInstance = Waline.init({
-                el: '#waline',
-                serverURL: 'https://waline.luckyan.dpdns.org',
-                lang: lang === 'zh' ? 'zh-CN' : 'en',
-                dark: html.getAttribute('data-theme') === 'dark',
-                meta: ['nick', 'mail'],
-                requiredMeta: [],
-                login: 'disable',
-                wordLimit: [0, 500],
-                pageSize: 10,
-            });
-
-            // 语言切换时同步 Waline 语言
-            const origSetLang = setLang;
-            setLang = function(l) {
-                origSetLang(l);
-                if (window.walineInstance) {
-                    walineInstance.update({ lang: l === 'zh' ? 'zh-CN' : 'en' });
-                }
-            };
-        };
-    </script>
-    <!-- 密码验证弹窗 -->
-    <div class="lock-modal-overlay" id="lockModal">
-        <div class="lock-modal">
-            <div class="lock-modal-icon">🔒</div>
-            <h3 class="lock-modal-title" data-zh="此项目需要密码访问" data-en="Password Required">此项目需要密码访问</h3>
-            <p class="lock-modal-desc" data-zh="请输入访问密码" data-en="Enter the access password">请输入访问密码</p>
-            <input type="password" class="lock-modal-input" id="lockInput" autocomplete="off" data-placeholder-zh="输入密码..." data-placeholder-en="Enter password...">
-            <p class="lock-modal-error" id="lockError" data-zh="密码错误，请重试" data-en="Wrong password, try again"></p>
-            <div class="lock-modal-actions">
-                <button class="lock-modal-btn lock-cancel" id="lockCancel" data-zh="取消" data-en="Cancel">取消</button>
-                <button class="lock-modal-btn lock-confirm" id="lockConfirm" data-zh="确认" data-en="Confirm">确认</button>
+    <!-- 密码弹窗 -->
+    <div class="lock-overlay" id="lockModal">
+        <div class="lock-box">
+            <div class="lock-icon">🔒</div>
+            <h3 class="lock-title" data-zh="此项目需要密码访问" data-en="Password Required">此项目需要密码访问</h3>
+            <p class="lock-desc" data-zh="请输入访问密码" data-en="Enter the access password">请输入访问密码</p>
+            <input type="password" class="lock-input" id="lockInput" autocomplete="off" data-placeholder-zh="输入密码..." data-placeholder-en="Enter password...">
+            <p class="lock-error" id="lockError" data-zh="密码错误，请重试" data-en="Wrong password, try again">密码错误，请重试</p>
+            <div class="lock-actions">
+                <button class="lock-btn lock-cancel" id="lockCancel" data-zh="取消" data-en="Cancel">取消</button>
+                <button class="lock-btn lock-confirm" id="lockConfirm" data-zh="确认" data-en="Confirm">确认</button>
             </div>
         </div>
     </div>
 
     <script>
-        // === 项目卡片密码锁 ===
-        const LOCKED_PASS = '558852';
-        const VERIFIED_KEY = 'yanbookmark_verified';
+    // ===== 配置 =====
+    const html = document.documentElement;
+    let lang = localStorage.getItem('lang') || 'zh';
 
-        function openLockModal() {
-            const modal = document.getElementById('lockModal');
-            const input = document.getElementById('lockInput');
-            const error = document.getElementById('lockError');
-            modal.classList.add('active');
-            error.style.display = 'none';
-            input.value = '';
-            setTimeout(() => input.focus(), 150);
+    // ===== 语言切换 =====
+    function setLang(l) {
+        lang = l;
+        localStorage.setItem('lang', l);
+        html.setAttribute('lang', l === 'zh' ? 'zh-CN' : 'en');
+        document.querySelectorAll('[data-zh]').forEach(el => {
+            el.textContent = el.getAttribute('data-' + l);
+        });
+        document.getElementById('langToggle').textContent = l === 'zh' ? 'EN' : '中';
+        const lockInput = document.getElementById('lockInput');
+        lockInput.placeholder = lockInput.getAttribute('data-placeholder-' + l) || '';
+        if (window.walineInstance) {
+            walineInstance.update({ lang: l === 'zh' ? 'zh-CN' : 'en' });
         }
+    }
 
-        function closeLockModal() {
-            document.getElementById('lockModal').classList.remove('active');
+    document.getElementById('langToggle').addEventListener('click', () => setLang(lang === 'zh' ? 'en' : 'zh'));
+    setLang(lang);
+
+    // ===== 自定义光标 =====
+    const cursor = document.getElementById('cursor');
+    const follower = document.getElementById('cursorFollower');
+    let mouseX = 0, mouseY = 0, followerX = 0, followerY = 0;
+    const isTouch = 'ontouchstart' in window;
+
+    if (!isTouch) {
+        document.addEventListener('mousemove', e => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            cursor.style.left = mouseX + 'px';
+            cursor.style.top = mouseY + 'px';
+        });
+
+        function animateFollower() {
+            followerX += (mouseX - followerX) * 0.12;
+            followerY += (mouseY - followerY) * 0.12;
+            follower.style.left = followerX + 'px';
+            follower.style.top = followerY + 'px';
+            requestAnimationFrame(animateFollower);
         }
+        animateFollower();
 
-        function verifyLock() {
-            const input = document.getElementById('lockInput');
-            const error = document.getElementById('lockError');
-            if (input.value === LOCKED_PASS) {
-                sessionStorage.setItem(VERIFIED_KEY, '1');
-                closeLockModal();
-                window.open('https://ablcy.github.io/yanbookmark', '_blank');
-            } else {
-                error.style.display = 'block';
-                input.value = '';
-                input.focus();
-                // 抖动效果
-                const modal = document.querySelector('.lock-modal');
-                modal.style.animation = 'shake 0.4s ease';
-                setTimeout(() => modal.style.animation = '', 400);
-            }
-        }
-
-        document.querySelectorAll('.locked-card').forEach(card => {
-            card.style.cursor = 'pointer';
-            card.addEventListener('click', () => {
-                if (sessionStorage.getItem(VERIFIED_KEY)) {
-                    window.open('https://ablcy.github.io/yanbookmark', '_blank');
-                } else {
-                    openLockModal();
-                }
+        // Hover 放大效果
+        document.querySelectorAll('a, button, .magnetic').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.classList.add('cursor-hover');
+                follower.classList.add('follower-hover');
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.classList.remove('cursor-hover');
+                follower.classList.remove('follower-hover');
             });
         });
+    } else {
+        cursor.style.display = 'none';
+        follower.style.display = 'none';
+    }
 
-        document.getElementById('lockConfirm').addEventListener('click', verifyLock);
-        document.getElementById('lockCancel').addEventListener('click', closeLockModal);
-        document.getElementById('lockInput').addEventListener('keydown', e => {
-            if (e.key === 'Enter') verifyLock();
+    // ===== 磁性按钮 =====
+    if (!isTouch) {
+        document.querySelectorAll('.magnetic').forEach(el => {
+            el.addEventListener('mousemove', e => {
+                const rect = el.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                el.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+                el.style.transition = 'transform 0.2s cubic-bezier(0.33, 1, 0.68, 1)';
+            });
+            el.addEventListener('mouseleave', () => {
+                el.style.transform = 'translate(0, 0)';
+            });
         });
-        document.getElementById('lockModal').addEventListener('click', e => {
-            if (e.target === e.currentTarget) closeLockModal();
-        });
+    }
 
-        // 初始化 lock input placeholder
-        const lockInput = document.getElementById('lockInput');
-        lockInput.placeholder = lockInput.getAttribute('data-placeholder-' + lang) || '输入密码...';
-        const origSetLang2 = setLang;
-        setLang = function(l) {
-            origSetLang2(l);
-            lockInput.placeholder = lockInput.getAttribute('data-placeholder-' + l) || '';
-        };
+    // ===== 加载动画 =====
+    const loader = document.getElementById('loader');
+    const loaderProgress = document.getElementById('loaderProgress');
+    window.addEventListener('load', () => {
+        loaderProgress.style.width = '100%';
+        setTimeout(() => {
+            loader.classList.add('loader-done');
+            document.body.style.overflow = 'auto';
+            animateHero();
+        }, 1200);
+    });
+
+    // ===== Hero 入场动画 =====
+    function animateHero() {
+        const elements = document.querySelectorAll('.hero-tag, .hero-name, .hero-subtitle, .hero-stats, .hero-right');
+        elements.forEach((el, i) => {
+            setTimeout(() => el.classList.add('in-view'), i * 150 + 200);
+        });
+    }
+
+    // ===== 数字滚动 =====
+    const counters = document.querySelectorAll('[data-count]');
+    const counterObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const target = parseInt(entry.target.dataset.count);
+                let current = 0;
+                const step = Math.ceil(target / 30);
+                const timer = setInterval(() => {
+                    current += step;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(timer);
+                    }
+                    entry.target.textContent = current;
+                }, 40);
+                counterObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+    counters.forEach(c => counterObserver.observe(c));
+
+    // ===== 滚动入场动画 =====
+    const scrollObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('in-view');
+                // Work cards 逐个入场
+                const cards = entry.target.querySelectorAll('.work-card, .contact-card');
+                cards.forEach((card, i) => {
+                    setTimeout(() => card.classList.add('in-view'), i * 100);
+                });
+                scrollObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.section').forEach(s => scrollObserver.observe(s));
+
+    // ===== 导航高亮 + 滚动显示 =====
+    const nav = document.getElementById('nav');
+    const sections = document.querySelectorAll('.section');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    window.addEventListener('scroll', () => {
+        // 导航背景
+        nav.classList.toggle('nav-scrolled', window.scrollY > 50);
+        // 高亮
+        let current = '';
+        sections.forEach(sec => {
+            if (window.scrollY >= sec.offsetTop - 150) current = sec.id;
+        });
+        navLinks.forEach(link => {
+            link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+        });
+    });
+
+    // ===== 密码弹窗 =====
+    const LOCKED_PASS = '558852';
+    const VERIFIED_KEY = 'yanbookmark_verified';
+
+    function openLockModal() {
+        const modal = document.getElementById('lockModal');
+        const input = document.getElementById('lockInput');
+        const error = document.getElementById('lockError');
+        modal.classList.add('active');
+        error.style.display = 'none';
+        input.value = '';
+        setTimeout(() => input.focus(), 200);
+    }
+
+    function closeLockModal() {
+        document.getElementById('lockModal').classList.remove('active');
+    }
+
+    function verifyLock() {
+        const input = document.getElementById('lockInput');
+        const error = document.getElementById('lockError');
+        if (input.value === LOCKED_PASS) {
+            sessionStorage.setItem(VERIFIED_KEY, '1');
+            closeLockModal();
+            window.open('https://ablcy.github.io/yanbookmark', '_blank');
+        } else {
+            error.style.display = 'block';
+            input.value = '';
+            input.focus();
+            const box = document.querySelector('.lock-box');
+            box.style.animation = 'shake 0.4s ease';
+            setTimeout(() => box.style.animation = '', 400);
+        }
+    }
+
+    document.querySelectorAll('.work-card-locked').forEach(card => {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', () => {
+            if (sessionStorage.getItem(VERIFIED_KEY)) {
+                window.open('https://ablcy.github.io/yanbookmark', '_blank');
+            } else {
+                openLockModal();
+            }
+        });
+    });
+
+    document.getElementById('lockConfirm').addEventListener('click', verifyLock);
+    document.getElementById('lockCancel').addEventListener('click', closeLockModal);
+    document.getElementById('lockInput').addEventListener('keydown', e => {
+        if (e.key === 'Enter') verifyLock();
+    });
+    document.getElementById('lockModal').addEventListener('click', e => {
+        if (e.target === e.currentTarget) closeLockModal();
+    });
+
+    // ===== 粒子背景 =====
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    class Particle {
+        constructor() {
+            this.reset();
+        }
+        reset() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 1.5 + 0.5;
+            this.speedX = (Math.random() - 0.5) * 0.3;
+            this.speedY = (Math.random() - 0.5) * 0.3;
+            this.opacity = Math.random() * 0.4 + 0.1;
+        }
+        update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+            if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+                this.reset();
+            }
+        }
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(139, 92, 246, ${this.opacity})`;
+            ctx.fill();
+        }
+    }
+
+    for (let i = 0; i < 60; i++) particles.push(new Particle());
+
+    function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => { p.update(); p.draw(); });
+
+        // 连线
+        for (let i = 0; i < particles.length; i++) {
+            for (let j = i + 1; j < particles.length; j++) {
+                const dx = particles[i].x - particles[j].x;
+                const dy = particles[i].y - particles[j].y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < 120) {
+                    ctx.beginPath();
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(particles[j].x, particles[j].y);
+                    ctx.strokeStyle = `rgba(139, 92, 246, ${0.06 * (1 - dist / 120)})`;
+                    ctx.lineWidth = 0.5;
+                    ctx.stroke();
+                }
+            }
+        }
+        requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    // ===== Waline =====
+    window.initWaline = function(Waline) {
+        window.walineInstance = Waline.init({
+            el: '#waline',
+            serverURL: 'https://waline.luckyan.dpdns.org',
+            lang: lang === 'zh' ? 'zh-CN' : 'en',
+            dark: 'html[data-theme="dark"]',
+            meta: ['nick', 'mail'],
+            requiredMeta: [],
+            login: 'disable',
+            wordLimit: [0, 500],
+            pageSize: 10,
+        });
+    };
     </script>
     <script type="module">
         import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
