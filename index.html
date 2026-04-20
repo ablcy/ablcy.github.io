@@ -48,8 +48,22 @@
         </div>
         <div class="nav-actions">
             <button class="lang-btn magnetic" id="langToggle">EN</button>
+            <button class="hamburger" id="hamburger">
+                <span></span><span></span><span></span>
+            </button>
         </div>
     </nav>
+
+    <!-- 移动端菜单 -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-inner">
+            <a href="#hero" class="mobile-nav-link" data-zh="主页" data-en="Home">主页</a>
+            <a href="#about" class="mobile-nav-link" data-zh="关于" data-en="About">关于</a>
+            <a href="#work" class="mobile-nav-link" data-zh="项目" data-en="Projects">项目</a>
+            <a href="#contact" class="mobile-nav-link" data-zh="联系" data-en="Contact">联系</a>
+            <a href="#guestbook" class="mobile-nav-link" data-zh="留言" data-en="Guest">留言</a>
+        </div>
+    </div>
 
     <main>
         <!-- ===== HERO ===== -->
@@ -413,6 +427,23 @@
 
     document.getElementById('langToggle').addEventListener('click', () => setLang(lang === 'zh' ? 'en' : 'zh'));
     setLang(lang);
+
+    // ===== Hamburger 菜单 =====
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    hamburger.addEventListener('click', () => {
+        mobileMenu.classList.toggle('active');
+        hamburger.classList.toggle('active');
+    });
+
+    // 点击菜单项关闭
+    mobileMenu.querySelectorAll('.mobile-nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+            hamburger.classList.remove('active');
+        });
+    });
 
     // ===== 自定义光标 =====
     const cursor = document.getElementById('cursor');
