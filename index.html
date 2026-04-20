@@ -303,10 +303,49 @@
                 <span class="section-num">04</span>
                 <h2 class="section-title" data-zh="留言板" data-en="Guestbook">留言板</h2>
             </div>
-            <p class="guestbook-hint" data-zh="留下你的想法，匿名也可以 ✨" data-en="Leave your thoughts, anonymous is fine too ✨">留下你的想法，匿名也可以 ✨</p>
-            <div id="waline"></div>
+            <!-- 折叠触发器 -->
+            <div class="collapse-trigger guestbook-collapse" id="guestbookTrigger">
+                <span class="collapse-label" data-zh="展开留言 ✨" data-en="Expand Comments ✨">展开留言 ✨</span>
+                <span class="collapse-arrow">▼</span>
+            </div>
+            <!-- 折叠内容（默认隐藏） -->
+            <div class="collapse-content" id="guestbookContent">
+                <div id="waline"></div>
+            </div>
         </section>
     </main>
+
+    <!-- ===== CHANGELOG ===== -->
+    <div class="changelog" id="changelog">
+        <div class="changelog-trigger" id="changelogTrigger">
+            <span class="changelog-label" data-zh="📋 更新日志" data-en="📋 Changelog">📋 更新日志</span>
+            <span class="collapse-arrow">▼</span>
+        </div>
+        <div class="changelog-content" id="changelogContent">
+            <div class="changelog-list">
+                <!-- v1.1.4 -->
+                <div class="changelog-item">
+                    <div class="changelog-header">
+                        <span class="changelog-version">v1.1.4</span>
+                        <span class="changelog-time">2026-04-20 11:48:00</span>
+                    </div>
+                    <div class="changelog-body">
+                        <p data-zh="底部新增运营统计（运营时长/累计访问/实时在线），评论区与更新日志改为折叠形式。" data-en="Added site stats to footer (runtime/PV/UV). Collapsible comments and changelog.">底部新增运营统计（运营时长/累计访问/实时在线），评论区与更新日志改为折叠形式。</p>
+                    </div>
+                </div>
+                <!-- v1.1.3 -->
+                <div class="changelog-item">
+                    <div class="changelog-header">
+                        <span class="changelog-version">v1.1.3</span>
+                        <span class="changelog-time">2026-04-19</span>
+                    </div>
+                    <div class="changelog-body">
+                        <p data-zh="开屏YAN放大+加速+隐藏Hero两行字+加强头像隐藏" data-en="Splash YAN enlarged, faster, hidden hero subtitle, enhanced avatar hide">开屏YAN放大+加速+隐藏Hero两行字+加强头像隐藏</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- FOOTER -->
     <footer class="footer">
@@ -314,15 +353,9 @@
             <!-- 网站运营统计 -->
             <div class="site-stats">
                 <div class="site-stat-item">
-                    <span class="site-stat-icon">🌱</span>
+                    <span class="site-stat-icon">⏱</span>
                     <span class="site-stat-label" data-zh="已运营" data-en="Running">已运营</span>
                     <span class="site-stat-value" id="siteRuntime">-</span>
-                </div>
-                <div class="site-stat-divider"></div>
-                <div class="site-stat-item">
-                    <span class="site-stat-icon">🕐</span>
-                    <span class="site-stat-label" data-zh="最后更新" data-en="Last Update">最后更新</span>
-                    <span class="site-stat-value" id="lastUpdate">2026-04-16</span>
                 </div>
                 <div class="site-stat-divider"></div>
                 <div class="site-stat-item">
@@ -659,8 +692,7 @@
     <script>
     // ===== 网站运营时长 =====
     (function() {
-        // 上线日期：2026-01-01（根据实际上线时间调整）
-        const LAUNCH_DATE = new Date('2024-03-03T14:28:00+08:00');
+        const LAUNCH_DATE = new Date('2026-04-16T19:35:00+08:00');
 
         function formatRuntime() {
             const now = new Date();
@@ -687,7 +719,6 @@
             }, 1000);
         }
 
-        // 语言切换时同步标签（利用已有 setLang 执行后触发）
         const origSetLang = window.setLang;
         if (typeof origSetLang === 'function') {
             window.setLang = function(l) {
@@ -696,6 +727,30 @@
             };
         }
     })();
+
+    // ===== 折叠逻辑 =====
+    function setupCollapse(trigger, content, isOpen) {
+        if (!trigger || !content) return;
+        content.style.display = isOpen ? 'block' : 'none';
+        trigger.classList.toggle('collapsed', !isOpen);
+
+        trigger.addEventListener('click', () => {
+            const open = content.style.display === 'none';
+            content.style.display = open ? 'block' : 'none';
+            trigger.classList.toggle('collapsed', !open);
+        });
+    }
+
+    setupCollapse(
+        document.getElementById('guestbookTrigger'),
+        document.getElementById('guestbookContent'),
+        false
+    );
+    setupCollapse(
+        document.getElementById('changelogTrigger'),
+        document.getElementById('changelogContent'),
+        false
+    );
     </script>
 </body>
 </html>
