@@ -1,0 +1,9 @@
+{
+  "name": "lcy-qd-je",
+  "version": 2,
+  "public": true,
+  "github": {
+    "enabled": true,
+    "autoJobCancelation": true
+  }
+}
