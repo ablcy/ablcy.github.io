@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YanGame — 免费小游戏合集</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:       #080b14;
+      --surface:  #0d1220;
+      --card:     #111827;
+      --border:   #1e2d45;
+      --neon-g:   #00ff88;
+      --neon-b:   #00cfff;
+      --neon-p:   #bf5fff;
+      --neon-y:   #ffe600;
+      --neon-r:   #ff4466;
+      --text:     #e2e8f0;
+      --muted:    #64748b;
+      --glow-g:   0 0 8px #00ff8888, 0 0 24px #00ff8840;
+      --glow-b:   0 0 8px #00cfff88, 0 0 24px #00cfff40;
+      --glow-p:   0 0 8px #bf5fff88, 0 0 24px #bf5fff40;
+      --glow-y:   0 0 8px #ffe60088, 0 0 24px #ffe60040;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Share Tech Mono', 'Noto Sans SC', monospace;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Scanline overlay ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.18) 2px,
+        rgba(0,0,0,0.18) 4px
+      );
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ── Noise texture ── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9998;
+      opacity: 0.5;
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: relative;
+      text-align: center;
+      padding: 60px 20px 40px;
+      overflow: hidden;
+    }
+
+    .header-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,207,255,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 20% 100%, rgba(191,95,255,0.10) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 80% 100%, rgba(0,255,136,0.08) 0%, transparent 60%);
+      z-index: 0;
+    }
+
+    .logo-wrap {
+      position: relative;
+      z-index: 1;
+      display: inline-block;
+    }
+
+    .logo {
+      font-family: 'Press Start 2P', monospace;
+      font-size: clamp(28px, 6vw, 64px);
+      letter-spacing: 0.05em;
+      line-height: 1.2;
+      background: linear-gradient(135deg, var(--neon-b) 0%, var(--neon-g) 50%, var(--neon-y) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 20px rgba(0,207,255,0.5)) drop-shadow(0 0 40px rgba(0,255,136,0.3));
+      animation: logoPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes logoPulse {
+      0%, 100% { filter: drop-shadow(0 0 20px rgba(0,207,255,0.5)) drop-shadow(0 0 40px rgba(0,255,136,0.3)); }
+      50%       { filter: drop-shadow(0 0 30px rgba(0,207,255,0.8)) drop-shadow(0 0 60px rgba(0,255,136,0.5)); }
+    }
+
+    .logo-sub {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: clamp(11px, 2vw, 15px);
+      color: var(--muted);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      margin-top: 12px;
+    }
+
+    .logo-sub span {
+      color: var(--neon-g);
+      animation: blink 1.2s step-end infinite;
+    }
+
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    /* ── PIXEL DIVIDER ── */
+    .pixel-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      max-width: 900px;
+      margin: 0 auto 48px;
+      padding: 0 20px;
+    }
+    .pixel-divider::before,
+    .pixel-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--neon-b), transparent);
+    }
+    .pixel-divider-icon {
+      font-size: 18px;
+      animation: spin 4s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding: 0 20px 40px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .nav-btn {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 9px;
+      padding: 8px 16px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--muted);
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      transition: all 0.2s;
+      clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+    }
+
+    .nav-btn:hover,
+    .nav-btn.active {
+      border-color: var(--neon-b);
+      color: var(--neon-b);
+      background: rgba(0,207,255,0.08);
+      box-shadow: var(--glow-b);
+    }
+
+    .nav-btn[data-cat="action"].active  { border-color:var(--neon-r); color:var(--neon-r); background:rgba(255,68,102,0.08); box-shadow:0 0 8px #ff446688,0 0 24px #ff446640; }
+    .nav-btn[data-cat="puzzle"].active  { border-color:var(--neon-p); color:var(--neon-p); background:rgba(191,95,255,0.08); box-shadow:var(--glow-p); }
+    .nav-btn[data-cat="casual"].active  { border-color:var(--neon-g); color:var(--neon-g); background:rgba(0,255,136,0.08); box-shadow:var(--glow-g); }
+    .nav-btn[data-cat="classic"].active { border-color:var(--neon-y); color:var(--neon-y); background:rgba(255,230,0,0.08); box-shadow:var(--glow-y); }
+
+    /* ── MAIN GRID ── */
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px 80px;
+    }
+
+    .section-title {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    /* ── GAME CARD ── */
+    .game-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+      overflow: hidden;
+      clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+    }
+
+    .game-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .game-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .game-card[data-color="blue"]:hover   { border-color: var(--neon-b); box-shadow: var(--glow-b), inset 0 0 30px rgba(0,207,255,0.05); }
+    .game-card[data-color="green"]:hover  { border-color: var(--neon-g); box-shadow: var(--glow-g), inset 0 0 30px rgba(0,255,136,0.05); }
+    .game-card[data-color="purple"]:hover { border-color: var(--neon-p); box-shadow: var(--glow-p), inset 0 0 30px rgba(191,95,255,0.05); }
+    .game-card[data-color="yellow"]:hover { border-color: var(--neon-y); box-shadow: var(--glow-y), inset 0 0 30px rgba(255,230,0,0.05); }
+    .game-card[data-color="red"]:hover    { border-color: var(--neon-r); box-shadow: 0 0 8px #ff446688,0 0 24px #ff446640, inset 0 0 30px rgba(255,68,102,0.05); }
+
+    .card-thumb {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      display: block;
+      background: var(--surface);
+      position: relative;
+    }
+
+    .card-thumb-placeholder {
+      width: 100%;
+      aspect-ratio: 16/9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      background: var(--surface);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-thumb-placeholder::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(255,255,255,0.02) 10px,
+        rgba(255,255,255,0.02) 20px
+      );
+    }
+
+    .card-body {
+      padding: 16px;
+    }
+
+    .card-tag {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 7px;
+      padding: 3px 8px;
+      border-radius: 0;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+
+    .tag-action  { background: rgba(255,68,102,0.15);  color: var(--neon-r); border: 1px solid rgba(255,68,102,0.3); }
+    .tag-puzzle  { background: rgba(191,95,255,0.15);  color: var(--neon-p); border: 1px solid rgba(191,95,255,0.3); }
+    .tag-casual  { background: rgba(0,255,136,0.12);   color: var(--neon-g); border: 1px solid rgba(0,255,136,0.3); }
+    .tag-classic { background: rgba(255,230,0,0.12);   color: var(--neon-y); border: 1px solid rgba(255,230,0,0.3); }
+    .tag-strategy{ background: rgba(0,207,255,0.12);   color: var(--neon-b); border: 1px solid rgba(0,207,255,0.3); }
+
+    .card-title {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 11px;
+      color: var(--text);
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+
+    .card-desc {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+
+    .card-play-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 8px;
+      padding: 8px 16px;
+      background: transparent;
+      border: 1px solid currentColor;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .game-card[data-color="blue"]   .card-play-btn { color: var(--neon-b); }
+    .game-card[data-color="green"]  .card-play-btn { color: var(--neon-g); }
+    .game-card[data-color="purple"] .card-play-btn { color: var(--neon-p); }
+    .game-card[data-color="yellow"] .card-play-btn { color: var(--neon-y); }
+    .game-card[data-color="red"]    .card-play-btn { color: var(--neon-r); }
+
+    .card-play-btn:hover {
+      background: rgba(255,255,255,0.06);
+    }
+
+    .card-play-btn .play-icon {
+      font-size: 10px;
+      animation: playBounce 1s ease-in-out infinite;
+    }
+
+    @keyframes playBounce {
+      0%,100% { transform: translateX(0); }
+      50%      { transform: translateX(3px); }
+    }
+
+    /* ── MODAL / GAME OVERLAY ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.92);
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 960px;
+      margin-bottom: 12px;
+    }
+
+    .modal-title {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 12px;
+      color: var(--neon-b);
+      text-shadow: var(--glow-b);
+    }
+
+    .modal-close {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 10px;
+      color: var(--neon-r);
+      background: none;
+      border: 1px solid var(--neon-r);
+      padding: 6px 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .modal-close:hover {
+      background: rgba(255,68,102,0.15);
+      box-shadow: 0 0 8px #ff446688;
+    }
+
+    .modal-frame {
+      width: 100%;
+      max-width: 960px;
+      aspect-ratio: 16/9;
+      border: 1px solid var(--neon-b);
+      box-shadow: var(--glow-b);
+      background: #000;
+    }
+
+    .modal-frame iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    .modal-hint {
+      margin-top: 10px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      border-top: 1px solid var(--border);
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    footer .footer-logo {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 10px;
+      color: var(--neon-g);
+      margin-bottom: 8px;
+    }
+
+    /* ── PIXEL CORNER DECORATION ── */
+    .corner-tl, .corner-br {
+      position: fixed;
+      width: 60px;
+      height: 60px;
+      pointer-events: none;
+      z-index: 100;
+      opacity: 0.4;
+    }
+    .corner-tl { top: 0; left: 0; border-top: 2px solid var(--neon-b); border-left: 2px solid var(--neon-b); }
+    .corner-br { bottom: 0; right: 0; border-bottom: 2px solid var(--neon-g); border-right: 2px solid var(--neon-g); }
+
+    /* ── HIDDEN ── */
+    .hidden { display: none !important; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .games-grid { grid-template-columns: 1fr; }
+      .logo { font-size: 22px; }
+    }
+
+    /* ── ENTRANCE ANIMATION ── */
+    .game-card {
+      animation: cardIn 0.4s ease both;
+    }
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .game-card:nth-child(1) { animation-delay: 0.05s; }
+    .game-card:nth-child(2) { animation-delay: 0.10s; }
+    .game-card:nth-child(3) { animation-delay: 0.15s; }
+    .game-card:nth-child(4) { animation-delay: 0.20s; }
+    .game-card:nth-child(5) { animation-delay: 0.25s; }
+    .game-card:nth-child(6) { animation-delay: 0.30s; }
+    .game-card:nth-child(7) { animation-delay: 0.35s; }
+    .game-card:nth-child(8) { animation-delay: 0.40s; }
+    .game-card:nth-child(9) { animation-delay: 0.45s; }
+  </style>
+</head>
+<body>
+
+<div class="corner-tl"></div>
+<div class="corner-br"></div>
+
+<!-- ── HEADER ── -->
+<header>
+  <div class="header-bg"></div>
+  <div class="logo-wrap">
+    <div class="logo">YanGame</div>
+    <div class="logo-sub">免费小游戏合集 <span>▮</span> FREE GAMES</div>
+  </div>
+</header>
+
+<!-- ── NAV ── -->
+<nav id="nav">
+  <button class="nav-btn active" data-cat="all">🕹 全部</button>
+  <button class="nav-btn" data-cat="action">⚔️ 动作</button>
+  <button class="nav-btn" data-cat="puzzle">🧩 益智</button>
+  <button class="nav-btn" data-cat="casual">🎯 休闲</button>
+  <button class="nav-btn" data-cat="classic">👾 经典</button>
+  <button class="nav-btn" data-cat="strategy">♟ 策略</button>
+</nav>
+
+<!-- ── MAIN ── -->
+<main>
+  <div class="section-title">// 游戏列表</div>
+  <div class="games-grid" id="gamesGrid">
+
+    <!-- 2048 -->
+    <div class="game-card" data-color="yellow" data-cat="puzzle">
+      <div class="card-thumb-placeholder">🔢</div>
+      <div class="card-body">
+        <span class="card-tag tag-puzzle">益智</span>
+        <div class="card-title">2048</div>
+        <div class="card-desc">滑动方块，合并数字，挑战 2048！经典益智游戏，简单上手难以放下。</div>
+        <a class="card-play-btn" href="https://play2048.co/" target="_blank" rel="noopener">
+          <span class="play-icon">▶</span> 开始游戏
+        </a>
+      </div>
+    </div>
+
+    <!-- Wordle -->
+    <div class="game-card" data-color="green" data-cat="puzzle">
+      <div class="card-thumb-placeholder">🔤</div>
+      <div class="card-body">
+        <span class="card-tag tag-puzzle">益智</span>
+        <div class="card-title">Wordle</div>
+        <div class="card-desc">每天一个单词，6次机会猜出答案。风靡全球的文字猜谜游戏。</div>
+        <a class="card-play-btn" href="https://www.nytimes.com/games/wordle/index.html" target="_blank" rel="noopener">
+          <span class="play-icon">▶</span> 开始游戏
+        </a>
+      </div>
+    </div>
+
+    <!-- Snake -->
+    <div class="game-card" data-color="green" data-cat="classic" data-embed="https://www.google.com/fbx?fbx=snake_arcade">
+      <div class="card-thumb-placeholder">🐍</div>
+      <div class="card-body">
+        <span class="card-tag tag-classic">经典</span>
+        <div class="card-title">贪吃蛇</div>
+        <div class="card-desc">控制蛇吃食物不断成长，经典街机游戏重温童年记忆。</div>
+        <button class="card-play-btn" onclick="openGame(this)">
+          <span class="play-icon">▶</span> 开始游戏
+        </button>
+      </div>
+    </div>
+
+    <!-- Tetris -->
+    <div class="game-card" data-color="blue" data-cat="classic">
+      <div class="card-thumb-placeholder">🟦</div>
+      <div class="card-body">
+        <span class="card-tag tag-classic">经典</span>
+        <div class="card-title">俄罗斯方块</div>
+        <div class="card-desc">旋转、移动、消除方块，永恒的经典益智游戏。</div>
+        <a class="card-play-btn" href="https://tetris.com/play-tetris" target="_blank" rel="noopener">
+          <span class="play-icon">▶</span> 开始游戏
+        </a>
+      </div>
+    </div>
+
+    <!-- Flappy Bird clone -->
+    <div class="game-card" data-color="yellow" data-cat="casual" data-embed="https://flappybird.io/">
+      <div class="card-thumb-placeholder">🐦</div>
+      <div class="card-body">
+        <span class="card-tag tag-casual">休闲</span>
+        <div class="card-title">Flappy Bird</div>
+        <div class="card-desc">点击屏幕让小鸟飞过管道，考验你的反应速度！</div>
+        <button class="card-play-btn" onclick="openGame(this)">
+          <span class="play-icon">▶</span> 开始游戏
+        </button>
+      </div>
+    </div>
+
+    <!-- Minesweeper -->
+    <div class="game-card" data-color="red" data-cat="puzzle">
+      <div class="card-thumb-placeholder">💣</div>
+      <div class="card-body">
+        <span class="card-tag tag-puzzle">益智</span>
+        <div class="card-title">扫雷</div>
+        <div class="card-desc">经典扫雷游戏，标记地雷、清除安全格，挑战你的逻辑推理。</div>
+        <a class="card-play-btn" href="https://minesweeper.online/" target="_blank" rel="noopener">
+          <span class="play-icon">▶</span> 开始游戏
+        </a>
+      </div>
+    </div>
+
+    <!-- Pac-Man -->
+    <div class="game-card" data-color="yellow" data-cat="classic">
+      <div class="card-thumb-placeholder">👾</div>
+      <div class="card-body">
+        <span class="card-tag tag-classic">经典</span>
+        <div class="card-title">Pac-Man</div>
+        <div class="card-desc">吃豆人经典街机游戏，躲避幽灵、吃遍所有豆子！</div>
+        <a class="card-play-btn" href="https://www.google.com/logos/2010/pacman10-i.html" target="_blank" rel="noopener">
+          <span class="play-icon">▶</span> 开始游戏
+        </a>
+      </div>
+    </div>
+
+    <!-- Chess -->
+    <div class="game-card" data-color="blue" data-cat="strategy">
+      <div class="card-thumb-placeholder">♟</div>
+      <div class="card-body">
+        <span class="card-tag tag-strategy">策略</span>
+        <div class="card-title">国际象棋</div>
+        <div class="card-desc">与 AI 对弈或在线挑战真人，提升你的棋艺。</div>
+        <a class="card-play-btn" href="https://www.chess.com/play/computer" target="_blank" rel="noopener">
+          <span class="play-icon">▶</span> 开始游戏
+        </a>
+      </div>
+    </div>
+
+    <!-- Dino Run -->
+    <div class="game-card" data-color="green" data-cat="casual" data-embed="https://chromedino.com/">
+      <div class="card-thumb-placeholder">🦕</div>
+      <div class="card-body">
+        <span class="card-tag tag-casual">休闲</span>
+        <div class="card-title">恐龙跑酷</div>
+        <div class="card-desc">Chrome 断网小恐龙！跳跃躲避仙人掌，看你能跑多远。</div>
+        <button class="card-play-btn" onclick="openGame(this)">
+          <span class="play-icon">▶</span> 开始游戏
+        </button>
+      </div>
+    </div>
+
+    <!-- Sudoku -->
+    <div class="game-card" data-color="purple" data-cat="puzzle">
+      <div class="card-thumb-placeholder">🔢</div>
+      <div class="card-body">
+        <span class="card-tag tag-puzzle">益智</span>
+        <div class="card-title">数独</div>
+        <div class="card-desc">填满 9×9 方格，每行每列每宫各含 1-9，经典数字逻辑游戏。</div>
+        <a class="card-play-btn" href="https://sudoku.com/" target="_blank" rel="noopener">
+          <span class="play-icon">▶</span> 开始游戏
+        </a>
+      </div>
+    </div>
+
+    <!-- Geometry Dash -->
+    <div class="game-card" data-color="red" data-cat="action">
+      <div class="card-thumb-placeholder">🔺</div>
+      <div class="card-body">
+        <span class="card-tag tag-action">动作</span>
+        <div class="card-title">几何冲刺</div>
+        <div class="card-desc">跟随节拍跳跃、飞行、翻转，挑战极限反应力！</div>
+        <a class="card-play-btn" href="https://geometrydash.io/" target="_blank" rel="noopener">
+          <span class="play-icon">▶</span> 开始游戏
+        </a>
+      </div>
+    </div>
+
+    <!-- Agar.io -->
+    <div class="game-card" data-color="purple" data-cat="action">
+      <div class="card-thumb-placeholder">🔵</div>
+      <div class="card-body">
+        <span class="card-tag tag-action">动作</span>
+        <div class="card-title">Agar.io</div>
+        <div class="card-desc">控制细胞吞噬更小的对手，不断壮大，成为最大的细胞！</div>
+        <a class="card-play-btn" href="https://agar.io/" target="_blank" rel="noopener">
+          <span class="play-icon">▶</span> 开始游戏
+        </a>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-logo">YanGame</div>
+  <div>免费小游戏合集 · 无需下载 · 即开即玩</div>
+  <div style="margin-top:8px;font-size:10px;">© 2025 YanGame · Made with ♥ by Yan</div>
+</footer>
+
+<!-- ── GAME MODAL ── -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-header">
+    <div class="modal-title" id="modalTitle">游戏加载中...</div>
+    <button class="modal-close" onclick="closeGame()">✕ 关闭</button>
+  </div>
+  <div class="modal-frame">
+    <iframe id="gameFrame" src="" allowfullscreen sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+  </div>
+  <div class="modal-hint">按 ESC 或点击「关闭」退出游戏</div>
+</div>
+
+<script>
+  // ── Category filter ──
+  const navBtns = document.querySelectorAll('.nav-btn');
+  const cards   = document.querySelectorAll('.game-card');
+
+  navBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      navBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const cat = btn.dataset.cat;
+      cards.forEach(card => {
+        if (cat === 'all' || card.dataset.cat === cat) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    });
+  });
+
+  // ── Modal game ──
+  function openGame(btn) {
+    const card  = btn.closest('.game-card');
+    const url   = card.dataset.embed;
+    const title = card.querySelector('.card-title').textContent;
+    if (!url) return;
+    document.getElementById('modalTitle').textContent = '▶ ' + title;
+    document.getElementById('gameFrame').src = url;
+    document.getElementById('modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeGame() {
+    document.getElementById('modal').classList.remove('open');
+    document.getElementById('gameFrame').src = '';
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeGame();
+  });
+
+  document.getElementById('modal').addEventListener('click', e => {
+    if (e.target === document.getElementById('modal')) closeGame();
+  });
+</script>
+</body>
+</html>
