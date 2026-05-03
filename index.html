@@ -550,8 +550,15 @@
     function animateHero() {
         const elements = document.querySelectorAll('.hero-name, .hero-stats, .hero-right');
         elements.forEach((el, i) => {
-            setTimeout(() => el.classList.add('in-view'), i * 150 + 200);
+            setTimeout(() => el.classList.add('in-view'), i * 150 + 100);
         });
+    }
+    
+    // 立即启动Hero动画（页面加载完成后）
+    if (document.readyState === 'complete') {
+        animateHero();
+    } else {
+        window.addEventListener('DOMContentLoaded', animateHero);
     }
 
     // ===== 数字滚动 =====
