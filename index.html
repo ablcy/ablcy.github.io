@@ -36,13 +36,7 @@
     <div class="glow glow-2"></div>
     <div class="glow glow-3"></div>
 
-    <!-- 加载屏幕 -->
-    <div class="loader" id="loader">
-        <div class="loader-text">YAN</div>
-        <div class="loader-bar">
-            <div class="loader-progress" id="loaderProgress"></div>
-        </div>
-    </div>
+
 
     <!-- 导航 -->
     <nav class="nav" id="nav">
@@ -549,30 +543,6 @@
             el.addEventListener('mouseleave', () => {
                 el.style.transform = 'translate(0, 0)';
             });
-        });
-    }
-
-    // ===== 加载动画 =====
-    const loader = document.getElementById('loader');
-    const loaderProgress = document.getElementById('loaderProgress');
-    const isTouch = 'ontouchstart' in window;
-
-    function hideLoader() {
-        loaderProgress.style.width = '100%';
-        setTimeout(() => {
-            loader.classList.add('loader-done');
-            document.body.style.overflow = 'auto';
-            animateHero();
-        }, isTouch ? 200 : 300);
-    }
-
-    if (document.readyState === 'complete') {
-        hideLoader();
-    } else {
-        window.addEventListener('load', hideLoader);
-        // 兜底：如果 load 事件迟迟不触发，DOMContentLoaded 后强制进入
-        document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(hideLoader, isTouch ? 200 : 300);
         });
     }
 
