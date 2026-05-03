@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Yan — Digital Craftsman 个人主页">
+    <title>Yan — Digital Craftsman</title>
+    
+    <!-- 预连接优化 -->
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="dns-prefetch" href="https://waline.luckyan.dpdns.org">
+    <link rel="dns-prefetch" href="//busuanzi.ibruce.info">
+    <link rel="dns-prefetch" href="https://ablcy.github.io">
+    <link rel="dns-prefetch" href="https://github.com">
+    
+    <link rel="stylesheet" href="style.css">
+    <!-- Waline CSS 延迟加载 -->
+    <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css" media="print" onload="this.media='all'">
+    <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180">
+</head>
+<body>
+    <!-- 自定义光标 -->
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-follower" id="cursorFollower"></div>
+
+    <!-- 粒子背景 -->
+    <canvas id="particleCanvas"></canvas>
+
+    <!-- 网格背景 -->
+    <div class="grid-bg"></div>
+
+    <!-- 背景光球 -->
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+    <div class="glow glow-3"></div>
+
+    <!-- 加载屏幕 -->
+    <div class="loader" id="loader">
+        <div class="loader-text">YAN</div>
+        <div class="loader-bar">
+            <div class="loader-progress" id="loaderProgress"></div>
+        </div>
+    </div>
+
+    <!-- 导航 -->
+    <nav class="nav" id="nav">
+        <a href="#" class="nav-logo magnetic">
+            <span class="logo-text">YAN</span>
+            <span class="logo-dot"></span>
+        </a>
+        <div class="nav-links">
+            <a href="#hero" class="nav-link magnetic" data-zh="主页" data-en="Home">主页</a>
+            <a href="#about" class="nav-link magnetic" data-zh="关于" data-en="About">关于</a>
+            <a href="#work" class="nav-link magnetic" data-zh="项目" data-en="Projects">项目</a>
+            <a href="#contact" class="nav-link magnetic" data-zh="联系" data-en="Contact">联系</a>
+            <a href="#guestbook" class="nav-link magnetic" data-zh="留言" data-en="Guest">留言</a>
+        </div>
+        <div class="nav-actions">
+            <button class="lang-btn magnetic" id="langToggle">EN</button>
+            <button class="hamburger" id="hamburger">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- 移动端菜单 -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-inner">
+            <a href="#hero" class="mobile-nav-link" data-zh="主页" data-en="Home">主页</a>
+            <a href="#about" class="mobile-nav-link" data-zh="关于" data-en="About">关于</a>
+            <a href="#work" class="mobile-nav-link" data-zh="项目" data-en="Projects">项目</a>
+            <a href="#contact" class="mobile-nav-link" data-zh="联系" data-en="Contact">联系</a>
+            <a href="#guestbook" class="mobile-nav-link" data-zh="留言" data-en="Guest">留言</a>
+        </div>
+    </div>
+
+    <main>
+        <!-- ===== HERO ===== -->
+        <section class="hero" id="hero">
+            <div class="hero-inner">
+                <div class="hero-left">
+                    <h1 class="hero-title">
+                        <span class="hero-name" id="heroName">Yan</span>
+                    </h1>
+                    <div class="hero-stats">
+                        <div class="stat">
+                            <span class="stat-number" data-count="10">0</span>
+                            <span class="stat-unit" data-zh="个项目" data-en="Projects">个项目</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number" data-count="3">0</span>
+                            <span class="stat-unit" data-zh="个平台" data-en="Platforms">个平台</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">∞</span>
+                            <span class="stat-unit" data-zh="个想法" data-en="Ideas">个想法</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-right">
+                    <div class="hero-avatar magnetic">
+                        <img src="avatar.jpg" alt="Yan" class="avatar-img" loading="eager" decoding="async">
+                        <div class="avatar-ring"></div>
+                        <div class="avatar-glow"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-scroll">
+                <span data-zh="向下探索" data-en="Scroll Down">向下探索</span>
+                <div class="scroll-line"></div>
+            </div>
+        </section>
+
+        <!-- ===== MARQUEE ===== -->
+        <div class="marquee-wrapper">
+            <div class="marquee" id="marquee">
+                <span>AI TOOLS</span>
+                <span>·</span>
+                <span>WEB DEV</span>
+                <span>·</span>
+                <span>DESIGN</span>
+                <span>·</span>
+                <span>OPEN SOURCE</span>
+                <span>·</span>
+                <span>AIGC</span>
+                <span>·</span>
+                <span>FIRE</span>
+                <span>·</span>
+                <span>CREATIVE</span>
+                <span>·</span>
+                <span>AI TOOLS</span>
+                <span>·</span>
+                <span>WEB DEV</span>
+                <span>·</span>
+                <span>DESIGN</span>
+                <span>·</span>
+                <span>OPEN SOURCE</span>
+                <span>·</span>
+                <span>AIGC</span>
+                <span>·</span>
+                <span>FIRE</span>
+                <span>·</span>
+                <span>CREATIVE</span>
+                <span>·</span>
+            </div>
+        </div>
+
+        <!-- ===== ABOUT ===== -->
+        <section class="section about-section" id="about">
+            <div class="section-header">
+                <span class="section-num">01</span>
+                <h2 class="section-title" data-zh="关于我" data-en="About Me">关于我</h2>
+            </div>
+            <div class="about-content">
+                <div class="about-verse">
+                    <span data-zh="我学着不去担心得太远，" data-en="I learn not to worry too far ahead,">我学着不去担心得太远，</span>
+                    <span data-zh="不计划太多反而能勇敢冒险。" data-en="not to plan too much so I can be brave.">不计划太多反而能勇敢冒险。</span>
+                    <span data-zh="丰富地过每一天快乐地看每一天。" data-en="Live every day richly, happily watch every day pass.">丰富地过每一天快乐地看每一天。</span>
+                </div>
+                <div class="about-body">
+                    <p class="about-desc" data-zh="一个在文字与逻辑之间游走的人。偏爱深度思考，习惯在安静里慢慢沉淀，对世界保持好奇，也对自我保持清醒。" data-en="A person wandering between words and logic. Loves deep thinking, settles slowly in quietness, stays curious about the world and clear about oneself.">一个在文字与逻辑之间游走的人。偏爱深度思考，习惯在安静里慢慢沉淀，对世界保持好奇，也对自我保持清醒。</p>
+                    <p class="about-desc" data-zh="时而感性细腻，时而理性较真，不追逐喧嚣，只忠于内心。" data-en="Sometimes emotional and delicate, sometimes rational and meticulous. Not chasing noise, only loyal to the heart.">时而感性细腻，时而理性较真，不追逐喧嚣，只忠于内心。</p>
+                    <p class="about-desc" data-zh="这里是我的精神自留地，记录思考、感悟与偶然的灵光一现。" data-en="This is my spiritual sanctuary — recording thoughts, reflections, and occasional flashes of inspiration.">这里是我的精神自留地，记录思考、感悟与偶然的灵光一现。</p>
+                    <p class="about-desc" data-zh="不问来路，不问归途，只与同频者，慢慢相遇。" data-en="Not asking where I came from, not asking where I'm going — just slowly meeting those on the same frequency.">不问来路，不问归途，只与同频者，慢慢相遇。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== WORK ===== -->
+        <section class="section work-section" id="work">
+            <div class="section-header">
+                <span class="section-num">02</span>
+                <h2 class="section-title" data-zh="项目" data-en="Projects">项目</h2>
+            </div>
+            <div class="work-grid">
+                <a href="https://ablcy.github.io/ai" class="work-card magnetic" data-color="violet">
+                    <div class="work-card-inner">
+                        <div class="work-index">01</div>
+                        <div class="work-info">
+                            <div class="work-icon">🤖</div>
+                            <h3 class="work-name">YanAI</h3>
+                            <p class="work-desc" data-zh="免费 AI 工具合集，60+ 款精选工具" data-en="Free AI tools collection, 60+ curated tools">免费 AI 工具合集，60+ 款精选工具</p>
+                        </div>
+                        <div class="work-arrow">↗</div>
+                    </div>
+                    <div class="work-card-bg"></div>
+                </a>
+
+                <a href="https://ablcy.github.io/travel" class="work-card magnetic" data-color="cyan">
+                    <div class="work-card-inner">
+                        <div class="work-index">02</div>
+                        <div class="work-info">
+                            <div class="work-icon">🌍</div>
+                            <h3 class="work-name">YanTravel</h3>
+                            <p class="work-desc" data-zh="全球景点推荐，36 个精选目的地" data-en="Global travel recommendations, 36 curated destinations">全球景点推荐，36 个精选目的地</p>
+                        </div>
+                        <div class="work-arrow">↗</div>
+                    </div>
+                    <div class="work-card-bg"></div>
+                </a>
+
+                <a href="https://ablcy.github.io/fire" class="work-card magnetic" data-color="amber">
+                    <div class="work-card-inner">
+                        <div class="work-index">03</div>
+                        <div class="work-info">
+                            <div class="work-icon">🔥</div>
+                            <h3 class="work-name">YanFire</h3>
+                            <p class="work-desc" data-zh="FIRE 生活推广，财务自由计算器" data-en="FIRE lifestyle advocacy & financial freedom calculator">FIRE 生活推广，财务自由计算器</p>
+                        </div>
+                        <div class="work-arrow">↗</div>
+                    </div>
+                    <div class="work-card-bg"></div>
+                </a>
+
+                <a href="https://ablcy.github.io/bookmark" class="work-card magnetic" data-color="teal">
+                    <div class="work-card-inner">
+                        <div class="work-index">04</div>
+                        <div class="work-info">
+                            <div class="work-icon">🔖</div>
+                            <h3 class="work-name">YanBookmark</h3>
+                            <p class="work-desc" data-zh="书签管理平台，精选收藏" data-en="Bookmark manager with curated collections">书签管理平台，精选收藏</p>
+                        </div>
+                        <div class="work-arrow">↗</div>
+                    </div>
+                    <div class="work-card-bg"></div>
+                </a>
+
+                <a href="https://ablcy.github.io/mindgarden" class="work-card magnetic" data-color="emerald">
+                    <div class="work-card-inner">
+                        <div class="work-index">05</div>
+                        <div class="work-info">
+                            <div class="work-icon">🌱</div>
+                            <h3 class="work-name">MindGarden</h3>
+                            <p class="work-desc" data-zh="心灵花园，成长与思考" data-en="Mind garden for growth and reflection">心灵花园，成长与思考</p>
+                        </div>
+                        <div class="work-arrow">↗</div>
+                    </div>
+                    <div class="work-card-bg"></div>
+                </a>
+
+                <a href="https://ablcy.github.io/mindflower" class="work-card magnetic" data-color="pink">
+                    <div class="work-card-inner">
+                        <div class="work-index">06</div>
+                        <div class="work-info">
+                            <div class="work-icon">🌸</div>
+                            <h3 class="work-name">MindFlower</h3>
+                            <p class="work-desc" data-zh="思维之花，灵感收集" data-en="Flower of thought, collecting inspiration">思维之花，灵感收集</p>
+                        </div>
+                        <div class="work-arrow">↗</div>
+                    </div>
+                    <div class="work-card-bg"></div>
+                </a>
+
+                <a href="https://ablcy.github.io/edu" class="work-card magnetic" data-color="sky">
+                    <div class="work-card-inner">
+                        <div class="work-index">07</div>
+                        <div class="work-info">
+                            <div class="work-icon">📚</div>
+                            <h3 class="work-name">YanEdu</h3>
+                            <p class="work-desc" data-zh="教育资源与学习分享" data-en="Educational resources and learning">教育资源与学习分享</p>
+                        </div>
+                        <div class="work-arrow">↗</div>
+                    </div>
+                    <div class="work-card-bg"></div>
+                </a>
+
+                <a href="https://ablcy.github.io/health" class="work-card magnetic" data-color="rose">
+                    <div class="work-card-inner">
+                        <div class="work-index">08</div>
+                        <div class="work-info">
+                            <div class="work-icon">💪</div>
+                            <h3 class="work-name">YanHealth</h3>
+                            <p class="work-desc" data-zh="健康管理，生活自律" data-en="Health management and self-discipline">健康管理，生活自律</p>
+                        </div>
+                        <div class="work-arrow">↗</div>
+                    </div>
+                    <div class="work-card-bg"></div>
+                </a>
+
+                <a href="https://ablcy.github.io/game" class="work-card magnetic" data-color="orange">
+                    <div class="work-card-inner">
+                        <div class="work-index">09</div>
+                        <div class="work-info">
+                            <div class="work-icon">🎮</div>
+                            <h3 class="work-name">YanGame</h3>
+                            <p class="work-desc" data-zh="小游戏合集，休闲娱乐" data-en="Mini games collection for fun">小游戏合集，休闲娱乐</p>
+                        </div>
+                        <div class="work-arrow">↗</div>
+                    </div>
+                    <div class="work-card-bg"></div>
+                </a>
+
+                <a href="https://ablcy.github.io/lcy" class="work-card magnetic" data-color="indigo">
+                    <div class="work-card-inner">
+                        <div class="work-index">10</div>
+                        <div class="work-info">
+                            <div class="work-icon">✨</div>
+                            <h3 class="work-name">LCY</h3>
+                            <p class="work-desc" data-zh="个人项目集" data-en="Personal project collection">个人项目集</p>
+                        </div>
+                        <div class="work-arrow">↗</div>
+                    </div>
+                    <div class="work-card-bg"></div>
+                </a>
+            </div>
+        </section>
+
+        <!-- ===== CONTACT ===== -->
+        <section class="section contact-section" id="contact">
+            <div class="section-header">
+                <span class="section-num">03</span>
+                <h2 class="section-title" data-zh="联系方式" data-en="Get in Touch">联系方式</h2>
+            </div>
+            <div class="contact-grid">
+                <a href="https://github.com/ablcy" target="_blank" rel="noopener" class="contact-card magnetic">
+                    <div class="contact-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                    </div>
+                    <div class="contact-text">
+                        <span class="contact-name">GitHub</span>
+                        <span class="contact-handle">@ablcy</span>
+                    </div>
+                    <span class="contact-arrow">→</span>
+                </a>
+
+                <a href="mailto:ablcy@qq.com" class="contact-card magnetic">
+                    <div class="contact-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                    </div>
+                    <div class="contact-text">
+                        <span class="contact-name">Email</span>
+                        <span class="contact-handle">ablcy@qq.com</span>
+                    </div>
+                    <span class="contact-arrow">→</span>
+                </a>
+
+                <a href="https://qm.qq.com/q/TpZmrSxLQQ" target="_blank" rel="noopener" class="contact-card magnetic">
+                    <div class="contact-icon">
+                        <svg width="22" height="22" viewBox="0 0 16 16" fill="currentColor"><path d="M6.048 3.323c.022.277-.13.523-.338.55-.21.026-.397-.176-.419-.453s.13-.523.338-.55c.21-.026.397.176.42.453Zm2.265-.24c-.603-.146-.894.256-.936.333-.027.048-.008.117.037.15.045.035.092.025.119-.003.361-.39.751-.172.829-.129l.011.007c.053.024.147.028.193-.098.023-.063.017-.11-.006-.142-.016-.023-.089-.08-.247-.118"/><path d="M11.727 6.719c0-.022.01-.375.01-.557 0-3.07-1.45-6.156-5.015-6.156S1.708 3.092 1.708 6.162c0 .182.01.535.01.557l-.72 1.795a26 26 0 0 0-.534 1.508c-.68 2.187-.46 3.093-.292 3.113.36.044 1.401-1.647 1.401-1.647 0 .979.504 2.256 1.594 3.179-.408.126-.907.319-1.228.556-.29.213-.253.43-.201.518.228.386 3.92.246 4.985.126 1.065.12 4.756.26 4.984-.126.052-.088.088-.305-.2-.518-.322-.237-.822-.43-1.23-.557 1.09-.922 1.594-2.2 1.594-3.178 0 0 1.041 1.69 1.401 1.647.168-.02.388-.926-.292-3.113a26 26 0 0 0-.534-1.508l-.72-1.795ZM9.773 5.53a.1.1 0 0 1-.009.096c-.109.159-1.554.943-3.033.943h-.017c-1.48 0-2.925-.784-3.034-.943a.1.1 0 0 1-.018-.055q0-.022.01-.04c.13-.287 1.43-.606 3.042-.606h.017c1.611 0 2.912.319 3.042.605m-4.32-.989c-.483.022-.896-.529-.922-1.229s.344-1.286.828-1.308c.483-.022.896.529.922 1.23.027.7-.344 1.286-.827 1.307Zm2.538 0c-.484-.022-.854-.607-.828-1.308.027-.7.44-1.25.923-1.23.483.023.853.608.827 1.309-.026.7-.439 1.251-.922 1.23ZM2.928 8.99q.32.063.639.117v2.336s1.104.222 2.21.068V9.363q.49.027.937.023h.017c1.117.013 2.474-.136 3.786-.396.097.622.151 1.386.097 2.284-.146 2.45-1.6 3.99-3.846 4.012h-.091c-2.245-.023-3.7-1.562-3.846-4.011-.054-.9 0-1.663.097-2.285"/></svg>
+                    </div>
+                    <div class="contact-text">
+                        <span class="contact-name">QQ</span>
+                        <span class="contact-handle">3428270273</span>
+                    </div>
+                    <span class="contact-arrow">→</span>
+                </a>
+
+                <a href="https://v.douyin.com/oWVmRw3Yc7c/" target="_blank" rel="noopener" class="contact-card magnetic">
+                    <div class="contact-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+                    </div>
+                    <div class="contact-text">
+                        <span class="contact-name" data-zh="抖音" data-en="Douyin">抖音</span>
+                        <span class="contact-handle">lcy9421</span>
+                    </div>
+                    <span class="contact-arrow">→</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- ===== GUESTBOOK ===== -->
+        <section class="section guestbook-section" id="guestbook">
+            <div class="section-header">
+                <span class="section-num">04</span>
+                <h2 class="section-title" data-zh="留言板" data-en="Guestbook">留言板</h2>
+            </div>
+            <!-- 折叠触发器 -->
+            <div class="collapse-trigger guestbook-collapse" id="guestbookTrigger">
+                <span class="collapse-label" data-zh="展开留言 ✨" data-en="Expand Comments ✨">展开留言 ✨</span>
+                <span class="collapse-arrow">▼</span>
+            </div>
+            <!-- 折叠内容（默认隐藏） -->
+            <div class="collapse-content" id="guestbookContent">
+                <div id="waline"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ===== CHANGELOG ===== -->
+    <div class="changelog" id="changelog">
+        <div class="changelog-trigger" id="changelogTrigger">
+            <span class="changelog-label" data-zh="📋 更新日志" data-en="📋 Changelog">📋 更新日志</span>
+            <span class="collapse-arrow">▼</span>
+        </div>
+        <div class="changelog-content" id="changelogContent">
+            <div class="changelog-list">
+                <!-- v1.1.6 -->
+                <div class="changelog-item">
+                    <div class="changelog-header">
+                        <span class="changelog-version">v1.1.6</span>
+                        <span class="changelog-time">2026-05-03</span>
+                    </div>
+                    <div class="changelog-body">
+                        <p data-zh="⚡ 性能大幅优化加载速度：桌面端加载动画缩短至0.3秒、添加预连接优化、减少粒子数量、延迟加载Waline和不蒜子统计、优化图片加载。" data-en="⚡ Major performance optimization: reduced desktop loader to 0.3s, added preconnect optimizations, reduced particle count, lazy load Waline and busuanzi, optimized image loading.">⚡ 性能大幅优化加载速度：桌面端加载动画缩短至0.3秒、添加预连接优化、减少粒子数量、延迟加载Waline和不蒜子统计、优化图片加载。</p>
+                    </div>
+                </div>
+                <!-- v1.1.5 -->
+                <div class="changelog-item">
+                    <div class="changelog-header">
+                        <span class="changelog-version">v1.1.5</span>
+                        <span class="changelog-time">2026-05-03 10:25:00</span>
+                    </div>
+                    <div class="changelog-body">
+                        <p data-zh="删除 YanMusic/YanRead/YanLink，新增 MindGarden/MindFlower/YanEdu/YanHealth/LCY/YanGame，移除 YanBookmark 密码锁，手机端加载动画缩短至 0.2 秒。" data-en="Removed YanMusic/YanRead/YanLink, added MindGarden/MindFlower/YanEdu/YanHealth/LCY/YanGame, removed YanBookmark password, reduced mobile loader to 0.2s.">删除 YanMusic/YanRead/YanLink，新增 MindGarden/MindFlower/YanEdu/YanHealth/LCY/YanGame，移除 YanBookmark 密码锁，手机端加载动画缩短至 0.2 秒。</p>
+                    </div>
+                </div>
+                <!-- v1.1.4 -->
+                <div class="changelog-item">
+                    <div class="changelog-header">
+                        <span class="changelog-version">v1.1.4</span>
+                        <span class="changelog-time">2026-04-20 11:48:00</span>
+                    </div>
+                    <div class="changelog-body">
+                        <p data-zh="底部新增运营统计（运营时长/累计访问/实时在线），评论区与更新日志改为折叠形式。" data-en="Added site stats to footer (runtime/PV/UV). Collapsible comments and changelog.">底部新增运营统计（运营时长/累计访问/实时在线），评论区与更新日志改为折叠形式。</p>
+                    </div>
+                </div>
+                <!-- v1.1.3 -->
+                <div class="changelog-item">
+                    <div class="changelog-header">
+                        <span class="changelog-version">v1.1.3</span>
+                        <span class="changelog-time">2026-04-19</span>
+                    </div>
+                    <div class="changelog-body">
+                        <p data-zh="开屏YAN放大+加速+隐藏Hero两行字+加强头像隐藏" data-en="Splash YAN enlarged, faster, hidden hero subtitle, enhanced avatar hide">开屏YAN放大+加速+隐藏Hero两行字+加强头像隐藏</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <!-- 网站运营统计 -->
+            <div class="site-stats">
+                <div class="site-stat-item">
+                    <span class="site-stat-icon">⏱</span>
+                    <span class="site-stat-label" data-zh="已运营" data-en="Running">已运营</span>
+                    <span class="site-stat-value" id="siteRuntime">-</span>
+                </div>
+                <div class="site-stat-divider"></div>
+                <div class="site-stat-item">
+                    <span class="site-stat-icon">👁</span>
+                    <span class="site-stat-label" data-zh="累计访问" data-en="Total Visits">累计访问</span>
+                    <span class="site-stat-value"><span id="busuanzi_value_site_pv">...</span></span>
+                </div>
+                <div class="site-stat-divider"></div>
+                <div class="site-stat-item">
+                    <span class="site-stat-icon">🟢</span>
+                    <span class="site-stat-label" data-zh="实时在线" data-en="Online Now">实时在线</span>
+                    <span class="site-stat-value"><span id="busuanzi_value_site_uv">...</span></span>
+                </div>
+            </div>
+            <p class="footer-text" data-zh="© 2026 Yan. 用代码构建有趣的产品。" data-en="© 2026 Yan. Building fun products with code.">© 2026 Yan. 用代码构建有趣的产品。</p>
+        <p class="footer-version">v1.1.6</p>
+        </div>
+    </footer>
+
+    <script>
+    // ===== 配置 =====
+    const html = document.documentElement;
+    let lang = localStorage.getItem('lang') || 'zh';
+
+    // ===== 语言切换 =====
+    function setLang(l) {
+        lang = l;
+        localStorage.setItem('lang', l);
+        html.setAttribute('lang', l === 'zh' ? 'zh-CN' : 'en');
+        document.querySelectorAll('[data-zh]').forEach(el => {
+            el.textContent = el.getAttribute('data-' + l);
+        });
+        document.getElementById('langToggle').textContent = l === 'zh' ? 'EN' : '中';
+        if (window.walineInstance) {
+            walineInstance.update({ lang: l === 'zh' ? 'zh-CN' : 'en' });
+        }
+    }
+
+    document.getElementById('langToggle').addEventListener('click', () => setLang(lang === 'zh' ? 'en' : 'zh'));
+    setLang(lang);
+
+    // ===== Hamburger 菜单 =====
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    hamburger.addEventListener('click', () => {
+        mobileMenu.classList.toggle('active');
+        hamburger.classList.toggle('active');
+    });
+
+    // 点击菜单项关闭
+    mobileMenu.querySelectorAll('.mobile-nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+            hamburger.classList.remove('active');
+        });
+    });
+
+    // ===== 自定义光标 =====
+    const cursor = document.getElementById('cursor');
+    const follower = document.getElementById('cursorFollower');
+    let mouseX = 0, mouseY = 0, followerX = 0, followerY = 0;
+    const isTouch = 'ontouchstart' in window;
+
+    if (!isTouch) {
+        document.addEventListener('mousemove', e => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            cursor.style.left = mouseX + 'px';
+            cursor.style.top = mouseY + 'px';
+        });
+
+        function animateFollower() {
+            followerX += (mouseX - followerX) * 0.12;
+            followerY += (mouseY - followerY) * 0.12;
+            follower.style.left = followerX + 'px';
+            follower.style.top = followerY + 'px';
+            requestAnimationFrame(animateFollower);
+        }
+        animateFollower();
+
+        // Hover 放大效果
+        document.querySelectorAll('a, button, .magnetic').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.classList.add('cursor-hover');
+                follower.classList.add('follower-hover');
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.classList.remove('cursor-hover');
+                follower.classList.remove('follower-hover');
+            });
+        });
+    } else {
+        cursor.style.display = 'none';
+        follower.style.display = 'none';
+    }
+
+    // ===== 磁性按钮 =====
+    if (!isTouch) {
+        document.querySelectorAll('.magnetic').forEach(el => {
+            el.addEventListener('mousemove', e => {
+                const rect = el.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                el.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+                el.style.transition = 'transform 0.2s cubic-bezier(0.33, 1, 0.68, 1)';
+            });
+            el.addEventListener('mouseleave', () => {
+                el.style.transform = 'translate(0, 0)';
+            });
+        });
+    }
+
+    // ===== 加载动画 =====
+    const loader = document.getElementById('loader');
+    const loaderProgress = document.getElementById('loaderProgress');
+    const isTouch = 'ontouchstart' in window;
+
+    function hideLoader() {
+        loaderProgress.style.width = '100%';
+        setTimeout(() => {
+            loader.classList.add('loader-done');
+            document.body.style.overflow = 'auto';
+            animateHero();
+        }, isTouch ? 200 : 300);
+    }
+
+    if (document.readyState === 'complete') {
+        hideLoader();
+    } else {
+        window.addEventListener('load', hideLoader);
+        // 兜底：如果 load 事件迟迟不触发，DOMContentLoaded 后强制进入
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(hideLoader, isTouch ? 200 : 300);
+        });
+    }
+
+    // ===== Hero 入场动画 =====
+    function animateHero() {
+        const elements = document.querySelectorAll('.hero-name, .hero-stats, .hero-right');
+        elements.forEach((el, i) => {
+            setTimeout(() => el.classList.add('in-view'), i * 150 + 200);
+        });
+    }
+
+    // ===== 数字滚动 =====
+    const counters = document.querySelectorAll('[data-count]');
+    const counterObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const target = parseInt(entry.target.dataset.count);
+                let current = 0;
+                const step = Math.ceil(target / 30);
+                const timer = setInterval(() => {
+                    current += step;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(timer);
+                    }
+                    entry.target.textContent = current;
+                }, 40);
+                counterObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+    counters.forEach(c => counterObserver.observe(c));
+
+    // ===== 滚动入场动画 =====
+    const scrollObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('in-view');
+                // Work cards 逐个入场
+                const cards = entry.target.querySelectorAll('.work-card, .contact-card');
+                cards.forEach((card, i) => {
+                    setTimeout(() => card.classList.add('in-view'), i * 100);
+                });
+                scrollObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.section').forEach(s => scrollObserver.observe(s));
+
+    // ===== 导航高亮 + 滚动显示 =====
+    const nav = document.getElementById('nav');
+    const sections = document.querySelectorAll('.section');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    window.addEventListener('scroll', () => {
+        // 导航背景
+        nav.classList.toggle('nav-scrolled', window.scrollY > 50);
+        // 高亮
+        let current = '';
+        sections.forEach(sec => {
+            if (window.scrollY >= sec.offsetTop - 150) current = sec.id;
+        });
+        navLinks.forEach(link => {
+            link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+        });
+    });
+
+    // ===== 粒子背景 =====
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    class Particle {
+        constructor() {
+            this.reset();
+        }
+        reset() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 1.2 + 0.4;
+            this.speedX = (Math.random() - 0.5) * 0.25;
+            this.speedY = (Math.random() - 0.5) * 0.25;
+            this.opacity = Math.random() * 0.3 + 0.08;
+        }
+        update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+            if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+                this.reset();
+            }
+        }
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(139, 92, 246, ${this.opacity})`;
+            ctx.fill();
+        }
+    }
+
+    // 减少粒子数量以提升性能
+    const particleCount = Math.min(40, Math.floor((window.innerWidth * window.innerHeight) / 15000));
+    for (let i = 0; i < particleCount; i++) particles.push(new Particle());
+
+    // 优化的粒子动画 - 使用 requestAnimationFrame 节流
+    let lastTime = 0;
+    const targetFPS = 30;
+    const interval = 1000 / targetFPS;
+
+    function animateParticles(timestamp) {
+        if (timestamp - lastTime < interval) {
+            requestAnimationFrame(animateParticles);
+            return;
+        }
+        lastTime = timestamp;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => { p.update(); p.draw(); });
+
+        // 优化的连线算法 - 减少计算
+        const connectDist = 100;
+        for (let i = 0; i < particles.length; i++) {
+            for (let j = i + 1; j < particles.length; j++) {
+                const dx = particles[i].x - particles[j].x;
+                const dy = particles[i].y - particles[j].y;
+                const dist = dx * dx + dy * dy; // 避免开方运算
+                if (dist < connectDist * connectDist) {
+                    const realDist = Math.sqrt(dist);
+                    ctx.beginPath();
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(particles[j].x, particles[j].y);
+                    ctx.strokeStyle = `rgba(139, 92, 246, ${0.05 * (1 - realDist / connectDist)})`;
+                    ctx.lineWidth = 0.4;
+                    ctx.stroke();
+                }
+            }
+        }
+        requestAnimationFrame(animateParticles);
+    }
+    requestAnimationFrame(animateParticles);
+
+    // ===== Waline =====
+    let walineLoaded = false;
+    window.initWaline = function(Waline) {
+        window.walineInstance = Waline.init({
+            el: '#waline',
+            serverURL: 'https://waline.luckyan.dpdns.org',
+            lang: lang === 'zh' ? 'zh-CN' : 'en',
+            dark: 'html[data-theme="dark"]',
+            meta: ['nick', 'mail'],
+            requiredMeta: [],
+            login: 'disable',
+            wordLimit: [0, 500],
+            pageSize: 10,
+        });
+    };
+
+    // 延迟加载 Waline - 当用户点击展开留言时才加载
+    const guestbookTrigger = document.getElementById('guestbookTrigger');
+    if (guestbookTrigger) {
+        guestbookTrigger.addEventListener('click', function loadWalineOnce() {
+            if (!walineLoaded) {
+                walineLoaded = true;
+                const script = document.createElement('script');
+                script.type = 'module';
+                script.textContent = `
+                    import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
+                    window.initWaline({ init });
+                `;
+                document.body.appendChild(script);
+                guestbookTrigger.removeEventListener('click', loadWalineOnce);
+            }
+        });
+    }
+    </script>
+
+    <!-- 不蒜子统计 - 延迟加载 -->
+    <script>
+    setTimeout(() => {
+        const script = document.createElement('script');
+        script.async = true;
+        script.src = '//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js';
+        document.body.appendChild(script);
+    }, 2000);
+    </script>
+
+    <script>
+    // ===== 网站运营时长 =====
+    (function() {
+        const LAUNCH_DATE = new Date('2026-04-16T19:35:00+08:00');
+
+        function formatRuntime() {
+            const now = new Date();
+            const diff = now - LAUNCH_DATE;
+            if (diff < 0) return '0天';
+
+            const days    = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours   = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            const l = window.__yan_lang || localStorage.getItem('lang') || 'zh';
+            if (l === 'en') {
+                return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+            }
+            return `${days}天 ${hours}时 ${minutes}分 ${seconds}秒`;
+        }
+
+        const el = document.getElementById('siteRuntime');
+        if (el) {
+            el.textContent = formatRuntime();
+            setInterval(() => {
+                el.textContent = formatRuntime();
+            }, 1000);
+        }
+
+        const origSetLang = window.setLang;
+        if (typeof origSetLang === 'function') {
+            window.setLang = function(l) {
+                origSetLang(l);
+                window.__yan_lang = l;
+            };
+        }
+    })();
+
+    // ===== 折叠逻辑 =====
+    function setupCollapse(trigger, content, isOpen) {
+        if (!trigger || !content) return;
+        content.style.display = isOpen ? 'block' : 'none';
+        trigger.classList.toggle('collapsed', !isOpen);
+
+        trigger.addEventListener('click', () => {
+            const open = content.style.display === 'none';
+            content.style.display = open ? 'block' : 'none';
+            trigger.classList.toggle('collapsed', !open);
+        });
+    }
+
+    setupCollapse(
+        document.getElementById('guestbookTrigger'),
+        document.getElementById('guestbookContent'),
+        false
+    );
+    setupCollapse(
+        document.getElementById('changelogTrigger'),
+        document.getElementById('changelogContent'),
+        false
+    );
+    </script>
+</body>
+</html>
