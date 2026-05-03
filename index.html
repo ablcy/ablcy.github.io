@@ -483,6 +483,10 @@
         html.setAttribute('data-theme', theme);
         localStorage.setItem('theme', theme);
         themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+        // 触发粒子重新绘制以适应主题
+        if (canvas && ctx) {
+            // 不需要重新初始化，下一次requestAnimationFrame会自动适应
+        }
     }
     
     // 从localStorage恢复主题或默认白色
@@ -657,10 +661,10 @@
         reset() {
             this.x = Math.random() * canvas.width;
             this.y = Math.random() * canvas.height;
-            this.size = Math.random() * 1.2 + 0.4;
+            this.size = Math.random() * 1.5 + 0.5;
             this.speedX = (Math.random() - 0.5) * 0.25;
             this.speedY = (Math.random() - 0.5) * 0.25;
-            this.opacity = Math.random() * 0.3 + 0.08;
+            this.opacity = Math.random() * 0.4 + 0.1;
         }
         update() {
             this.x += this.speedX;
@@ -670,9 +674,11 @@
             }
         }
         draw() {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            const particleOpacity = isDark ? this.opacity : this.opacity * 1.5;
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(139, 92, 246, ${this.opacity})`;
+            ctx.fillStyle = `rgba(139, 92, 246, ${particleOpacity})`;
             ctx.fill();
         }
     }
@@ -698,6 +704,8 @@
 
         // 优化的连线算法 - 减少计算
         const connectDist = 100;
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        const lineOpacityMultiplier = isDark ? 1 : 2;
         for (let i = 0; i < particles.length; i++) {
             for (let j = i + 1; j < particles.length; j++) {
                 const dx = particles[i].x - particles[j].x;
@@ -708,8 +716,8 @@
                     ctx.beginPath();
                     ctx.moveTo(particles[i].x, particles[i].y);
                     ctx.lineTo(particles[j].x, particles[j].y);
-                    ctx.strokeStyle = `rgba(139, 92, 246, ${0.05 * (1 - realDist / connectDist)})`;
-                    ctx.lineWidth = 0.4;
+                    ctx.strokeStyle = `rgba(139, 92, 246, ${0.05 * (1 - realDist / connectDist) * lineOpacityMultiplier})`;
+                    ctx.lineWidth = isDark ? 0.4 : 0.6;
                     ctx.stroke();
                 }
             }
