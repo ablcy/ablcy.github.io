@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="light">
+<html lang="zh-CN" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -52,7 +52,6 @@
             <a href="#guestbook" class="nav-link magnetic" data-zh="留言" data-en="Guest">留言</a>
         </div>
         <div class="nav-actions">
-            <button class="theme-btn magnetic" id="themeToggle" title="Toggle Theme">☀️</button>
             <button class="lang-btn magnetic" id="langToggle">EN</button>
             <button class="hamburger" id="hamburger">
                 <span></span><span></span><span></span>
@@ -475,29 +474,6 @@
     document.getElementById('langToggle').addEventListener('click', () => setLang(lang === 'zh' ? 'en' : 'zh'));
     setLang(lang);
 
-    // ===== 主题切换 =====
-    const themeToggle = document.getElementById('themeToggle');
-    const html = document.documentElement;
-    
-    function setTheme(theme) {
-        html.setAttribute('data-theme', theme);
-        localStorage.setItem('theme', theme);
-        themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
-        // 触发粒子重新绘制以适应主题
-        if (canvas && ctx) {
-            // 不需要重新初始化，下一次requestAnimationFrame会自动适应
-        }
-    }
-    
-    // 从localStorage恢复主题或默认白色
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    setTheme(savedTheme);
-    
-    themeToggle.addEventListener('click', () => {
-        const currentTheme = html.getAttribute('data-theme');
-        setTheme(currentTheme === 'dark' ? 'light' : 'dark');
-    });
-
     // ===== Hamburger 菜单 =====
     const hamburger = document.getElementById('hamburger');
     const mobileMenu = document.getElementById('mobileMenu');
@@ -661,10 +637,10 @@
         reset() {
             this.x = Math.random() * canvas.width;
             this.y = Math.random() * canvas.height;
-            this.size = Math.random() * 1.5 + 0.5;
+            this.size = Math.random() * 1.2 + 0.4;
             this.speedX = (Math.random() - 0.5) * 0.25;
             this.speedY = (Math.random() - 0.5) * 0.25;
-            this.opacity = Math.random() * 0.4 + 0.1;
+            this.opacity = Math.random() * 0.3 + 0.08;
         }
         update() {
             this.x += this.speedX;
@@ -674,11 +650,9 @@
             }
         }
         draw() {
-            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-            const particleOpacity = isDark ? this.opacity : this.opacity * 1.5;
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(139, 92, 246, ${particleOpacity})`;
+            ctx.fillStyle = `rgba(139, 92, 246, ${this.opacity})`;
             ctx.fill();
         }
     }
@@ -704,8 +678,6 @@
 
         // 优化的连线算法 - 减少计算
         const connectDist = 100;
-        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-        const lineOpacityMultiplier = isDark ? 1 : 2;
         for (let i = 0; i < particles.length; i++) {
             for (let j = i + 1; j < particles.length; j++) {
                 const dx = particles[i].x - particles[j].x;
@@ -716,8 +688,8 @@
                     ctx.beginPath();
                     ctx.moveTo(particles[i].x, particles[i].y);
                     ctx.lineTo(particles[j].x, particles[j].y);
-                    ctx.strokeStyle = `rgba(139, 92, 246, ${0.05 * (1 - realDist / connectDist) * lineOpacityMultiplier})`;
-                    ctx.lineWidth = isDark ? 0.4 : 0.6;
+                    ctx.strokeStyle = `rgba(139, 92, 246, ${0.05 * (1 - realDist / connectDist)})`;
+                    ctx.lineWidth = 0.4;
                     ctx.stroke();
                 }
             }
