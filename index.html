@@ -380,6 +380,16 @@
         </div>
         <div class="changelog-content" id="changelogContent">
             <div class="changelog-list">
+                <!-- v1.1.9 -->
+                <div class="changelog-item">
+                    <div class="changelog-header">
+                        <span class="changelog-version">v1.1.9</span>
+                        <span class="changelog-time">2026-05-03</span>
+                    </div>
+                    <div class="changelog-body">
+                        <p data-zh="🎛️ 导航文字横向显示，整体竖向排列，滚动时添加类似旋钮刻度的动态效果。" data-en="🎛️ Nav text horizontal, layout vertical, scroll with dial-like animation.">🎛️ 导航文字横向显示，整体竖向排列，滚动时添加类似旋钮刻度的动态效果。</p>
+                    </div>
+                </div>
                 <!-- v1.1.8 -->
                 <div class="changelog-item">
                     <div class="changelog-header">
@@ -468,7 +478,7 @@
                 </div>
             </div>
             <p class="footer-text">Copyright © 2026 Li Chengyan. All Rights Reserved.</p>
-        <p class="footer-version">v1.1.8</p>
+        <p class="footer-version">v1.1.9</p>
         </div>
     </footer>
 
@@ -620,21 +630,40 @@
 
     document.querySelectorAll('.section').forEach(s => scrollObserver.observe(s));
 
-    // ===== 导航高亮 + 滚动显示 =====
+    // ===== 导航高亮 + 滚动旋钮效果 =====
     const nav = document.getElementById('nav');
     const sections = document.querySelectorAll('.section');
     const navLinks = document.querySelectorAll('.nav-link');
 
     window.addEventListener('scroll', () => {
+        const scrollY = window.scrollY;
         // 导航背景
-        nav.classList.toggle('nav-scrolled', window.scrollY > 50);
+        nav.classList.toggle('nav-scrolled', scrollY > 50);
         // 高亮
         let current = '';
         sections.forEach(sec => {
-            if (window.scrollY >= sec.offsetTop - 150) current = sec.id;
+            if (scrollY >= sec.offsetTop - 150) current = sec.id;
         });
-        navLinks.forEach(link => {
-            link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+        navLinks.forEach((link, index) => {
+            const isActive = link.getAttribute('href') === '#' + current;
+            link.classList.toggle('active', isActive);
+            
+            // 旋钮刻度效果：基于滚动位置的旋转和缩放
+            const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = scrollY / totalHeight;
+            const centerIndex = navLinks.length / 2;
+            const distance = index - centerIndex;
+            
+            if (!isActive) {
+                const rotation = progress * 10 - distance * 2;
+                const scale = 1 - Math.abs(distance) * 0.05 - progress * 0.1;
+                const opacity = 1 - Math.abs(distance) * 0.1;
+                link.style.transform = `rotate(${rotation}deg) scale(${Math.max(0.7, scale)})`;
+                link.style.opacity = Math.max(0.4, opacity);
+            } else {
+                link.style.transform = 'scale(1.15)';
+                link.style.opacity = '1';
+            }
         });
     });
 
