@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="dark">
+<html lang="zh-CN" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -52,6 +52,7 @@
             <a href="#guestbook" class="nav-link magnetic" data-zh="留言" data-en="Guest">留言</a>
         </div>
         <div class="nav-actions">
+            <button class="theme-btn magnetic" id="themeToggle" title="Toggle Theme">☀️</button>
             <button class="lang-btn magnetic" id="langToggle">EN</button>
             <button class="hamburger" id="hamburger">
                 <span></span><span></span><span></span>
@@ -447,7 +448,7 @@
                     <span class="site-stat-value"><span id="busuanzi_value_site_uv">...</span></span>
                 </div>
             </div>
-            <p class="footer-text" data-zh="© 2026 Yan. 用代码构建有趣的产品。" data-en="© 2026 Yan. Building fun products with code.">© 2026 Yan. 用代码构建有趣的产品。</p>
+            <p class="footer-text">Copyright © 2026 Li Chengyan. All Rights Reserved.</p>
         <p class="footer-version">v1.1.6</p>
         </div>
     </footer>
@@ -473,6 +474,25 @@
 
     document.getElementById('langToggle').addEventListener('click', () => setLang(lang === 'zh' ? 'en' : 'zh'));
     setLang(lang);
+
+    // ===== 主题切换 =====
+    const themeToggle = document.getElementById('themeToggle');
+    const html = document.documentElement;
+    
+    function setTheme(theme) {
+        html.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+        themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+    }
+    
+    // 从localStorage恢复主题或默认白色
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    setTheme(savedTheme);
+    
+    themeToggle.addEventListener('click', () => {
+        const currentTheme = html.getAttribute('data-theme');
+        setTheme(currentTheme === 'dark' ? 'light' : 'dark');
+    });
 
     // ===== Hamburger 菜单 =====
     const hamburger = document.getElementById('hamburger');
