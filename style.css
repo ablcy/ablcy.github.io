@@ -1449,7 +1449,7 @@ body {
         bottom: auto;
         flex-direction: row;
         justify-content: space-between;
-        padding: 1rem 1rem;
+        padding: 1rem 0.5rem;
         border-right: none;
         border-bottom: 1px solid var(--border);
     }
@@ -1477,4 +1477,80 @@ body {
     .changelog { padding: 0 1.5rem; margin-bottom: 1.5rem; }
     .changelog-trigger { max-width: 200px; }
     .footer { padding: 4rem 1.5rem 3rem; }
+}
+
+/* ===== 微信弹窗 ===== */
+.wechat-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s var(--ease);
+}
+.wechat-modal.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+.wechat-modal-bg {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+.wechat-modal-card {
+    position: relative;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.3);
+    max-width: 320px;
+    width: 90%;
+    transform: translateY(20px);
+    transition: transform 0.3s var(--ease);
+}
+.wechat-modal.active .wechat-modal-card {
+    transform: translateY(0);
+}
+.wechat-modal-close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.75rem;
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 1.5rem;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s;
+}
+.wechat-modal-close:hover {
+    color: var(--text);
+}
+.wechat-qr {
+    width: 200px;
+    height: 200px;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    object-fit: cover;
+}
+.wechat-modal-text {
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    margin: 0;
+}
+@media (max-width: 768px) {
+    .wechat-modal-card {
+        padding: 1.5rem;
+    }
+    .wechat-qr {
+        width: 160px;
+        height: 160px;
+    }
 }

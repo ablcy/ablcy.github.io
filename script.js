@@ -395,3 +395,24 @@ setupCollapse(
     document.getElementById('changelogContent'),
     false
 );
+
+// ===== 微信弹窗 =====
+(function(){
+    const wechatCard = document.getElementById('wechatCard');
+    const modal = document.getElementById('wechatModal');
+    const close = document.getElementById('wechatModalClose');
+    const bg = document.getElementById('wechatModalBg');
+    if (!wechatCard || !modal) return;
+    wechatCard.addEventListener('click', function(e){
+        e.preventDefault();
+        modal.classList.add('active');
+    });
+    function closeModal(){
+        modal.classList.remove('active');
+    }
+    close.addEventListener('click', closeModal);
+    bg.addEventListener('click', closeModal);
+    document.addEventListener('keydown', function(e){
+        if (e.key === 'Escape') closeModal();
+    });
+})();
