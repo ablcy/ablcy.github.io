@@ -1462,7 +1462,7 @@ body {
     .logo-text { writing-mode: horizontal-tb; font-size: 0.9rem; }
     .logo-dot { width: 5px; height: 5px; }
     .nav-links { flex-direction: row; gap: 0.25rem; flex-shrink: 1; justify-content: center; }
-    .nav-link { writing-mode: horizontal-tb; font-size: 0.7rem; padding: 0.3rem 0.35rem; letter-spacing: 0.01em; white-space: nowrap; }
+    .nav-link { writing-mode: horizontal-tb; font-size: 0.75rem; padding: 0.3rem 0.35rem; letter-spacing: 0.01em; white-space: nowrap; }
     .nav-actions { flex-direction: row; margin-top: 0; margin-left: 0; gap: 0.2rem; flex-shrink: 0; }
     .lang-btn { writing-mode: horizontal-tb; padding: 0.25rem 0.3rem; font-size: 0.6rem; }
     .theme-btn { writing-mode: horizontal-tb; padding: 0.25rem 0.3rem; font-size: 0.65rem; }
