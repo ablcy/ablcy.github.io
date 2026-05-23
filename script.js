@@ -2,6 +2,27 @@
 const html = document.documentElement;
 let lang = localStorage.getItem('lang') || 'zh';
 
+// ===== 主题切换 =====
+let theme = localStorage.getItem('theme') || 'light';
+
+function setTheme(t) {
+    theme = t;
+    localStorage.setItem('theme', t);
+    html.setAttribute('data-theme', t);
+    const btn = document.getElementById('themeToggle');
+    if (btn) btn.textContent = t === 'dark' ? '🌙' : '☀️';
+    // 同步粒子颜色
+    if (window.__particleColorUpdate) window.__particleColorUpdate(t);
+}
+
+// 初始化主题按钮图标
+(function(){
+    const btn = document.getElementById('themeToggle');
+    if (btn) btn.textContent = theme === 'dark' ? '🌙' : '☀️';
+})();
+
+document.getElementById('themeToggle').addEventListener('click', () => setTheme(theme === 'dark' ? 'light' : 'dark'));
+
 // ===== 语言切换 =====
 function setLang(l) {
     lang = l;
@@ -216,7 +237,10 @@ class Particle {
     draw() {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(139, 92, 246, ${this.opacity})`;
+        const isDark = html.getAttribute('data-theme') === 'dark';
+        ctx.fillStyle = isDark
+            ? `rgba(139, 92, 246, ${this.opacity})`
+            : `rgba(124, 58, 237, ${this.opacity * 0.6})`;
         ctx.fill();
     }
 }
@@ -252,7 +276,13 @@ function animateParticles(timestamp) {
                 ctx.beginPath();
                 ctx.moveTo(particles[i].x, particles[i].y);
                 ctx.lineTo(particles[j].x, particles[j].y);
-                ctx.strokeStyle = `rgba(139, 92, 246, ${0.05 * (1 - realDist / connectDist)})`;
+                const isDark = html.getAttribute('data-theme') === 'dark';
+                const alpha = isDark
+                    ? 0.05 * (1 - realDist / connectDist)
+                    : 0.03 * (1 - realDist / connectDist);
+                ctx.strokeStyle = isDark
+                    ? `rgba(139, 92, 246, ${alpha})`
+                    : `rgba(124, 58, 237, ${alpha})`;
                 ctx.lineWidth = 0.4;
                 ctx.stroke();
             }

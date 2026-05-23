@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="dark">
+<html lang="zh-CN" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,6 +15,13 @@
     <link rel="dns-prefetch" href="https://github.com">
     
     <link rel="stylesheet" href="style.css">
+    <!-- 防主题闪烁：提前读取 localStorage 并应用 -->
+    <script>
+        (function(){
+            var t = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
     <!-- Waline CSS 延迟加载 -->
     <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css" media="print" onload="this.media='all'">
     <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
@@ -52,6 +59,7 @@
             <a href="#guestbook" class="nav-link magnetic" data-zh="留言" data-en="Guest">留言</a>
         </div>
         <div class="nav-actions">
+            <button class="theme-btn magnetic" id="themeToggle" title="切换主题">☀️</button>
             <button class="lang-btn magnetic" id="langToggle">EN</button>
             <button class="hamburger" id="hamburger">
                 <span></span><span></span><span></span>
@@ -380,6 +388,16 @@
         </div>
         <div class="changelog-content" id="changelogContent">
             <div class="changelog-list">
+                <!-- v1.3.0 -->
+                <div class="changelog-item">
+                    <div class="changelog-header">
+                        <span class="changelog-version">v1.3.0</span>
+                        <span class="changelog-time">20260524</span>
+                    </div>
+                    <div class="changelog-body">
+                        <p data-zh="🌗 新增深色/浅色主题切换，默认浅色主题，切换按钮位于语言切换旁边，支持记忆用户偏好。" data-en="🌗 Added dark/light theme toggle, defaults to light mode. Toggle button is next to the language switcher, with user preference saved.">🌗 新增深色/浅色主题切换，默认浅色主题，切换按钮位于语言切换旁边，支持记忆用户偏好。</p>
+                    </div>
+                </div>
                 <!-- v1.2.0 -->
                 <div class="changelog-item">
                     <div class="changelog-header">
@@ -488,7 +506,7 @@
                 </div>
             </div>
             <p class="footer-text">Copyright © 2026 Li Chengyan. All Rights Reserved.</p>
-        <p class="footer-version">v1.2.0</p>
+        <p class="footer-version">v1.3.0</p>
         </div>
     </footer>
 
