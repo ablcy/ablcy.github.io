@@ -1452,24 +1452,20 @@ body {
         right: 0;
         bottom: auto;
         flex-direction: row;
-        justify-content: flex-start;
+        justify-content: space-between;
         align-items: center;
-        padding: 0.35rem 0.3rem;
+        padding: 0.45rem 0.5rem;
         border-right: none;
         border-bottom: 1px solid var(--border);
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
     }
-    .nav::-webkit-scrollbar { display: none; }
-    .nav-logo { flex-direction: row; margin-right: 0.25rem; flex-shrink: 0; }
-    .logo-text { writing-mode: horizontal-tb; font-size: 0.85rem; }
-    .logo-dot { width: 4px; height: 4px; }
-    .nav-links { flex-direction: row; gap: 0.08rem; flex-shrink: 0; }
-    .nav-link { writing-mode: horizontal-tb; font-size: 0.62rem; padding: 0.2rem 0.28rem; letter-spacing: 0.01em; flex-shrink: 0; }
-    .nav-actions { flex-direction: row; margin-top: 0; margin-left: auto; gap: 0.12rem; margin-right: 0.1rem; flex-shrink: 0; }
-    .lang-btn { writing-mode: horizontal-tb; padding: 0.15rem 0.28rem; font-size: 0.55rem; flex-shrink: 0; }
-    .theme-btn { writing-mode: horizontal-tb; padding: 0.15rem 0.25rem; font-size: 0.58rem; flex-shrink: 0; }
+    .nav-logo { flex-direction: row; margin-right: 0; flex-shrink: 0; }
+    .logo-text { writing-mode: horizontal-tb; font-size: 0.9rem; }
+    .logo-dot { width: 5px; height: 5px; }
+    .nav-links { flex-direction: row; gap: 0.25rem; flex-shrink: 1; justify-content: center; }
+    .nav-link { writing-mode: horizontal-tb; font-size: 0.7rem; padding: 0.3rem 0.35rem; letter-spacing: 0.01em; white-space: nowrap; }
+    .nav-actions { flex-direction: row; margin-top: 0; margin-left: 0; gap: 0.2rem; flex-shrink: 0; }
+    .lang-btn { writing-mode: horizontal-tb; padding: 0.25rem 0.3rem; font-size: 0.6rem; }
+    .theme-btn { writing-mode: horizontal-tb; padding: 0.25rem 0.3rem; font-size: 0.65rem; }
     .hamburger { display: none !important; }
     .hero { padding: 5rem 1.5rem 0; }
     .about-content { padding: 2rem 1.5rem; }
