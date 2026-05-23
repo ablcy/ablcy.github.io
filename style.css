@@ -1112,8 +1112,13 @@ body {
 }
 
 /* ===== HAMBURGER ===== */
+/* 移动端导航全部展开，隐藏汉堡按钮和移动菜单 */
+.hamburger { display: none !important; }
+.mobile-menu { display: none !important; }
+
+/* 保留汉堡样式以备后用（已注释）
 .hamburger {
-    display: none;
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -1152,8 +1157,7 @@ body {
 .hamburger.active span:nth-child(3) {
     transform: translateY(-6.5px) rotate(-45deg);
 }
-
-/* ===== MOBILE MENU ===== */
+*/
 .mobile-menu {
     display: none;
     position: fixed;
@@ -1449,19 +1453,19 @@ body {
         bottom: auto;
         flex-direction: row;
         justify-content: flex-start;
-        padding: 1rem 0.5rem;
+        padding: 0.5rem 0.5rem;
         border-right: none;
         border-bottom: 1px solid var(--border);
     }
-    .nav-logo { flex-direction: row; margin-right: 0.75rem; }
-    .logo-text { writing-mode: horizontal-tb; }
-    .nav-links { flex-direction: row; gap: 0.8rem; }
-    .nav-link { writing-mode: horizontal-tb; font-size: 0.75rem; padding: 0.4rem 0.6rem; }
-    .nav-actions { flex-direction: row; margin-top: 0; margin-left: auto; gap: 0.25rem; margin-right: 0.25rem; }
-    .lang-btn { writing-mode: horizontal-tb; padding: 0.3rem 0.45rem; font-size: 0.6rem; }
-    .theme-btn { writing-mode: horizontal-tb; padding: 0.3rem 0.35rem; font-size: 0.65rem; }
-    .hamburger { width: 30px; height: 30px; border-radius: 8px; }
-    .hamburger span { width: 14px; }
+    .nav-logo { flex-direction: row; margin-right: 0.4rem; }
+    .logo-text { writing-mode: horizontal-tb; font-size: 0.95rem; }
+    .logo-dot { width: 5px; height: 5px; }
+    .nav-links { flex-direction: row; gap: 0.15rem; }
+    .nav-link { writing-mode: horizontal-tb; font-size: 0.66rem; padding: 0.25rem 0.35rem; letter-spacing: 0.01em; }
+    .nav-actions { flex-direction: row; margin-top: 0; margin-left: auto; gap: 0.15rem; margin-right: 0.15rem; }
+    .lang-btn { writing-mode: horizontal-tb; padding: 0.2rem 0.35rem; font-size: 0.58rem; }
+    .theme-btn { writing-mode: horizontal-tb; padding: 0.2rem 0.3rem; font-size: 0.6rem; }
+    .hamburger { display: none !important; }
     .hero { padding: 5rem 1.5rem 0; }
     .about-content { padding: 2rem 1.5rem; }
     body { cursor: auto; }
