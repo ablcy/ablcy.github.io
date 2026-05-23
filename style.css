@@ -1449,7 +1449,7 @@ body {
         bottom: auto;
         flex-direction: row;
         justify-content: space-between;
-        padding: 1rem 1.5rem;
+        padding: 1rem 1rem;
         border-right: none;
         border-bottom: 1px solid var(--border);
     }
@@ -1457,9 +1457,9 @@ body {
     .logo-text { writing-mode: horizontal-tb; }
     .nav-links { flex-direction: row; gap: 0.25rem; }
     .nav-link { writing-mode: horizontal-tb; font-size: 0.75rem; padding: 0.4rem 0.6rem; }
-    .nav-actions { flex-direction: row; margin-top: 0; }
-    .lang-btn { writing-mode: horizontal-tb; padding: 0.4rem 0.6rem; font-size: 0.7rem; }
-    .theme-btn { writing-mode: horizontal-tb; padding: 0.4rem 0.5rem; font-size: 0.75rem; }
+    .nav-actions { flex-direction: row; margin-top: 0; gap: 0.3rem; }
+    .lang-btn { writing-mode: horizontal-tb; padding: 0.35rem 0.5rem; font-size: 0.65rem; }
+    .theme-btn { writing-mode: horizontal-tb; padding: 0.35rem 0.4rem; font-size: 0.7rem; }
     .hero { padding: 5rem 1.5rem 0; }
     .about-content { padding: 2rem 1.5rem; }
     body { cursor: auto; }
