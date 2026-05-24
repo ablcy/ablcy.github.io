@@ -135,6 +135,8 @@ body {
     inset: 0;
     z-index: 0;
     pointer-events: none;
+    will-change: contents;
+    transform: translateZ(0); /* 提升为独立合成层 */
 }
 
 /* ===== 网格背景 ===== */
@@ -155,9 +157,11 @@ body {
 .glow {
     position: fixed;
     border-radius: 50%;
-    filter: blur(150px);
+    filter: blur(80px);
     pointer-events: none;
     z-index: 0;
+    will-change: transform;
+    contain: layout style;
 }
 
 .glow-1 {
@@ -207,15 +211,16 @@ body {
     justify-content: center;
     padding: 1rem 0;
     gap: 2rem;
-    transition: all 0.4s var(--ease), background 0.3s ease, border-color 0.3s ease;
+    transition: background 0.3s ease, border-color 0.3s ease, backdrop-filter 0.3s ease;
     border-right: 1px solid var(--nav-border);
     background: var(--nav-bg);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    /* 初始不开 backdrop-filter，滚动后才启用，避免首屏 GPU 负担 */
 }
 
 .nav-scrolled {
     background: var(--nav-bg);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
 }
 
 .nav-logo {

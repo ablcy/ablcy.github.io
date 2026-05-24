@@ -13,6 +13,8 @@
     <link rel="dns-prefetch" href="//busuanzi.ibruce.info">
     <link rel="dns-prefetch" href="https://ablcy.github.io">
     <link rel="dns-prefetch" href="https://github.com">
+    <!-- 头像预加载（关键 LCP 资源） -->
+    <link rel="preload" as="image" href="avatar.webp" type="image/webp">
     
     <link rel="stylesheet" href="style.css">
     <!-- 防主题闪烁：提前读取 localStorage 并应用 -->
@@ -99,7 +101,10 @@
                 </div>
                 <div class="hero-right">
                     <div class="hero-avatar magnetic">
-                        <img src="avatar.jpg" alt="Yan" class="avatar-img" loading="eager" decoding="async">
+                        <picture>
+                            <source srcset="avatar.webp" type="image/webp">
+                            <img src="avatar-opt.jpg" alt="Yan" class="avatar-img" loading="eager" decoding="async" fetchpriority="high">
+                        </picture>
                         <div class="avatar-ring"></div>
                         <div class="avatar-glow"></div>
                     </div>

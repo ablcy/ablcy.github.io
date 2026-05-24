@@ -64,21 +64,33 @@ let mouseX = 0, mouseY = 0, followerX = 0, followerY = 0;
 const isTouch = 'ontouchstart' in window;
 
 if (!isTouch) {
+    let followerRunning = false;
+
+    function animateFollower() {
+        const dx = mouseX - followerX;
+        const dy = mouseY - followerY;
+        followerX += dx * 0.12;
+        followerY += dy * 0.12;
+        follower.style.left = followerX + 'px';
+        follower.style.top = followerY + 'px';
+        // 当 follower 非常接近 cursor 时停止循环，等下次 mousemove 重启
+        if (Math.abs(dx) > 0.5 || Math.abs(dy) > 0.5) {
+            requestAnimationFrame(animateFollower);
+        } else {
+            followerRunning = false;
+        }
+    }
+
     document.addEventListener('mousemove', e => {
         mouseX = e.clientX;
         mouseY = e.clientY;
         cursor.style.left = mouseX + 'px';
         cursor.style.top = mouseY + 'px';
-    });
-
-    function animateFollower() {
-        followerX += (mouseX - followerX) * 0.12;
-        followerY += (mouseY - followerY) * 0.12;
-        follower.style.left = followerX + 'px';
-        follower.style.top = followerY + 'px';
-        requestAnimationFrame(animateFollower);
-    }
-    animateFollower();
+        if (!followerRunning) {
+            followerRunning = true;
+            requestAnimationFrame(animateFollower);
+        }
+    }, { passive: true });
 
     // Hover 放大效果
     document.querySelectorAll('a, button, .magnetic').forEach(el => {
@@ -171,42 +183,61 @@ const nav = document.getElementById('nav');
 const sections = document.querySelectorAll('.section');
 const navLinks = document.querySelectorAll('.nav-link');
 
-window.addEventListener('scroll', () => {
+let scrollTicking = false;
+let cachedTotalHeight = 0;
+
+// 缓存 totalHeight，resize 时更新
+function updateTotalHeight() {
+    cachedTotalHeight = document.documentElement.scrollHeight - window.innerHeight;
+}
+updateTotalHeight();
+window.addEventListener('resize', updateTotalHeight, { passive: true });
+
+function onScroll() {
     const scrollY = window.scrollY;
-    // 导航背景
     nav.classList.toggle('nav-scrolled', scrollY > 50);
-    // 高亮
+
     let current = '';
     sections.forEach(sec => {
         if (scrollY >= sec.offsetTop - 150) current = sec.id;
     });
+
+    const progress = cachedTotalHeight > 0 ? scrollY / cachedTotalHeight : 0;
+    const centerIndex = navLinks.length / 2;
+
     navLinks.forEach((link, index) => {
         const isActive = link.getAttribute('href') === '#' + current;
         link.classList.toggle('active', isActive);
 
-        // 旋钮刻度效果：基于滚动位置的旋转和缩放
-        const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-        const progress = scrollY / totalHeight;
-        const centerIndex = navLinks.length / 2;
         const distance = index - centerIndex;
-
         if (!isActive) {
             const rotation = progress * 10 - distance * 2;
-            const scale = 1 - Math.abs(distance) * 0.05 - progress * 0.1;
-            const opacity = 1 - Math.abs(distance) * 0.1;
-            link.style.transform = `rotate(${rotation}deg) scale(${Math.max(0.7, scale)})`;
-            link.style.opacity = Math.max(0.4, opacity);
+            const scale = Math.max(0.7, 1 - Math.abs(distance) * 0.05 - progress * 0.1);
+            const opacity = Math.max(0.4, 1 - Math.abs(distance) * 0.1);
+            link.style.transform = `rotate(${rotation}deg) scale(${scale})`;
+            link.style.opacity = opacity;
         } else {
             link.style.transform = 'scale(1.15)';
             link.style.opacity = '1';
         }
     });
-});
+    scrollTicking = false;
+}
+
+window.addEventListener('scroll', () => {
+    if (!scrollTicking) {
+        scrollTicking = true;
+        requestAnimationFrame(onScroll);
+    }
+}, { passive: true });
 
 // ===== 粒子背景 =====
 const canvas = document.getElementById('particleCanvas');
 const ctx = canvas.getContext('2d');
 let particles = [];
+// 粒子颜色缓存，避免每帧读取 DOM attribute
+let _cachedIsDark = html.getAttribute('data-theme') === 'dark';
+window.__particleColorUpdate = function(t) { _cachedIsDark = t === 'dark'; };
 
 function resizeCanvas() {
     canvas.width = window.innerWidth;
@@ -237,8 +268,7 @@ class Particle {
     draw() {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        const isDark = html.getAttribute('data-theme') === 'dark';
-        ctx.fillStyle = isDark
+        ctx.fillStyle = _cachedIsDark
             ? `rgba(139, 92, 246, ${this.opacity})`
             : `rgba(124, 58, 237, ${this.opacity * 0.6})`;
         ctx.fill();
@@ -246,15 +276,22 @@ class Particle {
 }
 
 // 减少粒子数量以提升性能
-const particleCount = Math.min(40, Math.floor((window.innerWidth * window.innerHeight) / 15000));
+const particleCount = Math.min(35, Math.floor((window.innerWidth * window.innerHeight) / 18000));
 for (let i = 0; i < particleCount; i++) particles.push(new Particle());
 
-// 优化的粒子动画 - 使用 requestAnimationFrame 节流
+// 优化的粒子动画 - 30fps + 页面隐藏时暂停
 let lastTime = 0;
 const targetFPS = 30;
 const interval = 1000 / targetFPS;
+let particlePaused = false;
+
+document.addEventListener('visibilitychange', () => {
+    particlePaused = document.hidden;
+    if (!particlePaused) requestAnimationFrame(animateParticles);
+});
 
 function animateParticles(timestamp) {
+    if (particlePaused) return;
     if (timestamp - lastTime < interval) {
         requestAnimationFrame(animateParticles);
         return;
@@ -266,20 +303,19 @@ function animateParticles(timestamp) {
 
     // 优化的连线算法 - 减少计算
     const connectDist = 100;
+    const connectDistSq = connectDist * connectDist;
+    const isDark = _cachedIsDark;
     for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
             const dx = particles[i].x - particles[j].x;
             const dy = particles[i].y - particles[j].y;
-            const dist = dx * dx + dy * dy; // 避免开方运算
-            if (dist < connectDist * connectDist) {
+            const dist = dx * dx + dy * dy;
+            if (dist < connectDistSq) {
                 const realDist = Math.sqrt(dist);
+                const alpha = (isDark ? 0.05 : 0.03) * (1 - realDist / connectDist);
                 ctx.beginPath();
                 ctx.moveTo(particles[i].x, particles[i].y);
                 ctx.lineTo(particles[j].x, particles[j].y);
-                const isDark = html.getAttribute('data-theme') === 'dark';
-                const alpha = isDark
-                    ? 0.05 * (1 - realDist / connectDist)
-                    : 0.03 * (1 - realDist / connectDist);
                 ctx.strokeStyle = isDark
                     ? `rgba(139, 92, 246, ${alpha})`
                     : `rgba(124, 58, 237, ${alpha})`;
