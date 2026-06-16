@@ -31,7 +31,7 @@ html[data-theme="dark"] {
     --particle-color: rgba(139, 92, 246, var(--p-opacity, 0.15));
     --selection-bg: rgba(139, 92, 246, 0.3);
     --selection-color: #fff;
-    --cursor-color: #fff;
+
     --shadow-card: 0 12px 40px rgba(139, 92, 246, 0.06);
 }
 
@@ -66,7 +66,7 @@ html[data-theme="light"] {
     --shadow-card: 0 8px 32px rgba(124, 58, 237, 0.08);
     --selection-bg: rgba(124, 58, 237, 0.18);
     --selection-color: #1a1a2e;
-    --cursor-color: #1a1a2e;
+
 }
 
 /* ===== 重置 ===== */
@@ -83,7 +83,6 @@ body {
     color: var(--text);
     overflow: auto;
     -webkit-font-smoothing: antialiased;
-    cursor: none;
 }
 
 ::selection {
@@ -91,43 +90,6 @@ body {
     color: var(--selection-color);
 }
 
-/* ===== 自定义光标 ===== */
-.cursor {
-    position: fixed;
-    width: 8px;
-    height: 8px;
-    background: var(--cursor-color);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 10000;
-    transform: translate(-50%, -50%);
-    transition: width 0.3s var(--ease), height 0.3s var(--ease), background 0.3s ease;
-    mix-blend-mode: difference;
-}
-
-.cursor.cursor-hover {
-    width: 4px;
-    height: 4px;
-}
-
-.cursor-follower {
-    position: fixed;
-    width: 36px;
-    height: 36px;
-    border: 1px solid rgba(139, 92, 246, 0.4);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9999;
-    transform: translate(-50%, -50%);
-    transition: width 0.4s var(--ease), height 0.4s var(--ease), border-color 0.3s ease, background 0.3s ease;
-}
-
-.cursor-follower.follower-hover {
-    width: 60px;
-    height: 60px;
-    border-color: rgba(139, 92, 246, 0.6);
-    background: rgba(139, 92, 246, 0.05);
-}
 
 /* ===== 粒子 Canvas ===== */
 #particleCanvas {
@@ -290,7 +252,7 @@ body {
     color: var(--text-dim);
     font-size: 0.65rem;
     font-weight: 700;
-    cursor: none;
+    cursor: pointer;
     letter-spacing: 0.05em;
     transition: all 0.3s var(--ease);
 }
@@ -308,7 +270,7 @@ body {
     padding: 0.4rem 0.6rem;
     color: var(--text-dim);
     font-size: 0.75rem;
-    cursor: none;
+    cursor: pointer;
     transition: all 0.3s var(--ease);
     display: flex;
     align-items: center;
@@ -1060,7 +1022,7 @@ body {
     letter-spacing: 5px;
     outline: none;
     transition: all 0.3s var(--ease);
-    cursor: none;
+    cursor: pointer;
     -webkit-text-fill-color: var(--text);
 }
 
@@ -1084,7 +1046,7 @@ body {
     border-radius: 14px;
     font-size: 0.88rem;
     font-weight: 600;
-    cursor: none;
+    cursor: pointer;
     transition: all 0.3s var(--ease);
     border: none;
 }
@@ -1476,8 +1438,6 @@ body {
     .hamburger { display: none !important; }
     .hero { padding: 5rem 1.5rem 0; }
     .about-content { padding: 2rem 1.5rem; }
-    body { cursor: auto; }
-    .cursor, .cursor-follower { display: none !important; }
     .magnetic { transition: none !important; }
     .site-stats {
         flex-wrap: wrap;

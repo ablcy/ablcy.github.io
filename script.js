@@ -57,58 +57,8 @@ mobileMenu.querySelectorAll('.mobile-nav-link').forEach(link => {
     });
 });
 
-// ===== 自定义光标 =====
-const cursor = document.getElementById('cursor');
-const follower = document.getElementById('cursorFollower');
-let mouseX = 0, mouseY = 0, followerX = 0, followerY = 0;
-const isTouch = 'ontouchstart' in window;
-
-if (!isTouch) {
-    let followerRunning = false;
-
-    function animateFollower() {
-        const dx = mouseX - followerX;
-        const dy = mouseY - followerY;
-        followerX += dx * 0.12;
-        followerY += dy * 0.12;
-        follower.style.left = followerX + 'px';
-        follower.style.top = followerY + 'px';
-        // 当 follower 非常接近 cursor 时停止循环，等下次 mousemove 重启
-        if (Math.abs(dx) > 0.5 || Math.abs(dy) > 0.5) {
-            requestAnimationFrame(animateFollower);
-        } else {
-            followerRunning = false;
-        }
-    }
-
-    document.addEventListener('mousemove', e => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        cursor.style.left = mouseX + 'px';
-        cursor.style.top = mouseY + 'px';
-        if (!followerRunning) {
-            followerRunning = true;
-            requestAnimationFrame(animateFollower);
-        }
-    }, { passive: true });
-
-    // Hover 放大效果
-    document.querySelectorAll('a, button, .magnetic').forEach(el => {
-        el.addEventListener('mouseenter', () => {
-            cursor.classList.add('cursor-hover');
-            follower.classList.add('follower-hover');
-        });
-        el.addEventListener('mouseleave', () => {
-            cursor.classList.remove('cursor-hover');
-            follower.classList.remove('follower-hover');
-        });
-    });
-} else {
-    cursor.style.display = 'none';
-    follower.style.display = 'none';
-}
-
 // ===== 磁性按钮 =====
+const isTouch = 'ontouchstart' in window;
 if (!isTouch) {
     document.querySelectorAll('.magnetic').forEach(el => {
         el.addEventListener('mousemove', e => {
