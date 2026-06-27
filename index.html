@@ -142,7 +142,7 @@
                 <h2 class="section-title" data-zh="关于我" data-en="About Me">关于我</h2>
             </div>
             <div class="about-content">
-                <div class="about-body">
+                <div class="about-body" id="aboutBody">
                     <p class="about-desc" data-zh="一个在文字与逻辑之间游走的人。偏爱深度思考，习惯在安静里慢慢沉淀，对世界保持好奇，也对自我保持清醒。" data-en="A person wandering between words and logic. Loves deep thinking, settles slowly in quietness, stays curious about the world and clear about oneself.">一个在文字与逻辑之间游走的人。偏爱深度思考，习惯在安静里慢慢沉淀，对世界保持好奇，也对自我保持清醒。</p>
                     <p class="about-desc" data-zh="时而感性细腻，时而理性较真，不追逐喧嚣，只忠于内心。" data-en="Sometimes emotional and delicate, sometimes rational and meticulous. Not chasing noise, only loyal to the heart.">时而感性细腻，时而理性较真，不追逐喧嚣，只忠于内心。</p>
                     <p class="about-desc" data-zh="这里是我的精神自留地，记录思考、感悟与偶然的灵光一现。" data-en="This is my spiritual sanctuary — recording thoughts, reflections, and occasional flashes of inspiration.">这里是我的精神自留地，记录思考、感悟与偶然的灵光一现。</p>
@@ -157,7 +157,7 @@
                 <span class="section-num">02</span>
                 <h2 class="section-title" data-zh="项目" data-en="Projects">项目</h2>
             </div>
-            <div class="work-grid">
+            <div class="work-grid" id="workGrid">
                 <a href="https://tell.super.site/" class="work-card" data-color="violet" target="_blank" rel="noopener">
                     <div class="work-card-inner">
                         <div class="work-index">01</div>
@@ -285,7 +285,7 @@
                 <span class="section-num">03</span>
                 <h2 class="section-title" data-zh="联系方式(可直接留言)" data-en="Contact (Leave a Message)">联系方式(可直接留言)</h2>
             </div>
-            <div class="contact-grid">
+            <div class="contact-grid" id="contactGrid">
                 <a href="#" class="contact-card" id="wechatCard">
                     <div class="contact-icon">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 0 0 .167-.054l1.903-1.114a.864.864 0 0 1 .717-.098 10.16 10.16 0 0 0 2.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178A1.17 1.17 0 0 1 4.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178 1.17 1.17 0 0 1-1.162-1.178c0-.651.52-1.18 1.162-1.18zm5.34 2.867c-1.797-.052-3.746.512-5.28 1.786-1.72 1.428-2.687 3.72-1.78 6.22.942 2.453 3.666 4.229 6.884 4.229.826 0 1.622-.12 2.361-.336a.722.722 0 0 1 .598.082l1.584.926a.272.272 0 0 0 .14.047c.134 0 .24-.111.24-.247 0-.06-.023-.12-.038-.177l-.327-1.233a.49.49 0 0 1 .178-.554C23.028 18.48 24 16.82 24 14.98c0-3.21-2.931-5.952-7.062-6.122zm-2.18 2.769c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.97-.982zm4.844 0c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.97-.982z"/></svg>
@@ -595,6 +595,11 @@
                     <span class="site-stat-label" data-zh="实时在线" data-en="Online Now">实时在线</span>
                     <span class="site-stat-value"><span id="busuanzi_value_site_uv">...</span></span>
                 </div>
+                <div class="site-stat-divider"></div>
+                <a href="/admin" class="site-stat-item admin-entry" style="text-decoration:none;color:inherit;">
+                    <span class="site-stat-icon">⚙</span>
+                    <span class="site-stat-label" data-zh="管理" data-en="Admin">管理</span>
+                </a>
             </div>
             <p class="footer-text">© 2026 Li Chengyan. All Rights Reserved.</p>
         <p class="footer-version">v2.0.0</p>

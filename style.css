@@ -1131,6 +1131,23 @@ h1, h2, h3, h4,
     letter-spacing: 0.05em;
 }
 
+/* ===== Admin Entry ===== */
+.admin-entry {
+    cursor: pointer;
+    transition: opacity 0.3s var(--ease);
+}
+.admin-entry:hover {
+    opacity: 0.7;
+}
+
+/* ===== About Images ===== */
+.about-image {
+    max-width: 100%;
+    height: auto;
+    margin-top: 1.2rem;
+    border-radius: 4px;
+}
+
 /* ===== WeChat Modal ===== */
 .wechat-modal {
     position: fixed;

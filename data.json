@@ -1,0 +1,45 @@
+{
+  "admin": {
+    "passwordHash": "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918"
+  },
+  "about": {
+    "paragraphs": [
+      {
+        "zh": "一个在文字与逻辑之间游走的人。偏爱深度思考，习惯在安静里慢慢沉淀，对世界保持好奇，也对自我保持清醒。",
+        "en": "A person wandering between words and logic. Loves deep thinking, settles slowly in quietness, stays curious about the world and clear about oneself."
+      },
+      {
+        "zh": "时而感性细腻，时而理性较真，不追逐喧嚣，只忠于内心。",
+        "en": "Sometimes emotional and delicate, sometimes rational and meticulous. Not chasing noise, only loyal to the heart."
+      },
+      {
+        "zh": "这里是我的精神自留地，记录思考、感悟与偶然的灵光一现。",
+        "en": "This is my spiritual sanctuary — recording thoughts, reflections, and occasional flashes of inspiration."
+      },
+      {
+        "zh": "不问来路，不问归途，只与同频者，慢慢相遇。",
+        "en": "Not asking where I came from, not asking where I'm going — just slowly meeting those on the same frequency."
+      }
+    ],
+    "images": []
+  },
+  "projects": [
+    { "id": 1, "name": "Tell", "icon": "tell-lcy.jpg", "iconType": "image", "desc_zh": "独具创意性聊天应用", "desc_en": "A uniquely creative chat app", "link": "https://tell.super.site/", "visible": true, "order": 1 },
+    { "id": 2, "name": "Mark", "icon": "mark1.png", "iconType": "image", "desc_zh": "云同步书签管理系统", "desc_en": "Cloud-sync bookmark manager", "link": "https://marki.up.railway.app/", "visible": true, "order": 2 },
+    { "id": 3, "name": "YanAI", "icon": "🤖", "iconType": "emoji", "desc_zh": "免费 AI 工具合集，60+ 款精选工具", "desc_en": "Free AI tools collection, 60+ curated tools", "link": "https://ablcy.github.io/ai", "visible": true, "order": 3 },
+    { "id": 4, "name": "YanTravel", "icon": "🌍", "iconType": "emoji", "desc_zh": "全球景点推荐，36 个精选目的地", "desc_en": "Global travel recommendations, 36 curated destinations", "link": "https://ablcy.github.io/travel", "visible": true, "order": 4 },
+    { "id": 5, "name": "YanFire", "icon": "🔥", "iconType": "emoji", "desc_zh": "FIRE 生活推广，财务自由计算器", "desc_en": "FIRE lifestyle advocacy & financial freedom calculator", "link": "https://ablcy.github.io/fire", "visible": true, "order": 5 },
+    { "id": 6, "name": "MindFlower", "icon": "🌸", "iconType": "emoji", "desc_zh": "专注时间驱动花卉养成游戏", "desc_en": "Focus-driven flower growing game", "link": "https://ablcy.github.io/mindflower", "visible": true, "order": 6 },
+    { "id": 7, "name": "YanEdu", "icon": "📚", "iconType": "emoji", "desc_zh": "教育资源与学习分享", "desc_en": "Educational resources and learning", "link": "https://ablcy.github.io/edu", "visible": true, "order": 7 },
+    { "id": 8, "name": "YanHealth", "icon": "💪", "iconType": "emoji", "desc_zh": "健康管理，生活自律", "desc_en": "Health management and self-discipline", "link": "https://ablcy.github.io/health", "visible": true, "order": 8 },
+    { "id": 9, "name": "YanGame", "icon": "🎮", "iconType": "emoji", "desc_zh": "小游戏合集，休闲娱乐", "desc_en": "Mini games collection for fun", "link": "https://ablcy.github.io/game", "visible": true, "order": 9 }
+  ],
+  "contact": {
+    "wechat": "LuckYan2025",
+    "email": "ablcy@qq.com",
+    "qq": "3428270273",
+    "douyin": "lcy9421",
+    "qqLink": "https://qm.qq.com/q/TpZmrSxLQQ",
+    "douyinLink": "https://v.douyin.com/oWVmRw3Yc7c/"
+  }
+}

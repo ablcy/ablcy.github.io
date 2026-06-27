@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin — Yan</title>
+<style>
+:root {
+  --accent: #c08552;
+  --accent-hover: #a46d3e;
+  --bg: #faf8f5;
+  --bg-card: #fff;
+  --bg-input: #f5f2ed;
+  --text: #24211e;
+  --text-dim: #6b6560;
+  --text-ghost: #a8a39e;
+  --border: #e5dfd7;
+  --border-accent: rgba(192,133,82,0.3);
+  --danger: #c04848;
+  --success: #4a8b5e;
+  --shadow: 0 2px 12px rgba(0,0,0,0.06);
+  --radius: 8px;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: "PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* Login */
+.login-page {
+  display: flex; align-items: center; justify-content: center; min-height: 100vh;
+}
+.login-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 2.5rem;
+  width: 92%; max-width: 400px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.login-card h1 { font-family: Georgia, serif; font-size: 1.5rem; margin-bottom: 0.3rem; color: var(--accent); }
+.login-card p { color: var(--text-dim); font-size: 0.85rem; margin-bottom: 1.8rem; }
+.login-card input {
+  width: 100%; padding: 0.75rem 1rem;
+  border: 1px solid var(--border); background: var(--bg-input);
+  font-size: 1rem; text-align: center; outline: none; border-radius: var(--radius);
+  transition: border-color 0.2s;
+}
+.login-card input:focus { border-color: var(--accent); }
+.login-card button {
+  margin-top: 1rem; width: 100%; padding: 0.75rem;
+  background: var(--accent); color: #fff; border: none;
+  font-size: 0.95rem; font-weight: 600; cursor: pointer; border-radius: var(--radius);
+  transition: background 0.2s;
+}
+.login-card button:hover { background: var(--accent-hover); }
+.login-error { color: var(--danger); font-size: 0.8rem; margin-top: 0.6rem; display: none; }
+
+/* Admin layout */
+.admin-page { display: none; min-height: 100vh; flex-direction: column; }
+
+/* Top bar */
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.8rem 1.5rem; border-bottom: 1px solid var(--border);
+  background: var(--bg-card); position: sticky; top: 0; z-index: 10;
+}
+.topbar h2 { font-family: Georgia, serif; font-size: 1.1rem; color: var(--accent); }
+.topbar-actions { display: flex; gap: 0.6rem; align-items: center; }
+.topbar-actions button {
+  padding: 0.4rem 1rem; font-size: 0.8rem; border: 1px solid var(--border);
+  background: var(--bg-card); color: var(--text-dim); cursor: pointer; border-radius: var(--radius);
+  transition: all 0.2s;
+}
+.topbar-actions button:hover { border-color: var(--accent); color: var(--text); }
+.topbar-actions button.logout-btn:hover { border-color: var(--danger); color: var(--danger); }
+
+/* Tabs */
+.tabs {
+  display: flex; gap: 0; border-bottom: 1px solid var(--border);
+  background: var(--bg-card); padding: 0 1.5rem;
+}
+.tab {
+  padding: 0.8rem 1.5rem; font-size: 0.88rem; color: var(--text-dim);
+  border: none; background: none; cursor: pointer; border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+
+/* Main content */
+.main-content {
+  flex: 1; padding: 1.5rem; max-width: 900px; margin: 0 auto; width: 100%;
+}
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* Form styles */
+.form-group { margin-bottom: 1.2rem; }
+.form-group label {
+  display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-dim);
+  margin-bottom: 0.35rem; letter-spacing: 0.02em;
+}
+.form-group input, .form-group textarea {
+  width: 100%; padding: 0.6rem 0.75rem;
+  border: 1px solid var(--border); background: var(--bg-input);
+  font-size: 0.9rem; outline: none; border-radius: var(--radius);
+  transition: border-color 0.2s; font-family: inherit; resize: vertical;
+}
+.form-group input:focus, .form-group textarea:focus { border-color: var(--accent); }
+.form-group textarea { min-height: 60px; }
+
+.form-row { display: flex; gap: 1rem; }
+.form-row .form-group { flex: 1; }
+
+/* About paragraphs */
+.para-item {
+  background: var(--bg-card); border: 1px solid var(--border); padding: 1rem;
+  margin-bottom: 0.75rem; border-radius: var(--radius);
+}
+.para-item .para-header {
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.7rem;
+}
+.para-header span { font-size: 0.78rem; color: var(--text-ghost); font-weight: 600; }
+.para-delete-btn {
+  background: none; border: none; color: var(--text-ghost); cursor: pointer;
+  font-size: 1.1rem; padding: 0 0.3rem; transition: color 0.2s;
+}
+.para-delete-btn:hover { color: var(--danger); }
+
+.add-btn {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  padding: 0.5rem 1rem; font-size: 0.82rem; border: 1px dashed var(--border-accent);
+  color: var(--accent); background: none; cursor: pointer; border-radius: var(--radius);
+  transition: all 0.2s; margin-top: 0.4rem;
+}
+.add-btn:hover { background: rgba(192,133,82,0.06); border-style: solid; }
+
+/* Image list */
+.image-list { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.5rem; }
+.image-item {
+  position: relative; width: 100px; height: 100px; border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden; background: var(--bg-input);
+}
+.image-item img { width: 100%; height: 100%; object-fit: cover; }
+.image-item .img-remove {
+  position: absolute; top: 2px; right: 2px;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: rgba(0,0,0,0.5); color: #fff; border: none; cursor: pointer;
+  font-size: 0.8rem; line-height: 1; display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity 0.2s;
+}
+.image-item:hover .img-remove { opacity: 1; }
+.image-add-form {
+  display: flex; gap: 0.5rem; margin-top: 0.8rem; align-items: center;
+}
+.image-add-form input { flex: 1; }
+.image-add-form button {
+  padding: 0.6rem 1rem; background: var(--accent); color: #fff; border: none;
+  border-radius: var(--radius); cursor: pointer; font-size: 0.85rem; white-space: nowrap;
+}
+
+/* Projects */
+.project-card {
+  display: flex; align-items: center; gap: 1rem;
+  padding: 0.9rem 1rem; background: var(--bg-card); border: 1px solid var(--border);
+  margin-bottom: 0.5rem; border-radius: var(--radius); cursor: pointer;
+  transition: all 0.2s;
+}
+.project-card:hover { border-color: var(--border-accent); box-shadow: var(--shadow); }
+.project-card .drag-handle {
+  color: var(--text-ghost); cursor: grab; font-size: 1.1rem; user-select: none; padding: 0 0.3rem;
+}
+.project-card.dragging { opacity: 0.5; }
+.project-card .proj-info { flex: 1; }
+.project-card .proj-name { font-weight: 600; font-size: 0.9rem; }
+.project-card .proj-desc { font-size: 0.78rem; color: var(--text-dim); margin-top: 0.15rem; }
+.project-card .proj-badge {
+  font-size: 0.68rem; padding: 0.15rem 0.5rem; border-radius: 10px; font-weight: 600;
+}
+.badge-visible { background: rgba(74,139,94,0.12); color: var(--success); }
+.badge-hidden { background: rgba(192,72,72,0.1); color: var(--danger); }
+
+/* Modal */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,0.4);
+  display: flex; align-items: center; justify-content: center;
+}
+.modal {
+  background: var(--bg-card); border: 1px solid var(--border);
+  padding: 1.8rem; width: 92%; max-width: 560px; max-height: 85vh;
+  overflow-y: auto; border-radius: var(--radius); box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+}
+.modal h3 { font-family: Georgia,serif; font-size: 1.1rem; margin-bottom: 1.2rem; color: var(--accent); }
+.modal-actions { display: flex; gap: 0.6rem; justify-content: flex-end; margin-top: 1.2rem; }
+.modal-actions button {
+  padding: 0.55rem 1.2rem; font-size: 0.85rem; border: 1px solid var(--border);
+  border-radius: var(--radius); cursor: pointer; font-weight: 600;
+}
+.btn-cancel { background: var(--bg-input); color: var(--text-dim); }
+.btn-cancel:hover { border-color: var(--text-ghost); }
+.btn-save { background: var(--accent); color: #fff; border-color: var(--accent) !important; }
+.btn-save:hover { background: var(--accent-hover); }
+.btn-delete { background: var(--danger); color: #fff; border-color: var(--danger) !important; }
+.btn-delete:hover { opacity: 0.85; }
+
+/* Settings */
+.password-section {
+  background: var(--bg-card); border: 1px solid var(--border);
+  padding: 1.5rem; border-radius: var(--radius); max-width: 480px;
+}
+
+/* Bottom bar */
+.bottom-bar {
+  position: sticky; bottom: 0; background: var(--bg-card); border-top: 1px solid var(--border);
+  padding: 0.9rem 1.5rem; display: flex; justify-content: center; z-index: 10;
+}
+.bottom-bar button {
+  padding: 0.75rem 3rem; font-size: 1rem; font-weight: 700;
+  background: var(--accent); color: #fff; border: none;
+  border-radius: var(--radius); cursor: pointer; transition: background 0.2s; letter-spacing: 0.03em;
+}
+.bottom-bar button:hover { background: var(--accent-hover); }
+.bottom-bar button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Toast */
+.toast {
+  position: fixed; bottom: 4rem; left: 50%; transform: translateX(-50%);
+  padding: 0.7rem 1.5rem; border-radius: var(--radius); font-size: 0.85rem;
+  z-index: 200; font-weight: 600; box-shadow: var(--shadow); transition: opacity 0.3s;
+}
+.toast-success { background: var(--success); color: #fff; }
+.toast-error { background: var(--danger); color: #fff; }
+
+/* Helper */
+.inline-icon-btn {
+  width: 28px; height: 28px; border-radius: 4px; border: 1px solid var(--border);
+  background: var(--bg-input); cursor: pointer; font-size: 0.9rem; display: inline-flex;
+  align-items: center; justify-content: center; color: var(--text-dim); vertical-align: middle;
+}
+.inline-icon-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+@media (max-width: 600px) {
+  .tabs { padding: 0 0.5rem; overflow-x: auto; }
+  .tab { padding: 0.7rem 1rem; font-size: 0.8rem; white-space: nowrap; }
+  .main-content { padding: 1rem; }
+  .form-row { flex-direction: column; gap: 0; }
+  .bottom-bar { padding: 0.7rem 1rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- Login -->
+<div class="login-page" id="loginPage">
+  <div class="login-card">
+    <h1>Yan Admin</h1>
+    <p>请输入管理密码</p>
+    <input type="password" id="loginPwd" placeholder="密码" autocomplete="current-password">
+    <button id="loginBtn">登 录</button>
+    <p class="login-error" id="loginError">密码错误</p>
+  </div>
+</div>
+
+<!-- Admin -->
+<div class="admin-page" id="adminPage">
+  <div class="topbar">
+    <h2>Yan Admin</h2>
+    <div class="topbar-actions">
+      <button onclick="window.open('/','_blank')">预览站点</button>
+      <button class="logout-btn" id="logoutBtn">退出</button>
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="tab active" data-panel="about">关于</button>
+    <button class="tab" data-panel="projects">项目</button>
+    <button class="tab" data-panel="contact">联系方式</button>
+    <button class="tab" data-panel="settings">设置</button>
+  </div>
+  <div class="main-content" id="mainContent">
+    <!-- About Panel -->
+    <div class="panel active" id="panel-about">
+      <h3 style="font-family:Georgia,serif;margin-bottom:1rem;color:var(--accent);">关于段落</h3>
+      <div id="paraList"></div>
+      <button class="add-btn" id="addParaBtn">+ 添加段落</button>
+      <h3 style="font-family:Georgia,serif;margin:1.5rem 0 0.8rem;color:var(--accent);">图片</h3>
+      <div class="image-list" id="imageList"></div>
+      <div class="image-add-form">
+        <input type="text" id="newImageUrl" placeholder="输入图片 URL">
+        <button id="addImageBtn">添加</button>
+      </div>
+    </div>
+
+    <!-- Projects Panel -->
+    <div class="panel" id="panel-projects">
+      <div id="projList"></div>
+      <button class="add-btn" id="addProjBtn">+ 新增项目</button>
+    </div>
+
+    <!-- Contact Panel -->
+    <div class="panel" id="panel-contact">
+      <div class="form-group"><label>微信</label><input type="text" id="cWechat"></div>
+      <div class="form-group"><label>邮箱</label><input type="text" id="cEmail"></div>
+      <div class="form-row">
+        <div class="form-group"><label>QQ</label><input type="text" id="cQq"></div>
+        <div class="form-group"><label>QQ 链接</label><input type="text" id="cQqLink"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>抖音</label><input type="text" id="cDouyin"></div>
+        <div class="form-group"><label>抖音链接</label><input type="text" id="cDouyinLink"></div>
+      </div>
+    </div>
+
+    <!-- Settings Panel -->
+    <div class="panel" id="panel-settings">
+      <div class="password-section">
+        <h3 style="font-family:Georgia,serif;margin-bottom:1.2rem;color:var(--accent);">修改管理员密码</h3>
+        <div class="form-group"><label>旧密码</label><input type="password" id="oldPwd"></div>
+        <div class="form-group"><label>新密码</label><input type="password" id="newPwd"></div>
+        <div class="form-group"><label>确认新密码</label><input type="password" id="confirmPwd"></div>
+        <p style="font-size:0.78rem;color:var(--text-dim);">密码修改将在点击"保存并部署"后一同生效</p>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-bar">
+    <button id="saveBtn">保存并部署</button>
+  </div>
+</div>
+
+<div id="toast" class="toast" style="display:none;"></div>
+
+<script>
+// ===== State =====
+let data = null;
+let newPasswordHash = null;
+
+async function sha256(message) {
+  const msgBuffer = new TextEncoder().encode(message);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// ===== Auth =====
+const loginPage = document.getElementById('loginPage');
+const adminPage = document.getElementById('adminPage');
+const loginPwd = document.getElementById('loginPwd');
+const loginBtn = document.getElementById('loginBtn');
+const loginError = document.getElementById('loginError');
+
+async function checkAuth() {
+  if (sessionStorage.getItem('admin_authed') === '1') {
+    await loadData();
+    showAdmin();
+    return;
+  }
+  showLogin();
+}
+
+async function loadData() {
+  const resp = await fetch('/data.json?t=' + Date.now());
+  if (!resp.ok) throw new Error('Failed to load data.json');
+  data = await resp.json();
+}
+
+function showLogin() {
+  loginPage.style.display = 'flex';
+  adminPage.style.display = 'none';
+  loginPwd.value = '';
+  loginError.style.display = 'none';
+}
+
+function showAdmin() {
+  loginPage.style.display = 'none';
+  adminPage.style.display = 'flex';
+  renderAll();
+}
+
+loginBtn.addEventListener('click', async () => {
+  const pwd = loginPwd.value.trim();
+  if (!pwd) return;
+  try {
+    // Load data first if not loaded
+    if (!data) {
+      const resp = await fetch('/data.json?t=' + Date.now());
+      data = await resp.json();
+    }
+    const hash = await sha256(pwd);
+    if (hash === data.admin.passwordHash) {
+      sessionStorage.setItem('admin_authed', '1');
+      showAdmin();
+    } else {
+      loginError.style.display = 'block';
+      loginPwd.focus();
+    }
+  } catch (e) {
+    loginError.textContent = '加载失败，请检查网络';
+    loginError.style.display = 'block';
+  }
+});
+
+loginPwd.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') loginBtn.click();
+});
+
+document.getElementById('logoutBtn').addEventListener('click', () => {
+  sessionStorage.removeItem('admin_authed');
+  showLogin();
+});
+
+// ===== Tabs =====
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    const panelId = 'panel-' + tab.dataset.panel;
+    document.getElementById(panelId).classList.add('active');
+    if (tab.dataset.panel === 'contact') renderContact();
+    if (tab.dataset.panel === 'settings') renderSettings();
+  });
+});
+
+// ===== Toast =====
+function showToast(msg, type) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.className = 'toast toast-' + type;
+  toast.style.display = 'block';
+  toast.style.opacity = '1';
+  setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.style.display = 'none', 300); }, 2500);
+}
+
+// ===== About Panel =====
+function renderAbout() {
+  const paraList = document.getElementById('paraList');
+  paraList.innerHTML = '';
+  (data.about.paragraphs || []).forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = 'para-item';
+    div.innerHTML = `
+      <div class="para-header"><span>段落 ${i + 1}</span>
+        <button class="para-delete-btn" onclick="deletePara(${i})" title="删除">×</button>
+      </div>
+      <div class="form-group"><label>中文</label>
+        <textarea data-para="${i}" data-lang="zh" oninput="updatePara(${i},'zh',this.value)">${escapeHtml(p.zh||'')}</textarea>
+      </div>
+      <div class="form-group"><label>English</label>
+        <textarea data-para="${i}" data-lang="en" oninput="updatePara(${i},'en',this.value)">${escapeHtml(p.en||'')}</textarea>
+      </div>`;
+    paraList.appendChild(div);
+  });
+  renderImages();
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function updatePara(idx, lang, value) {
+  if (!data.about.paragraphs[idx]) return;
+  data.about.paragraphs[idx][lang] = value;
+}
+
+document.getElementById('addParaBtn').addEventListener('click', () => {
+  data.about.paragraphs.push({ zh: '', en: '' });
+  renderAbout();
+});
+
+function deletePara(idx) {
+  if (!confirm('确定删除段落 ' + (idx + 1) + '？')) return;
+  data.about.paragraphs.splice(idx, 1);
+  renderAbout();
+}
+
+function renderImages() {
+  const imageList = document.getElementById('imageList');
+  imageList.innerHTML = '';
+  (data.about.images || []).forEach((img, i) => {
+    const div = document.createElement('div');
+    div.className = 'image-item';
+    div.innerHTML = `<img src="${escapeHtml(img)}" alt="about image ${i+1}"><button class="img-remove" onclick="deleteImage(${i})">×</button>`;
+    imageList.appendChild(div);
+  });
+}
+
+function deleteImage(idx) {
+  data.about.images.splice(idx, 1);
+  renderImages();
+}
+
+document.getElementById('addImageBtn').addEventListener('click', () => {
+  const url = document.getElementById('newImageUrl').value.trim();
+  if (!url) return;
+  if (!data.about.images) data.about.images = [];
+  data.about.images.push(url);
+  document.getElementById('newImageUrl').value = '';
+  renderImages();
+});
+
+// ===== Projects Panel =====
+let nextProjId = 100;
+
+function renderProjects() {
+  const list = document.getElementById('projList');
+  list.innerHTML = '';
+  if (!data.projects) data.projects = [];
+  const sorted = [...data.projects].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+  sorted.forEach((p, idx) => {
+    const div = document.createElement('div');
+    div.className = 'project-card';
+    div.draggable = true;
+    div.dataset.id = p.id;
+    div.innerHTML = `
+      <span class="drag-handle" title="拖拽排序">⠿</span>
+      <div class="proj-info">
+        <div class="proj-name">${escapeHtml(p.name || '未命名')}</div>
+        <div class="proj-desc">${escapeHtml((p.desc_zh||'').substring(0,40))}</div>
+      </div>
+      <span class="proj-badge ${p.visible !== false ? 'badge-visible' : 'badge-hidden'}">${p.visible !== false ? '可见' : '隐藏'}</span>
+      <button class="inline-icon-btn" onclick="deleteProject(${p.id})" title="删除">×</button>`;
+    div.addEventListener('click', (e) => {
+      if (e.target.tagName === 'BUTTON') return;
+      openProjectModal(p);
+    });
+    // Drag events
+    div.addEventListener('dragstart', (e) => {
+      e.dataTransfer.effectAllowed = 'move';
+      div.classList.add('dragging');
+      e.dataTransfer.setData('text/plain', String(p.id));
+    });
+    div.addEventListener('dragend', () => div.classList.remove('dragging'));
+    div.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+    });
+    div.addEventListener('drop', (e) => {
+      e.preventDefault();
+      const draggedId = parseInt(e.dataTransfer.getData('text/plain'));
+      const targetId = p.id;
+      if (draggedId === targetId) return;
+      reorderProjects(draggedId, targetId);
+    });
+    list.appendChild(div);
+  });
+}
+
+function reorderProjects(draggedId, targetId) {
+  const draggedIdx = data.projects.findIndex(p => p.id === draggedId);
+  const targetIdx = data.projects.findIndex(p => p.id === targetId);
+  if (draggedIdx < 0 || targetIdx < 0) return;
+  const [item] = data.projects.splice(draggedIdx, 1);
+  data.projects.splice(targetIdx, 0, item);
+  data.projects.forEach((p, i) => p.order = i + 1);
+  renderProjects();
+}
+
+document.getElementById('addProjBtn').addEventListener('click', () => {
+  const newProj = {
+    id: nextProjId++,
+    name: '',
+    icon: '📌',
+    iconType: 'emoji',
+    desc_zh: '',
+    desc_en: '',
+    link: '',
+    visible: true,
+    order: (data.projects || []).length + 1
+  };
+  data.projects.push(newProj);
+  openProjectModal(newProj);
+  renderProjects();
+});
+
+function deleteProject(id) {
+  if (!confirm('确定删除此项目？')) return;
+  const idx = data.projects.findIndex(p => p.id === id);
+  if (idx >= 0) data.projects.splice(idx, 1);
+  renderProjects();
+}
+
+function openProjectModal(proj) {
+  let overlay = document.getElementById('projModal');
+  if (overlay) overlay.remove();
+  overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.id = 'projModal';
+  overlay.innerHTML = `<div class="modal">
+    <h3>${proj.name ? '编辑项目: ' + escapeHtml(proj.name) : '新增项目'}</h3>
+    <div class="form-group"><label>图标类型</label>
+      <select id="mIconType" onchange="toggleIconInput()">
+        <option value="emoji" ${proj.iconType==='emoji'?'selected':''}>Emoji</option>
+        <option value="image" ${proj.iconType==='image'?'selected':''}>图片 URL</option>
+      </select>
+    </div>
+    <div class="form-group"><label>图标</label>
+      <input type="text" id="mIcon" value="${escapeHtml(proj.icon||'')}" placeholder="emoji 或图片URL">
+    </div>
+    <div class="form-group"><label>名称</label>
+      <input type="text" id="mName" value="${escapeHtml(proj.name||'')}">
+    </div>
+    <div class="form-group"><label>中文简介</label>
+      <textarea id="mDescZh">${escapeHtml(proj.desc_zh||'')}</textarea>
+    </div>
+    <div class="form-group"><label>英文简介</label>
+      <textarea id="mDescEn">${escapeHtml(proj.desc_en||'')}</textarea>
+    </div>
+    <div class="form-group"><label>链接</label>
+      <input type="text" id="mLink" value="${escapeHtml(proj.link||'')}">
+    </div>
+    <div class="form-group"><label>
+      <input type="checkbox" id="mVisible" ${proj.visible !== false ? 'checked' : ''}> 可见
+    </label></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeProjModal()">取消</button>
+      <button class="btn-save" id="saveProjBtn">保存</button>
+    </div></div>`;
+  document.body.appendChild(overlay);
+
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeProjModal();
+  });
+
+  document.getElementById('saveProjBtn').addEventListener('click', () => {
+    proj.iconType = document.getElementById('mIconType').value;
+    proj.icon = document.getElementById('mIcon').value.trim();
+    proj.name = document.getElementById('mName').value.trim();
+    proj.desc_zh = document.getElementById('mDescZh').value.trim();
+    proj.desc_en = document.getElementById('mDescEn').value.trim();
+    proj.link = document.getElementById('mLink').value.trim();
+    proj.visible = document.getElementById('mVisible').checked;
+    closeProjModal();
+    renderProjects();
+  });
+}
+
+function toggleIconInput() {
+  // placeholder hint
+}
+
+function closeProjModal() {
+  const overlay = document.getElementById('projModal');
+  if (overlay) overlay.remove();
+}
+
+// ===== Contact Panel =====
+function renderContact() {
+  const c = data.contact || {};
+  document.getElementById('cWechat').value = c.wechat || '';
+  document.getElementById('cEmail').value = c.email || '';
+  document.getElementById('cQq').value = c.qq || '';
+  document.getElementById('cQqLink').value = c.qqLink || '';
+  document.getElementById('cDouyin').value = c.douyin || '';
+  document.getElementById('cDouyinLink').value = c.douyinLink || '';
+}
+
+function collectContact() {
+  const c = data.contact || {};
+  c.wechat = document.getElementById('cWechat').value.trim();
+  c.email = document.getElementById('cEmail').value.trim();
+  c.qq = document.getElementById('cQq').value.trim();
+  c.qqLink = document.getElementById('cQqLink').value.trim();
+  c.douyin = document.getElementById('cDouyin').value.trim();
+  c.douyinLink = document.getElementById('cDouyinLink').value.trim();
+  data.contact = c;
+}
+
+// ===== Settings Panel =====
+function renderSettings() {
+  document.getElementById('oldPwd').value = '';
+  document.getElementById('newPwd').value = '';
+  document.getElementById('confirmPwd').value = '';
+  newPasswordHash = null;
+}
+
+// ===== Save =====
+document.getElementById('saveBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('saveBtn');
+  btn.disabled = true;
+  btn.textContent = '保存中...';
+
+  try {
+    // Collect contact
+    collectContact();
+
+    // Handle password change
+    const oldPwd = document.getElementById('oldPwd').value.trim();
+    const newPwd = document.getElementById('newPwd').value.trim();
+    const confirmPwd = document.getElementById('confirmPwd').value.trim();
+
+    if (newPwd || confirmPwd) {
+      if (!oldPwd) throw new Error('请输入旧密码');
+      const oldHash = await sha256(oldPwd);
+      if (oldHash !== data.admin.passwordHash) throw new Error('旧密码错误');
+      if (newPwd !== confirmPwd) throw new Error('两次新密码不一致');
+      if (newPwd.length < 4) throw new Error('新密码至少 4 位');
+      newPasswordHash = await sha256(newPwd);
+    }
+
+    // Build payload
+    const payload = JSON.parse(JSON.stringify(data));
+    if (newPasswordHash) {
+      payload.admin.passwordHash = newPasswordHash;
+    }
+
+    // Get token
+    let token = localStorage.getItem('gh_token');
+    if (!token) {
+      token = prompt('请输入 GitHub Personal Access Token（需 repo 权限）：');
+      if (!token) throw new Error('未提供 token');
+      if (confirm('是否记住 token 到本地？')) {
+        localStorage.setItem('gh_token', token);
+      }
+    }
+
+    // GitHub API
+    const apiUrl = 'https://api.github.com/repos/ablcy/ablcy.github.io/contents/data.json';
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(payload, null, 2))));
+
+    // Get current sha
+    let sha = '';
+    try {
+      const getResp = await fetch(apiUrl, {
+        headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json' }
+      });
+      if (getResp.ok) {
+        const getData = await getResp.json();
+        sha = getData.sha;
+      }
+    } catch(e) {}
+
+    const putBody = { message: 'update data.json via admin', content: content };
+    if (sha) putBody.sha = sha;
+
+    const putResp = await fetch(apiUrl, {
+      method: 'PUT',
+      headers: {
+        'Authorization': 'token ' + token,
+        'Content-Type': 'application/json',
+        'Accept': 'application/vnd.github.v3+json'
+      },
+      body: JSON.stringify(putBody)
+    });
+
+    if (!putResp.ok) {
+      const err = await putResp.json().catch(() => ({}));
+      throw new Error(err.message || 'GitHub API 错误: ' + putResp.status);
+    }
+
+    // Update local state if password changed
+    if (newPasswordHash) {
+      data.admin.passwordHash = newPasswordHash;
+      newPasswordHash = null;
+    }
+
+    showToast('已保存，约 1 分钟后生效', 'success');
+  } catch (e) {
+    showToast(e.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '保存并部署';
+  }
+});
+
+// ===== Render all =====
+function renderAll() {
+  renderAbout();
+  renderProjects();
+  renderContact();
+  renderSettings();
+}
+
+// ===== Init =====
+checkAuth();
+</script>
+</body>
+</html>
