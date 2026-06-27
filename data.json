@@ -118,8 +118,8 @@
     {
       "id": 9,
       "name": "YanGame",
-      "icon": "🎮",
-      "iconType": "emoji",
+      "icon": "https://www.pexels.com/photo/cozy-cat-lounging-in-sunlit-room-32481757/",
+      "iconType": "image",
       "desc_zh": "小游戏合集，休闲娱乐",
       "desc_en": "Mini games collection for fun",
       "link": "https://ablcy.github.io/game",
