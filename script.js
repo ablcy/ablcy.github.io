@@ -6,11 +6,61 @@ async function loadSiteData() {
         const resp = await fetch('data.json');
         if (!resp.ok) throw new Error('data.json not found');
         siteData = await resp.json();
+        renderHero();
         renderAbout();
         renderProjects();
         renderContact();
     } catch (e) {
         console.warn('data.json load failed, using fallback', e);
+    }
+}
+
+function renderHero() {
+    if (!siteData || !siteData.hero) return;
+    const h = siteData.hero;
+    // Title
+    const nameEl = document.getElementById('heroName');
+    if (nameEl && h.title) nameEl.textContent = h.title;
+    // Subtitle
+    const subEl = document.getElementById('heroSubtitle');
+    if (subEl) {
+        if (h.subtitle_zh || h.subtitle_en) {
+            subEl.setAttribute('data-zh', h.subtitle_zh || '');
+            subEl.setAttribute('data-en', h.subtitle_en || '');
+            subEl.textContent = (lang === 'zh' ? h.subtitle_zh : h.subtitle_en) || '';
+        } else {
+            subEl.setAttribute('data-zh', '');
+            subEl.setAttribute('data-en', '');
+            subEl.textContent = '';
+        }
+    }
+    // Avatar
+    if (h.image) {
+        const avatarImg = document.getElementById('heroAvatarImg');
+        if (avatarImg) {
+            avatarImg.src = h.image.startsWith('http') ? h.image : h.image;
+            avatarImg.srcset = '';
+        }
+        // Also update the picture source
+        const avatarSrc = document.querySelector('.hero-avatar picture source');
+        if (avatarSrc) {
+            avatarSrc.srcset = h.image;
+        }
+    }
+    // Stats
+    if (h.stats) {
+        const statNums = document.querySelectorAll('.hero-stats .stat-number');
+        if (statNums.length >= 3 && h.stats.projects !== undefined) {
+            statNums[0].setAttribute('data-count', h.stats.projects);
+            statNums[0].textContent = h.stats.projects;
+        }
+        if (statNums.length >= 2 && h.stats.platforms !== undefined) {
+            statNums[1].setAttribute('data-count', h.stats.platforms);
+            statNums[1].textContent = h.stats.platforms;
+        }
+        if (statNums.length >= 3 && h.stats.ideas !== undefined) {
+            statNums[2].textContent = h.stats.ideas;
+        }
     }
 }
 

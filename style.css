@@ -338,6 +338,28 @@ h1, h2, h3, h4,
     transform: translateY(0);
 }
 
+.hero-subtitle {
+    font-size: 1.05rem;
+    color: var(--text-dim);
+    margin-bottom: 2.2rem;
+    margin-top: -1.8rem;
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.8s var(--ease) 0.2s;
+    min-height: 0;
+}
+
+.hero-subtitle:empty {
+    display: none;
+}
+
+.hero-left.in-view .hero-subtitle {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 .hero-stats {
     display: flex;
     gap: 3.5rem;

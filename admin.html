@@ -277,22 +277,62 @@ body {
     </div>
   </div>
   <div class="tabs">
-    <button class="tab active" data-panel="about">关于</button>
+    <button class="tab active" data-panel="hero">Hero</button>
+    <button class="tab" data-panel="about">关于</button>
     <button class="tab" data-panel="projects">项目</button>
     <button class="tab" data-panel="contact">联系方式</button>
     <button class="tab" data-panel="settings">设置</button>
   </div>
   <div class="main-content" id="mainContent">
+    <!-- Hero Panel -->
+    <div class="panel active" id="panel-hero">
+      <h3 style="font-family:Georgia,serif;margin-bottom:1rem;color:var(--accent);">Hero 编辑</h3>
+      <div class="form-group"><label>标题</label>
+        <input type="text" id="heroTitle" oninput="data.hero.title=this.value.trim()">
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>副标题（中文）</label>
+          <textarea id="heroSubZh" oninput="data.hero.subtitle_zh=this.value"></textarea>
+        </div>
+        <div class="form-group"><label>副标题（English）</label>
+          <textarea id="heroSubEn" oninput="data.hero.subtitle_en=this.value"></textarea>
+        </div>
+      </div>
+      <div class="form-group"><label>头像图片</label>
+        <div style="display:flex;align-items:center;gap:1rem;margin-top:0.3rem;">
+          <img id="heroAvatarPreview" src="" alt="Hero Avatar" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:2px solid var(--border);">
+          <div>
+            <button class="add-btn" id="heroUploadBtn">上传新图片</button>
+            <p style="font-size:0.72rem;color:var(--text-dim);margin-top:0.3rem;">支持 jpg/png/webp/gif/bmp，限 2MB，超限自动压缩</p>
+          </div>
+        </div>
+        <input type="file" id="heroFileInput" accept="image/jpeg,image/png,image/webp,image/gif,image/bmp" style="display:none;">
+      </div>
+      <h3 style="font-family:Georgia,serif;margin:1.5rem 0 0.8rem;color:var(--accent);">统计数字</h3>
+      <div class="form-row">
+        <div class="form-group"><label>项目数</label>
+          <input type="number" id="heroStatsProjects" oninput="data.hero.stats.projects=parseInt(this.value)||0">
+        </div>
+        <div class="form-group"><label>平台数</label>
+          <input type="number" id="heroStatsPlatforms" oninput="data.hero.stats.platforms=parseInt(this.value)||0">
+        </div>
+        <div class="form-group"><label>想法</label>
+          <input type="text" id="heroStatsIdeas" oninput="data.hero.stats.ideas=this.value.trim()">
+        </div>
+      </div>
+    </div>
+
     <!-- About Panel -->
-    <div class="panel active" id="panel-about">
+    <div class="panel" id="panel-about">
       <h3 style="font-family:Georgia,serif;margin-bottom:1rem;color:var(--accent);">关于段落</h3>
       <div id="paraList"></div>
       <button class="add-btn" id="addParaBtn">+ 添加段落</button>
       <h3 style="font-family:Georgia,serif;margin:1.5rem 0 0.8rem;color:var(--accent);">图片</h3>
       <div class="image-list" id="imageList"></div>
       <div class="image-add-form">
-        <input type="text" id="newImageUrl" placeholder="输入图片 URL">
-        <button id="addImageBtn">添加</button>
+        <button id="addImageBtn" class="add-btn">+ 上传图片</button>
+        <input type="file" id="aboutFileInput" accept="image/jpeg,image/png,image/webp,image/gif,image/bmp" style="display:none;" multiple>
+        <p style="font-size:0.72rem;color:var(--text-dim);margin-left:0.5rem;">支持 jpg/png/webp/gif/bmp，限 2MB，超限自动压缩</p>
       </div>
     </div>
 
@@ -338,6 +378,48 @@ body {
 // ===== State =====
 let data = null;
 let newPasswordHash = null;
+// Track pending image uploads: { key, file (base64), ext }
+let _pendingUploads = [];
+
+function compressImage(file, maxMB = 2) {
+  return new Promise((resolve, reject) => {
+    const maxBytes = maxMB * 1024 * 1024;
+    if (file.size <= maxBytes) {
+      const reader = new FileReader();
+      reader.onload = () => resolve({ base64: reader.result, blob: file, name: file.name, ext: file.name.split('.').pop().toLowerCase() });
+      reader.readAsDataURL(file);
+      return;
+    }
+    const img = new Image();
+    const reader = new FileReader();
+    reader.onload = (e) => { img.src = e.target.result; };
+    reader.onerror = reject;
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      let scale = Math.sqrt(maxBytes / file.size) * 0.95;
+      canvas.width = Math.round(img.width * scale);
+      canvas.height = Math.round(img.height * scale);
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      function tryQuality(q) {
+        canvas.toBlob((blob) => {
+          if (!blob) { tryQuality(Math.max(0.3, q - 0.1)); return; }
+          if (blob.size <= maxBytes || q <= 0.3) {
+            const r2 = new FileReader();
+            r2.onload = () => resolve({ base64: r2.result, blob, name: file.name, ext: 'jpg' });
+            r2.onerror = reject;
+            r2.readAsDataURL(blob);
+          } else {
+            tryQuality(q - 0.1);
+          }
+        }, 'image/jpeg', q);
+      }
+      tryQuality(0.9);
+    };
+    img.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
 
 async function sha256(message) {
   const msgBuffer = new TextEncoder().encode(message);
@@ -486,7 +568,8 @@ function renderImages() {
   (data.about.images || []).forEach((img, i) => {
     const div = document.createElement('div');
     div.className = 'image-item';
-    div.innerHTML = `<img src="${escapeHtml(img)}" alt="about image ${i+1}"><button class="img-remove" onclick="deleteImage(${i})">×</button>`;
+    const src = (typeof img === 'string') ? img : (img.value || '');
+    div.innerHTML = `<img src="${escapeHtml(src)}" alt="about image ${i+1}"><button class="img-remove" onclick="deleteImage(${i})">×</button>`;
     imageList.appendChild(div);
   });
 }
@@ -497,12 +580,55 @@ function deleteImage(idx) {
 }
 
 document.getElementById('addImageBtn').addEventListener('click', () => {
-  const url = document.getElementById('newImageUrl').value.trim();
-  if (!url) return;
+  document.getElementById('aboutFileInput').click();
+});
+
+document.getElementById('aboutFileInput').addEventListener('change', async (e) => {
+  const files = e.target.files;
+  if (!files || files.length === 0) return;
   if (!data.about.images) data.about.images = [];
-  data.about.images.push(url);
-  document.getElementById('newImageUrl').value = '';
+  for (const file of files) {
+    const result = await compressImage(file);
+    // Store as object with _upload flag
+    const imgObj = { _upload: true, base64: result.base64, ext: result.ext };
+    data.about.images.push(imgObj);
+  }
+  document.getElementById('aboutFileInput').value = '';
   renderImages();
+});
+
+// ===== Hero Panel =====
+function renderHero() {
+  if (!data.hero) return;
+  document.getElementById('heroTitle').value = data.hero.title || '';
+  document.getElementById('heroSubZh').value = data.hero.subtitle_zh || '';
+  document.getElementById('heroSubEn').value = data.hero.subtitle_en || '';
+  document.getElementById('heroStatsProjects').value = data.hero.stats?.projects ?? 0;
+  document.getElementById('heroStatsPlatforms').value = data.hero.stats?.platforms ?? 0;
+  document.getElementById('heroStatsIdeas').value = data.hero.stats?.ideas ?? '';
+  // Preview
+  const img = data.hero.image || '';
+  const prev = document.getElementById('heroAvatarPreview');
+  if (data.hero._newImage) {
+    prev.src = data.hero._newImage.base64;
+  } else if (img.startsWith('data:') || img.startsWith('http')) {
+    prev.src = img;
+  } else {
+    prev.src = '/' + img;
+  }
+}
+
+document.getElementById('heroUploadBtn').addEventListener('click', () => {
+  document.getElementById('heroFileInput').click();
+});
+
+document.getElementById('heroFileInput').addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const result = await compressImage(file);
+  data.hero._newImage = { base64: result.base64, ext: result.ext };
+  document.getElementById('heroAvatarPreview').src = result.base64;
+  document.getElementById('heroFileInput').value = '';
 });
 
 // ===== Projects Panel =====
@@ -597,11 +723,19 @@ function openProjectModal(proj) {
     <div class="form-group"><label>图标类型</label>
       <select id="mIconType" onchange="toggleIconInput()">
         <option value="emoji" ${proj.iconType==='emoji'?'selected':''}>Emoji</option>
-        <option value="image" ${proj.iconType==='image'?'selected':''}>图片 URL</option>
+        <option value="image" ${proj.iconType==='image'?'selected':''}>图片</option>
       </select>
     </div>
-    <div class="form-group"><label>图标</label>
-      <input type="text" id="mIcon" value="${escapeHtml(proj.icon||'')}" placeholder="emoji 或图片URL">
+    <div class="form-group" id="mIconEmojiGroup"><label>图标</label>
+      <input type="text" id="mIcon" value="${escapeHtml(proj.icon||'')}" placeholder="emoji 字符">
+    </div>
+    <div class="form-group" id="mIconFileGroup" style="display:none;"><label>图标图片</label>
+      <div style="display:flex;align-items:center;gap:0.8rem;">
+        <img id="mIconPreview" src="${proj.iconType==='image'?escapeHtml(proj.icon||''):''}" alt="预览" style="width:48px;height:48px;border-radius:4px;object-fit:cover;border:1px solid var(--border);${proj.iconType==='image'&&proj.icon?'':'display:none;'}">
+        <button class="add-btn" id="mIconUploadBtn">选择图片</button>
+        <input type="file" id="mIconFileInput" accept="image/jpeg,image/png,image/webp,image/gif,image/bmp" style="display:none;">
+      </div>
+      <p style="font-size:0.72rem;color:var(--text-dim);margin-top:0.3rem;">支持 jpg/png/webp/gif/bmp，限 2MB，超限自动压缩</p>
     </div>
     <div class="form-group"><label>名称</label>
       <input type="text" id="mName" value="${escapeHtml(proj.name||'')}">
@@ -630,7 +764,16 @@ function openProjectModal(proj) {
 
   document.getElementById('saveProjBtn').addEventListener('click', () => {
     proj.iconType = document.getElementById('mIconType').value;
-    proj.icon = document.getElementById('mIcon').value.trim();
+    if (proj.iconType === 'emoji') {
+      proj.icon = document.getElementById('mIcon').value.trim();
+    } else {
+      // If new file was uploaded
+      if (proj._newIcon) {
+        proj.icon = proj._newIcon;
+      } else {
+        proj.icon = proj.icon || '';
+      }
+    }
     proj.name = document.getElementById('mName').value.trim();
     proj.desc_zh = document.getElementById('mDescZh').value.trim();
     proj.desc_en = document.getElementById('mDescEn').value.trim();
@@ -639,10 +782,39 @@ function openProjectModal(proj) {
     closeProjModal();
     renderProjects();
   });
+
+  // Icon file upload handler
+  const iconUploadBtn = document.getElementById('mIconUploadBtn');
+  const iconFileInput = document.getElementById('mIconFileInput');
+  if (iconUploadBtn) {
+    iconUploadBtn.addEventListener('click', () => iconFileInput.click());
+  }
+  if (iconFileInput) {
+    iconFileInput.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const result = await compressImage(file);
+      proj._newIcon = { base64: result.base64, ext: result.ext };
+      document.getElementById('mIconPreview').src = result.base64;
+      document.getElementById('mIconPreview').style.display = 'block';
+      iconFileInput.value = '';
+    });
+  }
+
+  toggleIconInput();
 }
 
 function toggleIconInput() {
-  // placeholder hint
+  const type = document.getElementById('mIconType').value;
+  const emojiGroup = document.getElementById('mIconEmojiGroup');
+  const fileGroup = document.getElementById('mIconFileGroup');
+  if (type === 'emoji') {
+    emojiGroup.style.display = 'block';
+    fileGroup.style.display = 'none';
+  } else {
+    emojiGroup.style.display = 'none';
+    fileGroup.style.display = 'block';
+  }
 }
 
 function closeProjModal() {
@@ -704,12 +876,6 @@ document.getElementById('saveBtn').addEventListener('click', async () => {
       newPasswordHash = await sha256(newPwd);
     }
 
-    // Build payload
-    const payload = JSON.parse(JSON.stringify(data));
-    if (newPasswordHash) {
-      payload.admin.passwordHash = newPasswordHash;
-    }
-
     // Get token
     let token = localStorage.getItem('gh_token');
     if (!token) {
@@ -720,11 +886,128 @@ document.getElementById('saveBtn').addEventListener('click', async () => {
       }
     }
 
-    // GitHub API
+    // Collect and upload new images
+    const imagesToUpload = [];
+
+    // Hero image
+    if (data.hero._newImage && data.hero._newImage.base64) {
+      const ts = Date.now();
+      const fname = 'hero_' + ts + '.' + (data.hero._newImage.ext || 'jpg');
+      imagesToUpload.push({
+        path: 'images/' + fname,
+        base64: data.hero._newImage.base64.split(',')[1],
+        setKey: () => { data.hero.image = 'images/' + fname; delete data.hero._newImage; }
+      });
+    }
+
+    // About images
+    if (data.about.images) {
+      for (let i = 0; i < data.about.images.length; i++) {
+        const img = data.about.images[i];
+        if (img && img._upload && img.base64) {
+          const ts = Date.now() + i;
+          const fname = 'about_' + ts + '.' + (img.ext || 'jpg');
+          const idx = i;
+          imagesToUpload.push({
+            path: 'images/' + fname,
+            base64: img.base64.split(',')[1],
+            setKey: () => { data.about.images[idx] = 'images/' + fname; }
+          });
+        } else if (img && typeof img === 'object' && img.base64) {
+          // Already base64 but marked differently
+          const ts = Date.now() + i + 100;
+          const fname = 'about_' + ts + '.' + (img.ext || 'jpg');
+          const idx = i;
+          imagesToUpload.push({
+            path: 'images/' + fname,
+            base64: img.base64.split(',')[1],
+            setKey: () => { data.about.images[idx] = 'images/' + fname; }
+          });
+        }
+      }
+    }
+
+    // Project icons
+    if (data.projects) {
+      data.projects.forEach((proj) => {
+        if (proj._newIcon && proj._newIcon.base64) {
+          const ts = Date.now() + Math.random();
+          const fname = 'proj_' + proj.id + '_' + Math.floor(ts) + '.' + (proj._newIcon.ext || 'jpg');
+          imagesToUpload.push({
+            path: 'images/' + fname,
+            base64: proj._newIcon.base64.split(',')[1],
+            setKey: () => { proj.icon = 'images/' + fname; delete proj._newIcon; }
+          });
+        }
+      });
+    }
+
+    // Upload images to GitHub
+    const uploadResults = [];
+    for (const img of imagesToUpload) {
+      try {
+        // Check if file exists to get sha
+        let sha = '';
+        const getUrl = 'https://api.github.com/repos/ablcy/ablcy.github.io/contents/' + img.path;
+        try {
+          const getResp = await fetch(getUrl, {
+            headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json' }
+          });
+          if (getResp.ok) {
+            const getData = await getResp.json();
+            sha = getData.sha;
+          }
+        } catch(e) {}
+
+        const putBody = {
+          message: 'upload ' + img.path,
+          content: img.base64
+        };
+        if (sha) putBody.sha = sha;
+
+        const putResp = await fetch(getUrl, {
+          method: 'PUT',
+          headers: {
+            'Authorization': 'token ' + token,
+            'Content-Type': 'application/json',
+            'Accept': 'application/vnd.github.v3+json'
+          },
+          body: JSON.stringify(putBody)
+        });
+
+        if (putResp.ok) {
+          img.setKey();
+          uploadResults.push({ path: img.path, ok: true });
+        } else {
+          const errData = await putResp.json().catch(() => ({}));
+          uploadResults.push({ path: img.path, ok: false, error: errData.message || putResp.status });
+        }
+      } catch (e) {
+        uploadResults.push({ path: img.path, ok: false, error: e.message });
+      }
+    }
+
+    const failedUploads = uploadResults.filter(r => !r.ok);
+    if (failedUploads.length > 0) {
+      console.warn('Some images failed to upload:', failedUploads);
+      // Continue — save data.json anyway
+    }
+
+    // Build payload
+    const payload = JSON.parse(JSON.stringify(data));
+    if (newPasswordHash) {
+      payload.admin.passwordHash = newPasswordHash;
+    }
+    // Clean up internal flags
+    delete payload.hero?._newImage;
+    if (payload.projects) {
+      payload.projects.forEach(p => delete p._newIcon);
+    }
+
+    // GitHub API for data.json
     const apiUrl = 'https://api.github.com/repos/ablcy/ablcy.github.io/contents/data.json';
     const content = btoa(unescape(encodeURIComponent(JSON.stringify(payload, null, 2))));
 
-    // Get current sha
     let sha = '';
     try {
       const getResp = await fetch(apiUrl, {
@@ -754,13 +1037,21 @@ document.getElementById('saveBtn').addEventListener('click', async () => {
       throw new Error(err.message || 'GitHub API 错误: ' + putResp.status);
     }
 
-    // Update local state if password changed
+    // Update local state
     if (newPasswordHash) {
       data.admin.passwordHash = newPasswordHash;
       newPasswordHash = null;
     }
 
-    showToast('已保存，约 1 分钟后生效', 'success');
+    let msg = '已保存，约 1 分钟后生效';
+    if (failedUploads.length > 0) {
+      msg += '（' + failedUploads.length + ' 张图片上传失败）';
+    }
+    showToast(msg, 'success');
+    // Re-render to show clean paths
+    renderImages();
+    renderHero();
+    renderProjects();
   } catch (e) {
     showToast(e.message, 'error');
   } finally {
@@ -771,6 +1062,7 @@ document.getElementById('saveBtn').addEventListener('click', async () => {
 
 // ===== Render all =====
 function renderAll() {
+  renderHero();
   renderAbout();
   renderProjects();
   renderContact();
