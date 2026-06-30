@@ -13,6 +13,18 @@
     <link rel="dns-prefetch" href="//busuanzi.ibruce.info">
     <link rel="dns-prefetch" href="https://ablcy.github.io">
     <link rel="dns-prefetch" href="https://github.com">
+    <!-- 预加载 data.json：浏览器解析 HTML 阶段即开始下载，JS fetch 时命中缓存 -->
+    <link rel="preload" as="fetch" href="data.json" crossorigin="anonymous">
+
+    <!-- 首屏关键数据内联占位：JS 执行前即可渲染 Hero，无需等待 fetch -->
+    <script>
+        window.__hero_preload = {
+            title: "Yan",
+            image: "avatar.webp",
+            subtitle_zh: "",
+            subtitle_en: ""
+        };
+    </script>
 
     
     <link rel="stylesheet" href="style.css">

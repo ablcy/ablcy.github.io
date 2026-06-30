@@ -2,6 +2,12 @@
 let siteData = null;
 
 async function loadSiteData() {
+    // 1. 立即用内联数据渲染首屏，无需等待 fetch
+    if (window.__hero_preload) {
+        renderHeroFromPreload();
+    }
+
+    // 2. 异步拉取完整数据，覆盖更新所有区域
     try {
         const resp = await fetch('data.json');
         if (!resp.ok) throw new Error('data.json not found');
@@ -12,6 +18,35 @@ async function loadSiteData() {
         renderContact();
     } catch (e) {
         console.warn('data.json load failed, using fallback', e);
+    }
+}
+
+function renderHeroFromPreload() {
+    const preload = window.__hero_preload;
+    if (!preload) return;
+    // Title
+    const nameEl = document.getElementById('heroName');
+    if (nameEl && preload.title) nameEl.textContent = preload.title;
+    // Avatar
+    const avatarImg = document.getElementById('heroAvatarImg');
+    if (avatarImg && preload.image) {
+        avatarImg.onload = function() {
+            avatarImg.style.transition = 'opacity 0.3s ease';
+            avatarImg.style.opacity = '1';
+        };
+        avatarImg.onerror = function() {
+            avatarImg.style.opacity = '1';
+        };
+        avatarImg.src = preload.image;
+    }
+    // Subtitle
+    if (preload.subtitle_zh || preload.subtitle_en) {
+        const subEl = document.getElementById('heroSubtitle');
+        if (subEl) {
+            subEl.setAttribute('data-zh', preload.subtitle_zh || '');
+            subEl.setAttribute('data-en', preload.subtitle_en || '');
+            subEl.textContent = (lang === 'zh' ? preload.subtitle_zh : preload.subtitle_en) || '';
+        }
     }
 }
 
