@@ -34,18 +34,17 @@ function renderHero() {
             subEl.textContent = '';
         }
     }
-    // Avatar
-    if (h.image) {
-        const avatarImg = document.getElementById('heroAvatarImg');
-        if (avatarImg) {
-            avatarImg.src = h.image.startsWith('http') ? h.image : h.image;
-            avatarImg.srcset = '';
-        }
-        // Also update the picture source
-        const avatarSrc = document.querySelector('.hero-avatar picture source');
-        if (avatarSrc) {
-            avatarSrc.srcset = h.image;
-        }
+    // Avatar — set src after data.json loaded, fade in on load
+    const avatarImg = document.getElementById('heroAvatarImg');
+    if (avatarImg && h.image) {
+        avatarImg.onload = function() {
+            avatarImg.style.transition = 'opacity 0.3s ease';
+            avatarImg.style.opacity = '1';
+        };
+        avatarImg.onerror = function() {
+            avatarImg.style.opacity = '1';
+        };
+        avatarImg.src = h.image;
     }
     // Stats
     if (h.stats) {
@@ -78,9 +77,17 @@ function renderAbout() {
     });
     (siteData.about.images || []).forEach(img => {
         const imgEl = document.createElement('img');
-        imgEl.src = img;
         imgEl.className = 'about-image';
         imgEl.loading = 'lazy';
+        imgEl.style.opacity = '0';
+        imgEl.onload = function() {
+            imgEl.style.transition = 'opacity 0.3s ease';
+            imgEl.style.opacity = '1';
+        };
+        imgEl.onerror = function() {
+            imgEl.style.opacity = '1';
+        };
+        imgEl.src = img;
         body.appendChild(imgEl);
     });
 }
@@ -104,7 +111,7 @@ function renderProjects() {
             <div class="work-card-inner">
                 <div class="work-index">${String(idx + 1).padStart(2, '0')}</div>
                 <div class="work-info">
-                    <div class="work-icon">${proj.iconType === 'emoji' ? proj.icon : `<img src="${proj.icon}" alt="${proj.name}" style="width:1.4em;height:1.4em;border-radius:4px;vertical-align:middle;object-fit:cover;">`}</div>
+                    <div class="work-icon">${proj.iconType === 'emoji' ? proj.icon : `<img src="${proj.icon}" alt="${proj.name}" style="width:1.4em;height:1.4em;border-radius:4px;vertical-align:middle;object-fit:cover;opacity:0;transition:opacity 0.3s ease;" onload="this.style.opacity=1" onerror="this.style.opacity=1">`}</div>
                     <h3 class="work-name">${proj.name}</h3>
                     <p class="work-desc" data-zh="${proj.desc_zh || ''}" data-en="${proj.desc_en || ''}">${lang === 'zh' ? proj.desc_zh : proj.desc_en}</p>
                 </div>
