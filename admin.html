@@ -281,6 +281,7 @@ body {
     <button class="tab" data-panel="about">关于</button>
     <button class="tab" data-panel="projects">项目</button>
     <button class="tab" data-panel="contact">联系方式</button>
+    <button class="tab" data-panel="site">站点设置</button>
     <button class="tab" data-panel="settings">设置</button>
   </div>
   <div class="main-content" id="mainContent">
@@ -353,6 +354,24 @@ body {
       <div class="form-row">
         <div class="form-group"><label>抖音</label><input type="text" id="cDouyin"></div>
         <div class="form-group"><label>抖音链接</label><input type="text" id="cDouyinLink"></div>
+      </div>
+    </div>
+
+    <!-- Site Panel -->
+    <div class="panel" id="panel-site">
+      <h3 style="font-family:Georgia,serif;margin-bottom:1rem;color:var(--accent);">站点设置</h3>
+      <div class="form-group"><label>网站标题（&lt;title&gt;）</label>
+        <input type="text" id="siteTitle" oninput="data.site.title=this.value.trim()">
+      </div>
+      <div class="form-group"><label>网站图标（favicon）</label>
+        <div style="display:flex;align-items:center;gap:1rem;margin-top:0.3rem;">
+          <img id="faviconPreview" src="" alt="Favicon Preview" style="width:32px;height:32px;border:1px solid var(--border);background:var(--bg-input);">
+          <div>
+            <button class="add-btn" id="faviconUploadBtn">上传图标</button>
+            <p style="font-size:0.72rem;color:var(--text-dim);margin-top:0.3rem;">建议 32×32 或 64×64 的 PNG/JPG/WebP</p>
+          </div>
+        </div>
+        <input type="file" id="faviconFileInput" accept="image/png,image/jpeg,image/webp" style="display:none;">
       </div>
     </div>
 
@@ -448,6 +467,7 @@ async function loadData() {
   const resp = await fetch('/data.json?t=' + Date.now());
   if (!resp.ok) throw new Error('Failed to load data.json');
   data = await resp.json();
+  if (!data.site) data.site = { title: 'Yan | Designer & Developer' };
 }
 
 function showLogin() {
@@ -504,6 +524,7 @@ document.querySelectorAll('.tab').forEach(tab => {
     const panelId = 'panel-' + tab.dataset.panel;
     document.getElementById(panelId).classList.add('active');
     if (tab.dataset.panel === 'contact') renderContact();
+    if (tab.dataset.panel === 'site') renderSite();
     if (tab.dataset.panel === 'settings') renderSettings();
   });
 });
@@ -844,6 +865,47 @@ function collectContact() {
   data.contact = c;
 }
 
+// ===== Site Panel =====
+function renderSite() {
+  if (!data.site) data.site = { title: 'Yan | Designer & Developer' };
+  document.getElementById('siteTitle').value = data.site.title || '';
+  document.getElementById('faviconPreview').src = data.site._faviconBase64 || '/images/favicon.png?t=' + Date.now();
+}
+
+function generateFavicon(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = 32;
+        canvas.height = 32;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, 32, 32);
+        resolve(canvas.toDataURL('image/png'));
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+document.getElementById('faviconUploadBtn').addEventListener('click', () => {
+  document.getElementById('faviconFileInput').click();
+});
+
+document.getElementById('faviconFileInput').addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const base64 = await generateFavicon(file);
+  data.site._faviconBase64 = base64;
+  document.getElementById('faviconPreview').src = base64;
+  document.getElementById('faviconFileInput').value = '';
+});
+
 // ===== Settings Panel =====
 function renderSettings() {
   document.getElementById('oldPwd').value = '';
@@ -993,6 +1055,60 @@ document.getElementById('saveBtn').addEventListener('click', async () => {
       // Continue — save data.json anyway
     }
 
+    // Upload favicon if changed
+    let faviconUploaded = false;
+    if (data.site._faviconBase64) {
+      try {
+        const faviconPath = 'images/favicon.png';
+        let sha = '';
+        try {
+          const getResp = await fetch(
+            'https://api.github.com/repos/ablcy/ablcy.github.io/contents/' + faviconPath,
+            { headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json' } }
+          );
+          if (getResp.ok) { const getData = await getResp.json(); sha = getData.sha; }
+        } catch(e) {}
+        const putBody = { message: 'update favicon', content: data.site._faviconBase64.split(',')[1] };
+        if (sha) putBody.sha = sha;
+        const putResp = await fetch(
+          'https://api.github.com/repos/ablcy/ablcy.github.io/contents/' + faviconPath,
+          { method: 'PUT', headers: { 'Authorization': 'token ' + token, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' }, body: JSON.stringify(putBody) }
+        );
+        if (putResp.ok) { faviconUploaded = true; delete data.site._faviconBase64; }
+        else { console.warn('favicon upload failed:', await putResp.json().catch(() => ({}))); }
+      } catch(e) { console.warn('favicon upload failed:', e); }
+    }
+
+    // Update index.html title and favicon link
+    try {
+      const idxUrl = 'https://api.github.com/repos/ablcy/ablcy.github.io/contents/index.html';
+      const idxResp = await fetch(idxUrl, {
+        headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json' }
+      });
+      if (idxResp.ok) {
+        const idxData = await idxResp.json();
+        let idxContent = decodeURIComponent(escape(atob(idxData.content)));
+        // Update title
+        idxContent = idxContent.replace(/<title>.*?<\/title>/, '<title>' + (data.site.title || 'Yan') + '</title>');
+        // Update favicon link
+        const faviconLink = '\n    <link rel="icon" type="image/png" href="images/favicon.png">\n    <link rel="apple-touch-icon" href="images/favicon.png">';
+        if (/<link[^>]*rel=["'](icon|shortcut icon)["'][^>]*>/.test(idxContent)) {
+          // Replace all existing favicon-related link tags
+          idxContent = idxContent.replace(/[ \t]*<link[^>]*rel=["'](icon|shortcut icon|apple-touch-icon)["'][^>]*>\n?/g, '');
+          // Insert after </title>
+          idxContent = idxContent.replace('</title>', '</title>' + faviconLink);
+        } else {
+          idxContent = idxContent.replace('</title>', '</title>' + faviconLink);
+        }
+        const newContent = btoa(unescape(encodeURIComponent(idxContent)));
+        await fetch(idxUrl, {
+          method: 'PUT',
+          headers: { 'Authorization': 'token ' + token, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' },
+          body: JSON.stringify({ message: 'update site title/favicon', content: newContent, sha: idxData.sha })
+        });
+      }
+    } catch(e) { console.warn('index.html update failed:', e); }
+
     // Build payload
     const payload = JSON.parse(JSON.stringify(data));
     if (newPasswordHash) {
@@ -1066,6 +1182,7 @@ function renderAll() {
   renderAbout();
   renderProjects();
   renderContact();
+  renderSite();
   renderSettings();
 }
 
