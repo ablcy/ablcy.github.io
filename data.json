@@ -35,10 +35,7 @@
         "en": "Not asking where I came from, not asking where I'm going — just slowly meeting those on the same frequency."
       }
     ],
-    "images": [
-      "https://www.pexels.com/photo/cat-lying-down-19526522/",
-      "https://www.pexels.com/photo/cozy-cat-lounging-in-sunlit-room-32481757/"
-    ]
+    "images": []
   },
   "projects": [
     {
@@ -142,10 +139,10 @@
     },
     {
       "id": 100,
-      "name": "新闻作品",
+      "name": "新闻作品｜《安徽阜阳：生死30秒女子落水 跑船父子紧急施救》",
       "icon": "images/proj_100_1784538367594.jpg",
       "iconType": "image",
-      "desc_zh": "《安徽阜阳：生死30秒女子落水 跑船父子紧急施救》\n独立完成事件采访、文稿撰写，稿件刊发于人民法治网（中国法学会主管，国家级法治权威平台）",
+      "desc_zh": "新闻作品｜《安徽阜阳：生死30秒女子落水 跑船父子紧急施救》\n独立完成事件采访、文稿撰写，稿件刊发于人民法治网（中国法学会主管，国家级法治权威平台），聚焦见义勇为凡人善举，单篇阅读量25.6万，文章被作为典型案例用于公益宣讲，具备较强正向传播影响力，熟练掌握深度纪实新闻全流程采编工作。",
       "desc_en": "",
       "link": "https://www.rmfzw.org.cn/article/0/300930",
       "visible": true,
